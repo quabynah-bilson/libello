@@ -17,7 +17,7 @@ class FilledButtonWithIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: context.colorScheme.surface,
           border: Border.symmetric(

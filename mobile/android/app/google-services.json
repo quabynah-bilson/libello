@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "578565313797",
+    "project_id": "libello-notes",
+    "storage_bucket": "libello-notes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578565313797:android:cf6411ea22aad3ea01d36c",
+        "android_client_info": {
+          "package_name": "io.qcodelabs.libello"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578565313797-i0lcl4on2og3ofu9b63q4dc2n8qc8rgq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZCFTfe48PmMSF3sP0jqLEnqDSegmkI1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578565313797-i0lcl4on2og3ofu9b63q4dc2n8qc8rgq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "578565313797-j6ubqtjvbqtlpoc8buljllr1899gluls.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.qcodelabs.libello"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

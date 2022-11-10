@@ -45,19 +45,61 @@ class ThemeConfig {
   static ThemeData kLightThemeData(BuildContext context) =>
       ThemeData.light(useMaterial3: true).copyWith(
         textTheme: _kDefaultTextTheme(context.colorScheme.onBackground),
+        scaffoldBackgroundColor: const Color(0xffF9F9F9),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xffFDF4A5),
+          secondary: Color(0xff4120E9),
+          secondaryContainer: Color(0xffECFDC7),
+          tertiary: Colors.white,
+          tertiaryContainer: Color(0xffdddddd),
+          background: Color(0xffF9F9F9),
+          surface: Colors.white,
+          onBackground: Colors.black,
+          onSurface: Colors.black,
+          onPrimary: Colors.black,
+          onSecondary: Colors.white,
+          onTertiary: Colors.black,
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: const Color(0xff4120E9),
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          elevation: 3,
+          type: BottomNavigationBarType.fixed,
+          enableFeedback: true,
+          selectedIconTheme: const IconThemeData(color: Colors.black),
+          unselectedIconTheme:
+              IconThemeData(color: Colors.grey.withOpacity(0.65)),
+          selectedLabelStyle: const TextStyle(color: Colors.black),
+          unselectedLabelStyle: TextStyle(color: Colors.grey.withOpacity(0.65)),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xffF9F9F9),
+          iconTheme: IconThemeData(color: Colors.black),
+          centerTitle: true,
+          actionsIconTheme: IconThemeData(color: Colors.black),
+        ),
+        listTileTheme: const ListTileThemeData(textColor: Colors.black),
       );
 
   static ThemeData kDarkThemeData(BuildContext context) =>
       ThemeData.dark(useMaterial3: true).copyWith(
         textTheme: _kDefaultTextTheme(context.colorScheme.onBackground),
-        scaffoldBackgroundColor: const Color(0xff181818),
+        scaffoldBackgroundColor: const Color(0xff131313),
         colorScheme: const ColorScheme.dark(
           primary: Color(0xff9DC1CE),
           secondary: Color(0xffFDF4A5),
           secondaryContainer: Color(0xffECFDC7),
           tertiary: Color(0xff232323),
           tertiaryContainer: Color(0xff161616),
-          background: Color(0xff181818),
+          background: Color(0xff131313),
           surface: Color(0xff232323),
           onPrimary: Colors.black,
           onSecondary: Colors.black,
@@ -84,10 +126,11 @@ class ThemeConfig {
           showUnselectedLabels: false,
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xff181818),
+          backgroundColor: Color(0xff131313),
           iconTheme: IconThemeData(color: Colors.white),
           centerTitle: true,
           actionsIconTheme: IconThemeData(color: Colors.white),
         ),
+        listTileTheme: const ListTileThemeData(textColor: Colors.white),
       );
 }

@@ -24,3 +24,8 @@ const kEmphasisHigh = 0.85;
 const kEmphasisMedium = 0.67;
 const kEmphasisLow = 0.38;
 const kEmphasisLowest = 0.1;
+
+/// animation duration
+const kSampleDelay = Duration(seconds: 2);
+const kListAnimationDuration = Duration(milliseconds: 850);
+const kListSlideOffset = 100.0;

@@ -30,7 +30,13 @@ dependencies:
   flutter_tabler_icons:
   riverpod:
   date_time_format:
+  timeago_flutter:
   fl_chart: ^0.55.2
+  upgrader:
+  google_sign_in:
+  firebase_core: ^2.1.1
+  cloud_firestore: ^4.0.4
+  firebase_auth: ^4.1.1
 
 dev_dependencies:
   flutter_test:

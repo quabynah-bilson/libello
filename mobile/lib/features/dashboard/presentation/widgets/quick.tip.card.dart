@@ -66,8 +66,8 @@ class QuickTipCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: context.theme.textTheme.subtitle2?.copyWith(
-                        color: foregroundColor ??
-                            context.colorScheme.onSecondary
+                        color:
+                            (foregroundColor ?? context.colorScheme.onSecondary)
                                 .withOpacity(kEmphasisMedium),
                       ),
                       overflow: TextOverflow.ellipsis,

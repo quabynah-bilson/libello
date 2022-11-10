@@ -14,7 +14,7 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
   void initState() {
     super.initState();
     doAfterDelay(() async {
-      await Future.delayed(const Duration(milliseconds: 1500));
+      await Future.delayed(kSampleDelay);
       if (mounted) setState(() => _loading = false);
     });
   }
@@ -23,6 +23,7 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
   Widget build(BuildContext context) => LoadingOverlay(
         isLoading: _loading,
         child: CustomScrollView(
+          shrinkWrap: true,
           slivers: [
             /// top app bar
             SliverToBoxAdapter(

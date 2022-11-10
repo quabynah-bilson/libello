@@ -1,13 +1,19 @@
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/core/theme.dart';
 import 'package:libello/features/dashboard/presentation/widgets/quick.tip.card.dart';
+import 'package:libello/features/shared/domain/entities/folder.dart';
+import 'package:libello/features/shared/presentation/pages/login.dart';
+import 'package:libello/features/shared/presentation/widgets/custom.chip.dart';
 import 'package:libello/features/shared/presentation/widgets/filled.button.dart';
+import 'package:libello/features/shared/presentation/widgets/folder.tile.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 
 part 'tabs/folder.dart';
@@ -46,7 +52,12 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         // todo => add new note
-        onPressed: () => context.showSnackBar(kFeatureUnderDev),
+        onPressed: () => Navigator.of(context).push(
+          LoginDialog(
+            backgroundColor:
+                context.colorScheme.background.withOpacity(kEmphasisMedium),
+          ),
+        ),
         child: const Icon(TablerIcons.plus),
       ),
       bottomNavigationBar: BottomNavigationBar(

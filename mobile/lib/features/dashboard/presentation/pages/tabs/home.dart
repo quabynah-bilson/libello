@@ -15,7 +15,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
   void initState() {
     super.initState();
     doAfterDelay(() async {
-      await Future.delayed(const Duration(milliseconds: 1500));
+      await Future.delayed(kSampleDelay);
       if (mounted) setState(() => _loading = false);
     });
   }
@@ -116,7 +116,8 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Quick Tips',
-                  style: context.theme.textTheme.subtitle1?.copyWith(),
+                  style: context.theme.textTheme.subtitle1
+                      ?.copyWith(color: context.colorScheme.onBackground),
                 ),
               ),
             ),
@@ -163,7 +164,8 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Your monthly report',
-                  style: context.theme.textTheme.subtitle1?.copyWith(),
+                  style: context.theme.textTheme.subtitle1
+                      ?.copyWith(color: context.colorScheme.onBackground),
                 ),
               ),
             ),

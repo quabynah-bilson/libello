@@ -20,7 +20,7 @@ class _LibelloAppState extends State<LibelloApp> {
       title: kAppName,
       theme: ThemeConfig.kLightThemeData(context),
       darkTheme: ThemeConfig.kDarkThemeData(context),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       routerDelegate: _router.delegate(),
       routeInformationParser: _router.defaultRouteParser(),
     );
