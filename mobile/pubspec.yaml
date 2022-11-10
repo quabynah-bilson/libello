@@ -2,9 +2,9 @@ name: libello
 description: A note taking application for pros
 
 publish_to: 'none'
-repository: ''
-homepage: ''
-issue_tracker: ''
+repository: 'https://github.com/quabynah-bilson/libello'
+homepage: 'https://github.com/quabynah-bilson/libello'
+issue_tracker: 'https://github.com/quabynah-bilson/libello/issues'
 
 version: 0.0.0+0
 
@@ -28,6 +28,9 @@ dependencies:
   logger:
   fluttericon:
   flutter_tabler_icons:
+  riverpod:
+  date_time_format:
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_test:
@@ -43,3 +46,32 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+
+# flutter pub run flutter_native_splash:create
+flutter_native_splash:
+  image: assets/logo.png
+  image_dark: assets/logo.png
+  icon_background_color: "#ffffff"
+  color: "#ffffff"
+  color_dark: "#ffffff"
+  icon_background_color_dark: "#ffffff"
+  web: false
+  android_12:
+    image: assets/logo.png
+    color: "#ffffff"
+    icon_background_color: "#ffffff"
+    icon_background_color_dark: "#ffffff"
+    color_dark: "#ffffff"
+    image_dark: assets/logo.png
+
+# flutter pub run flutter_launcher_icons:main
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.png"
+  remove_alpha_ios: true
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: false
+  windows:
+    generate: false
