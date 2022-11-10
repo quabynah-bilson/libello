@@ -5,8 +5,6 @@ publish_to: 'none'
 repository: ''
 homepage: ''
 issue_tracker: ''
-authors:
-  - 'Dennis Bilson <qcodelabsllc@gmail.com>'
 
 version: 1.0.0+1
 
