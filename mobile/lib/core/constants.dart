@@ -14,6 +14,7 @@ const kScanNoteDescription =
     'Transfer your note with an image capture directly from your camera';
 const kDrawNoteTitle = 'Draw your note';
 const kDrawNoteDescription = 'Beautifully design your note with art effects';
+const kAuthRequired = 'Sign in to access your notes';
 
 /// radius
 const kRadiusSmall = 8.0;

@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
-void setupInjector() async {
+Future<void> setupInjector() async {
   /// shared preferences
   getIt.registerFactoryAsync<SharedPreferences>(
       () => SharedPreferences.getInstance());

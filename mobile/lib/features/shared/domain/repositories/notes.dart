@@ -12,7 +12,7 @@ abstract class BaseNoteRepository {
 
   Future<Either<Note, String>> getNote(String id);
 
-  Future<Either<List<Note>, String>> getNotes(
+  Future<Either<Stream<List<Note>>, String>> getNotes(
       {NoteStatus status, NoteType type});
 
   /// endregion notes
@@ -24,7 +24,7 @@ abstract class BaseNoteRepository {
 
   Future<Either<String, String>> deleteFolder(String id);
 
-  Future<Either<List<NoteFolder>, String>> getFolders();
+  Future<Either<Stream<List<NoteFolder>>, String>> getFolders();
 
   Future<Either<NoteFolder, String>> getFolder(String id);
 

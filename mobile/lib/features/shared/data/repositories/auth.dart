@@ -25,10 +25,9 @@ class AuthRepository implements BaseAuthRepository {
             await getIt.get<FirebaseAuth>().signInWithCredential(credential);
         if (userCredential.user != null) {
           /// save credentials locally
-          await getIt
-              .get<SharedPreferences>()
-              .setString(kUserIdKey, userCredential.user!.uid);
-          await getIt.get<SharedPreferences>().setString(kUsernameKey,
+          var prefs = await getIt.getAsync<SharedPreferences>();
+          await prefs.setString(kUserIdKey, userCredential.user!.uid);
+          await prefs.setString(kUsernameKey,
               userCredential.user!.displayName ?? 'Cherished user');
           return Left(userCredential.user!);
         }

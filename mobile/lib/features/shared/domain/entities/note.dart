@@ -1,3 +1,4 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'note.g.dart';
@@ -15,6 +16,7 @@ enum NoteType {
 }
 
 @JsonSerializable()
+@CopyWith()
 class Note {
   final String id;
   final String title;
@@ -23,6 +25,7 @@ class Note {
   final NoteStatus status;
   final String? folder;
   final String owner;
+  final bool completed;
 
   const Note({
     required this.id,
@@ -32,6 +35,7 @@ class Note {
     this.status = NoteStatus.regular,
     this.folder,
     this.owner = '', // add this when uploading to server
+    this.completed = false,
   });
 
   factory Note.fromJson(json) => _$NoteFromJson(json);

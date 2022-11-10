@@ -137,7 +137,7 @@ class _AppTextFieldState extends State<AppTextField> {
                     ? '***'
                     : 'mm/yy',
             filled: true,
-            fillColor: context.theme.disabledColor.withOpacity(0.3),
+            fillColor: context.colorScheme.surface,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             focusedBorder: OutlineInputBorder(
@@ -181,7 +181,7 @@ class _AppTextFieldState extends State<AppTextField> {
                 labelText: widget.label,
                 labelStyle: TextStyle(color: context.colorScheme.onSurface),
                 filled: true,
-                fillColor: context.theme.disabledColor.withOpacity(0.3),
+                fillColor: context.colorScheme.surface,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 focusedBorder: OutlineInputBorder(
@@ -222,7 +222,7 @@ class _AppTextFieldState extends State<AppTextField> {
           labelText: widget.label,
           labelStyle: TextStyle(color: context.colorScheme.onSurface),
           filled: true,
-          fillColor: context.theme.disabledColor.withOpacity(0.3),
+          fillColor: context.colorScheme.surface,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           focusedBorder: OutlineInputBorder(
@@ -286,7 +286,7 @@ class _AppTextFieldState extends State<AppTextField> {
             counter: const SizedBox.shrink(),
             labelText: widget.label,
             filled: true,
-            fillColor: context.theme.disabledColor.withOpacity(0.3),
+            fillColor: context.colorScheme.surface,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             focusedBorder: OutlineInputBorder(
@@ -328,7 +328,7 @@ class _AppTextFieldState extends State<AppTextField> {
           labelText: widget.label,
           labelStyle: TextStyle(color: context.colorScheme.onSurface),
           filled: true,
-          fillColor: context.theme.disabledColor.withOpacity(0.3),
+          fillColor: context.colorScheme.surface,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           focusedBorder: OutlineInputBorder(
@@ -368,7 +368,7 @@ class _AppTextFieldState extends State<AppTextField> {
             labelText: widget.label,
             labelStyle: TextStyle(color: context.colorScheme.onSurface),
             filled: true,
-            fillColor: context.theme.disabledColor.withOpacity(0.3),
+            fillColor: context.colorScheme.surface,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             focusedBorder: OutlineInputBorder(
@@ -437,7 +437,7 @@ class AppDropdownField extends StatelessWidget {
             labelText: label,
             labelStyle: TextStyle(color: context.colorScheme.onSurface),
             filled: true,
-            fillColor: context.theme.disabledColor.withOpacity(0.3),
+            fillColor: context.colorScheme.surface,
             suffixIcon: Icon(
               Icons.arrow_drop_down,
               color: context.colorScheme.onSurface,

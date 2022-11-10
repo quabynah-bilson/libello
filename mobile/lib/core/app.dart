@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/core/theme.dart';
+import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/dismiss.keyboard.dart';
 
 class LibelloApp extends StatefulWidget {
@@ -15,15 +17,19 @@ class _LibelloAppState extends State<LibelloApp> {
   final _router = LibelloAppRouter();
 
   @override
-  Widget build(BuildContext context) => DismissKeyboard(
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: kAppName,
-          theme: ThemeConfig.kLightThemeData(context),
-          darkTheme: ThemeConfig.kDarkThemeData(context),
-          themeMode: ThemeMode.system,
-          routerDelegate: _router.delegate(),
-          routeInformationParser: _router.defaultRouteParser(),
+  Widget build(BuildContext context) =>
+      DismissKeyboard(
+        child: BlocProvider(
+          create: (context) => NoteCubit(),
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: kAppName,
+            theme: ThemeConfig.kLightThemeData(context),
+            darkTheme: ThemeConfig.kDarkThemeData(context),
+            themeMode: ThemeMode.system,
+            routerDelegate: _router.delegate(),
+            routeInformationParser: _router.defaultRouteParser(),
+          ),
         ),
       );
 }
