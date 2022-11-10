@@ -8,8 +8,22 @@ class _DashboardFolderTab extends StatefulWidget {
 }
 
 class _DashboardFolderTabState extends State<_DashboardFolderTab> {
+  var _loading = true;
+
   @override
-  Widget build(BuildContext context) => const Center(
-      child: Text(kFeatureUnderDev),
-    );
+  void initState() {
+    super.initState();
+    doAfterDelay(() async {
+      await Future.delayed(const Duration(milliseconds: 1500));
+      if (mounted) setState(() => _loading = false);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => LoadingOverlay(
+    isLoading: _loading,
+    child: CustomScrollView(
+
+    ),
+  );
 }

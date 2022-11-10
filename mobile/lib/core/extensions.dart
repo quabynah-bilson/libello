@@ -110,14 +110,14 @@ extension ContextX on BuildContext {
           content: Text(
             message,
             style: Theme.of(this).textTheme.bodyText2?.copyWith(
-              color: foreground ?? Theme.of(this).colorScheme.onPrimary,
+              color: foreground ?? Theme.of(this).colorScheme.onSecondary,
             ),
           ),
-          backgroundColor: background ?? Theme.of(this).colorScheme.primary,
+          backgroundColor: background ?? Theme.of(this).colorScheme.secondary,
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
             label: 'Dismiss',
-            textColor: foreground ?? Theme.of(this).colorScheme.onPrimary,
+            textColor: foreground ?? Theme.of(this).colorScheme.onSecondary,
             onPressed: () => messenger.hideCurrentSnackBar(),
           ),
         ),

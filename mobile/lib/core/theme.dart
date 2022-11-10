@@ -3,8 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:libello/core/extensions.dart';
 
 class ThemeConfig {
+  static const kOrange = Colors.orange,
+      kAmber = Colors.amber,
+      kGreen = Colors.green,
+      kRed = Colors.red;
+
   static const _defaultFont = GoogleFonts.spaceGrotesk,
-      _secondaryFont = GoogleFonts.dmSans, _tertiaryFont = GoogleFonts.dmMono;
+      _secondaryFont = GoogleFonts.dmSans,
+      _tertiaryFont = GoogleFonts.dmMono;
 
   static TextTheme _kDefaultTextTheme(Color textColor) => TextTheme(
         headline1: _defaultFont(
@@ -28,7 +34,7 @@ class ThemeConfig {
             color: textColor, fontWeight: FontWeight.w500, letterSpacing: 0.5),
         bodyText2: _defaultFont(
             color: textColor, fontWeight: FontWeight.w500, letterSpacing: 0.25),
-        button: _secondaryFont(
+        button: _tertiaryFont(
             color: textColor, fontWeight: FontWeight.w700, letterSpacing: 1.25),
         caption: _tertiaryFont(
             color: textColor, fontWeight: FontWeight.w500, letterSpacing: 0.4),
@@ -76,6 +82,12 @@ class ThemeConfig {
           unselectedLabelStyle: TextStyle(color: Colors.grey.withOpacity(0.65)),
           showSelectedLabels: false,
           showUnselectedLabels: false,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xff181818),
+          iconTheme: IconThemeData(color: Colors.white),
+          centerTitle: true,
+          actionsIconTheme: IconThemeData(color: Colors.white),
         ),
       );
 }

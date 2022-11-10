@@ -1,11 +1,14 @@
 import 'dart:math';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
+import 'package:libello/core/theme.dart';
 import 'package:libello/features/dashboard/presentation/widgets/quick.tip.card.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:libello/features/shared/presentation/widgets/filled.button.dart';
+import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 
 part 'tabs/folder.dart';
 
@@ -34,7 +37,9 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     kUseDefaultOverlays(context,
-        statusBarBrightness: context.invertedThemeBrightness);
+        statusBarBrightness: _selectedIndex == 0
+            ? context.invertedThemeBrightness
+            : context.theme.brightness);
 
     return Scaffold(
       body: _pages[_selectedIndex],

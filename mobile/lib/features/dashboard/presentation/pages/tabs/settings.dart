@@ -8,8 +8,22 @@ class _DashboardSettingsTab extends StatefulWidget {
 }
 
 class _DashboardSettingsTabState extends State<_DashboardSettingsTab> {
+  var _loading = true;
+
   @override
-  Widget build(BuildContext context) => const Center(
-        child: Text(kFeatureUnderDev),
+  void initState() {
+    super.initState();
+    doAfterDelay(() async {
+      await Future.delayed(const Duration(milliseconds: 1500));
+      if (mounted) setState(() => _loading = false);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => LoadingOverlay(
+        isLoading: _loading,
+        child: const Center(
+          child: Text(kFeatureUnderDev),
+        ),
       );
 }
