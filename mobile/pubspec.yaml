@@ -28,7 +28,9 @@ dependencies:
   logger:
   fluttericon:
   flutter_tabler_icons:
-  riverpod:
+  get_it:
+  uuid:
+  flutter_multi_formatter:
   date_time_format:
   timeago_flutter:
   fl_chart: ^0.55.2

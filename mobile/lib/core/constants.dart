@@ -10,7 +10,8 @@ const kAppLogo = 'assets/logo.png';
 const kAppLoadingAnimation = 'assets/notes_doc.json';
 const kFeatureUnderDev = 'Feature under development';
 const kScanNoteTitle = 'Scan your note';
-const kScanNoteDescription = 'Transfer your note with an image capture directly from your camera';
+const kScanNoteDescription =
+    'Transfer your note with an image capture directly from your camera';
 const kDrawNoteTitle = 'Draw your note';
 const kDrawNoteDescription = 'Beautifully design your note with art effects';
 
@@ -29,3 +30,7 @@ const kEmphasisLowest = 0.1;
 const kSampleDelay = Duration(seconds: 2);
 const kListAnimationDuration = Duration(milliseconds: 850);
 const kListSlideOffset = 100.0;
+
+/// local storage preferences (keys)
+const kUsernameKey = 'libello-username-key';
+const kUserIdKey = 'libello-id-key';

@@ -22,6 +22,7 @@ class Note {
   final NoteType type;
   final NoteStatus status;
   final String? folder;
+  final String owner;
 
   const Note({
     required this.id,
@@ -30,6 +31,7 @@ class Note {
     this.type = NoteType.important,
     this.status = NoteStatus.regular,
     this.folder,
+    this.owner = '', // add this when uploading to server
   });
 
   factory Note.fromJson(json) => _$NoteFromJson(json);

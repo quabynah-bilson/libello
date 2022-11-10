@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:libello/features/dashboard/presentation/pages/dashboard.dart';
 import 'package:libello/features/dashboard/presentation/pages/folder/folder.notes.dart';
-import 'package:libello/features/shared/presentation/pages/login.dart';
+import 'package:libello/features/dashboard/presentation/pages/notes/create.note.dart';
 
 @CustomAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -11,7 +11,7 @@ import 'package:libello/features/shared/presentation/pages/login.dart';
   routes: [
     AutoRoute(page: DashboardPage, initial: true),
     AutoRoute(page: FolderNotesPage),
-    // AutoRoute(page: LoginDialog, fullscreenDialog: true),
+    AutoRoute(page: CreateNotePage),
   ],
 )
 class $LibelloAppRouter {}

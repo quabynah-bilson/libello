@@ -15,6 +15,7 @@ Note _$NoteFromJson(Map<String, dynamic> json) => Note(
       status: $enumDecodeNullable(_$NoteStatusEnumMap, json['status']) ??
           NoteStatus.regular,
       folder: json['folder'] as String?,
+      owner: json['owner'] as String? ?? '',
     );
 
 Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
@@ -24,6 +25,7 @@ Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
       'type': _$NoteTypeEnumMap[instance.type]!,
       'status': _$NoteStatusEnumMap[instance.status]!,
       'folder': instance.folder,
+      'owner': instance.owner,
     };
 
 const _$NoteTypeEnumMap = {
