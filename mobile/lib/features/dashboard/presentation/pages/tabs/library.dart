@@ -206,19 +206,16 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
               SliverToBoxAdapter(
                 child: FilledButtonWithIcon(
                   label: 'Fixed',
-                  // todo => add action
-                  onTap: () => context.showSnackBar(kFeatureUnderDev),
+                  onTap: () => context.router.push(const CreateNoteRoute()),
                 ),
               ),
               // all files
               SliverToBoxAdapter(
                 child: ListTile(
-                  // todo => view notes by status type
-                  onTap: () => context.showSnackBar(kFeatureUnderDev),
+                  onTap: () => context.router.push(NotesRoute(showAll: true)),
                   leading: const Icon(TablerIcons.script,
                       color: ThemeConfig.kOrange),
                   title: const Text('All files'),
-                  // todo => get data from database
                   trailing: Text(
                     '${_notes.length}',
                     style: context.theme.textTheme.subtitle2?.copyWith(
@@ -231,8 +228,8 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
               // archived files
               SliverToBoxAdapter(
                 child: ListTile(
-                  // todo => view notes by status type
-                  onTap: () => context.showSnackBar(kFeatureUnderDev),
+                  onTap: () => context.router
+                      .push(NotesRoute(status: NoteStatus.archived)),
                   leading: const Icon(TablerIcons.archive,
                       color: ThemeConfig.kGreen),
                   title: const Text('Archived'),
@@ -248,8 +245,8 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
               // deleted files
               SliverToBoxAdapter(
                 child: ListTile(
-                  // todo => view notes by status type
-                  onTap: () => context.showSnackBar(kFeatureUnderDev),
+                  onTap: () => context.router
+                      .push(NotesRoute(status: NoteStatus.deleted)),
                   leading:
                       const Icon(TablerIcons.trash, color: ThemeConfig.kRed),
                   title: const Text('Deleted'),
@@ -277,8 +274,8 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
               //
               SliverToBoxAdapter(
                 child: ListTile(
-                  // todo => view notes by status type
-                  onTap: () => context.showSnackBar(kFeatureUnderDev),
+                  onTap: () =>
+                      context.router.push(NotesRoute(type: NoteType.important)),
                   leading: const Icon(TablerIcons.star),
                   title: const Text('Important'),
                 ),
@@ -286,8 +283,8 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
               // to-do list
               SliverToBoxAdapter(
                 child: ListTile(
-                  // todo => view notes by status type
-                  onTap: () => context.showSnackBar(kFeatureUnderDev),
+                  onTap: () =>
+                      context.router.push(NotesRoute(type: NoteType.todoList)),
                   leading: const Icon(TablerIcons.list_check),
                   title: const Text('To-do List'),
                 ),
@@ -295,8 +292,8 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
               // business
               SliverToBoxAdapter(
                 child: ListTile(
-                  // todo => view notes by status type
-                  onTap: () => context.showSnackBar(kFeatureUnderDev),
+                  onTap: () =>
+                      context.router.push(NotesRoute(type: NoteType.business)),
                   leading: const Icon(TablerIcons.businessplan),
                   title: const Text('Business'),
                 ),
