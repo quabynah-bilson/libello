@@ -1,6 +1,15 @@
 # Libello
 
-A note taking mobile application for pros (created using Flutter &amp; Firebase)
+A note-taking mobile application for pros (created using Flutter &amp; Firebase)
+
+<p align="center">
+  <img src="assets/logo.png" width="250" title="login" alt="libello" style="margin-right: 1rem; margin-top: 2rem">
+  <img src="assets/logo.svg" width="250" alt="dashboard-home" style="margin-top: 2rem">
+  <img src="assets/logo.svg" width="250" alt="dashboard-libraries" style="margin-right: 1rem; margin-top: 2rem">
+  <img src="assets/logo.svg" width="250" alt="dashboard-folders" style="margin-top: 2rem">
+  <img src="assets/logo.svg" width="250" alt="create-note" style="margin-right: 1rem; margin-top: 2rem">
+  <img src="assets/logo.svg" width="250" alt="view-note">
+</p>
 
 ### References
 
