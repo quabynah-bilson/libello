@@ -116,6 +116,75 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                                           .withOpacity(kEmphasisMedium)),
                             ),
                           },
+
+                          /// todos
+                          if(_currentNote.todos.isNotEmpty) ... {
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24),
+                              child: Text(
+                                'To-Do',
+                                style: context.theme.textTheme.subtitle1
+                                    ?.copyWith(
+                                    color: context.colorScheme.secondary),
+                              ),
+                            ),
+                            AnimationLimiter(
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  var todo = _currentNote.todos[index];
+                                  return AnimationConfiguration.synchronized(
+                                    duration: kListAnimationDuration,
+                                    child: SlideAnimation(
+                                      horizontalOffset: kListSlideOffset,
+                                      child: FadeInAnimation(
+                                        child: Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          children: [
+                                            Checkbox(
+                                              value: todo.completed,
+                                              activeColor:
+                                              context.theme.disabledColor,
+                                              onChanged: (checked) {
+                                                todo = todo.copyWith(
+                                                    completed: checked,
+                                                    updatedAt: DateTime.now());
+                                                _currentNote.todos[index] = todo;
+                                                _noteCubit.updateNote(_currentNote);
+                                              },
+                                            ),
+                                            const SizedBox(width: 12),
+                                            Expanded(
+                                              child: Text(
+                                                todo.text,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: context
+                                                    .theme.textTheme.subtitle2
+                                                    ?.copyWith(
+                                                  color: todo.completed
+                                                      ? context.theme.disabledColor
+                                                      : context.colorScheme.onSurface,
+                                                  decoration: todo.completed
+                                                      ? TextDecoration.lineThrough
+                                                      : null,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (_, __) => const SizedBox.shrink(),
+                                itemCount: _currentNote.todos.length,
+                              ),
+                            ),
+                          },
                         ],
                       ),
                     ),

@@ -104,8 +104,15 @@ class _NoteTileState extends State<NoteTile> {
                       ),
                     },
                     if (_currentNote.todos.isNotEmpty) ...{
+                      Divider(
+                        color: context.theme.disabledColor
+                            .withOpacity(kEmphasisLowest),
+                      ),
                       AnimationLimiter(
                         child: ListView.separated(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             var todo = _currentNote.todos[index];
                             return AnimationConfiguration.synchronized(
@@ -119,6 +126,8 @@ class _NoteTileState extends State<NoteTile> {
                                     children: [
                                       Checkbox(
                                         value: todo.completed,
+                                        activeColor:
+                                            context.theme.disabledColor,
                                         onChanged: (checked) {
                                           todo = todo.copyWith(
                                               completed: checked,
@@ -151,10 +160,13 @@ class _NoteTileState extends State<NoteTile> {
                               ),
                             );
                           },
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: 8),
+                          separatorBuilder: (_, __) => const SizedBox.shrink(),
                           itemCount: _currentNote.todos.length,
                         ),
+                      ),
+                      Divider(
+                        color: context.theme.disabledColor
+                            .withOpacity(kEmphasisLowest),
                       ),
                     },
 
