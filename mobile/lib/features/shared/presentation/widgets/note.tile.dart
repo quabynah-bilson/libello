@@ -113,7 +113,8 @@ class _NoteTileState extends State<NoteTile> {
                                           value: todo.completed,
                                           onChanged: (checked) {
                                             todo = todo.copyWith(
-                                                completed: checked);
+                                                completed: checked,
+                                                updatedAt: DateTime.now());
                                             _currentNote.todos[index] = todo;
                                             _noteCubit.updateNote(_currentNote);
                                           },

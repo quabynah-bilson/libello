@@ -166,7 +166,7 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
                 child: ListTile(
                   onTap: () =>
                       context.router.push(NotesRoute(type: NoteType.business)),
-                  leading: const Icon(TablerIcons.businessplan),
+                  leading: const Icon(TablerIcons.briefcase),
                   title: const Text('Business'),
                 ),
               ),

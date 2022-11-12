@@ -63,19 +63,28 @@ class _DashboardFolderTabState extends State<_DashboardFolderTab> {
                     scrollDirection: Axis.horizontal,
                     children: [
                       CustomChip(
-                        onTap: () => context.showSnackBar(kFeatureUnderDev),
+                        onTap: () =>
+                            context.router.push(NotesRoute(showAll: true)),
                         leadingIcon: TablerIcons.filter,
                         label: 'filter',
                       ),
                       CustomChip(
-                        onTap: () => context.showSnackBar(kFeatureUnderDev),
+                        onTap: () => context.router
+                            .push(NotesRoute(type: NoteType.important)),
                         leadingIcon: TablerIcons.star,
                         label: 'important',
                       ),
                       CustomChip(
-                        onTap: () => context.showSnackBar(kFeatureUnderDev),
+                        onTap: () => context.router
+                            .push(NotesRoute(type: NoteType.todoList)),
                         leadingIcon: TablerIcons.list_check,
                         label: 'to-do list',
+                      ),
+                      CustomChip(
+                        onTap: () => context.router
+                            .push(NotesRoute(type: NoteType.business)),
+                        leadingIcon: TablerIcons.briefcase,
+                        label: 'business',
                       ),
                     ],
                   ),
@@ -86,31 +95,34 @@ class _DashboardFolderTabState extends State<_DashboardFolderTab> {
               SliverToBoxAdapter(
                 child: _folders.isEmpty
                     ? Center(
-                        child: GestureDetector(
-                          // todo => add a new folder
-                          onTap: () => context.showSnackBar(kFeatureUnderDev),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                TablerIcons.folder_minus,
-                                size: context.width * 0.2,
-                                color: context.colorScheme.secondary,
-                              ),
-                              const SizedBox(height: 24),
-                              Text('Create a new folder',
-                                  style: context.theme.textTheme.headline6),
-                              const SizedBox(height: 8),
-                              Text(
-                                'You have no new folders available',
-                                style:
-                                    context.theme.textTheme.subtitle1?.copyWith(
-                                  color: context.colorScheme.onBackground
-                                      .withOpacity(kEmphasisMedium),
+                        child: SizedBox(
+                          height: context.height * 0.4,
+                          child: GestureDetector(
+                            // todo => add a new folder
+                            onTap: () => context.showSnackBar(kFeatureUnderDev),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  TablerIcons.folder_minus,
+                                  size: context.width * 0.2,
+                                  color: context.colorScheme.secondary,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 24),
+                                Text('Create a new folder',
+                                    style: context.theme.textTheme.headline6),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'You have no new folders available',
+                                  style: context.theme.textTheme.subtitle1
+                                      ?.copyWith(
+                                    color: context.colorScheme.onBackground
+                                        .withOpacity(kEmphasisMedium),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       )

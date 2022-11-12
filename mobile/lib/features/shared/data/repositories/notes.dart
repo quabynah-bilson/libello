@@ -70,7 +70,7 @@ class NoteRepository implements BaseNoteRepository {
   }
 
   @override
-  Future<Either<Note, String>> getNote(String id) {
+  Future<Either<Stream<Note>, String>> getNote(String id) {
     // TODO: implement getNote
     throw UnimplementedError();
   }
@@ -101,7 +101,12 @@ class NoteRepository implements BaseNoteRepository {
 
   @override
   Future<Either<Note, String>> updateNote(Note note) async {
-    // TODO: implement updateNote
-    throw UnimplementedError();
+    try {
+      await _kNoteRef.doc(note.id).set(note.toJson(), SetOptions(merge: true));
+      return Left(note);
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while creating the note');
   }
 }
