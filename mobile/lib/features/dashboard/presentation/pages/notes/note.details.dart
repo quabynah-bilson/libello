@@ -38,12 +38,12 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
         appBar: AppBar(
           actions: [
             IconButton(
-              onPressed: () {},
-              icon: Icon(TablerIcons.message_share),
+              onPressed: () async => shareNote(context, _currentNote),
+              icon: const Icon(TablerIcons.message_share),
             ),
             IconButton(
               onPressed: () => _noteCubit.deleteNote(_currentNote.id),
-              icon: Icon(TablerIcons.trash),
+              icon: const Icon(TablerIcons.trash),
               color: context.colorScheme.error,
             ),
           ],

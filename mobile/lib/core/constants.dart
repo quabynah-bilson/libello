@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:logger/logger.dart';
+import 'package:share_plus/share_plus.dart';
 
 /// for debugging
 final logger = Logger();
@@ -39,6 +44,12 @@ const kOptionsFabTag = 'libello-options-sheet';
 const kUsernameKey = 'libello-username-key';
 const kUserIdKey = 'libello-id-key';
 
-/// samples
-const kSampleDesc =
-    'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+/// share
+Future<void> shareNote(BuildContext context, Note note) async {
+  final box = context.findRenderObject() as RenderBox?;
+  await Share.share(note.title,
+      subject: note.title,
+      sharePositionOrigin: Platform.isIOS && context.size!.width >= 650
+          ? box!.localToGlobal(Offset.zero) & box.size
+          : null);
+}
