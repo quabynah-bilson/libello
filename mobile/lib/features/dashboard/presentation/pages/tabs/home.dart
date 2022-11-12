@@ -76,6 +76,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                     ),
                   ),
                   child: SafeArea(
+                    bottom: false,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -108,29 +109,30 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                         /// greeting
                         const SizedBox(height: 28),
                         StreamBuilder<bool>(
-                            stream: _authCubit.loginStatus,
-                            initialData: false,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                      ConnectionState.done &&
-                                  snapshot.hasData &&
-                                  snapshot.data!) {
-                                return Text(
-                                  '${_greeting.replaceAll('!', ',')}${_authCubit.displayName}',
-                                  style: context.theme.textTheme.headline2
-                                      ?.copyWith(
-                                    color: context.colorScheme.onPrimary,
-                                  ),
-                                );
-                              }
+                          stream: _authCubit.loginStatus,
+                          initialData: false,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                snapshot.hasData &&
+                                snapshot.data!) {
                               return Text(
-                                _greeting,
+                                '${_greeting.replaceAll('!', ',')}${_authCubit.displayName}',
                                 style:
                                     context.theme.textTheme.headline2?.copyWith(
                                   color: context.colorScheme.onPrimary,
                                 ),
                               );
-                            }),
+                            }
+                            return Text(
+                              _greeting,
+                              style:
+                                  context.theme.textTheme.headline2?.copyWith(
+                                color: context.colorScheme.onPrimary,
+                              ),
+                            );
+                          },
+                        ),
 
                         /// notes counter
                         const SizedBox(height: 24),
@@ -221,7 +223,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                 ),
               ),
 
-              /// monthly report
+              /// recent notes
               SliverPadding(
                 padding: const EdgeInsets.only(top: 28, left: 20, bottom: 20),
                 sliver: SliverToBoxAdapter(
@@ -249,6 +251,8 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                     ],
                   ),
                 ),
+                SliverToBoxAdapter(
+                    child: SizedBox(height: context.height * 0.1)),
               } else ...{
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),

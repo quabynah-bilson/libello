@@ -43,9 +43,7 @@ class Note {
     this.owner = '', // add this when uploading to server
     this.todos = const <NoteTodo>[],
     this.tags = const <String>[],
-  }) : assert(status == NoteStatus.secret &&
-            lockPin != null &&
-            lockPin.bitLength >= 4);
+  });
 
   factory Note.fromJson(json) => _$NoteFromJson(json);
 

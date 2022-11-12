@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
@@ -9,9 +10,11 @@ import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/auth_cubit.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/pages/login.dart';
+import 'package:libello/features/shared/presentation/widgets/animated.column.dart';
 import 'package:libello/features/shared/presentation/widgets/app.text.field.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 import 'package:libello/features/shared/presentation/widgets/rounded.button.dart';
+import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateNotePage extends StatefulWidget {
@@ -22,11 +25,14 @@ class CreateNotePage extends StatefulWidget {
 }
 
 class _CreateNotePageState extends State<CreateNotePage> {
-  var _loading = false;
+  var _loading = false, _showTodosUI = false;
   final _formKey = GlobalKey<FormState>(),
       _titleController = TextEditingController(),
+      _descController = TextEditingController(),
       _authCubit = AuthCubit(),
-      _noteCubit = NoteCubit();
+      _noteCubit = NoteCubit(),
+      _todos = List<NoteTodo>.empty(growable: true),
+      _labels = List<String>.empty(growable: true)..addAll(['Personal']);
 
   @override
   Widget build(BuildContext context) => BlocListener(
@@ -48,58 +54,150 @@ class _CreateNotePageState extends State<CreateNotePage> {
         child: Scaffold(
           body: LoadingOverlay(
             isLoading: _loading,
-            child: CustomScrollView(
-              shrinkWrap: true,
-              slivers: [
-                const SliverAppBar(title: Text('Create a note')),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 40, top: 16),
-                    child: Text(
-                      'Complete the details to create a new note',
-                      style: context.theme.textTheme.subtitle1?.copyWith(
-                        color: context.colorScheme.onBackground
-                            .withOpacity(kEmphasisMedium),
+            child: AnimationLimiter(
+              child: CustomScrollView(
+                shrinkWrap: true,
+                slivers: [
+                  SliverAppBar(
+                    actions: [
+                      IconButton(
+                        onPressed: () => context.showSnackBar(kFeatureUnderDev),
+                        icon: const Icon(Icons.undo),
                       ),
-                      textAlign: TextAlign.center,
+                      IconButton(
+                        onPressed: () => context.showSnackBar(kFeatureUnderDev),
+                        icon: const Icon(Icons.redo),
+                      ),
+                    ],
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                    sliver: SliverToBoxAdapter(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            /// title
+                            TextFormField(
+                              controller: _titleController,
+                              enabled: !_loading,
+                              validator: (input) =>
+                                  input == null || input.isEmpty
+                                      ? 'Required'
+                                      : null,
+                              decoration: _inputDecorator('Title*'),
+                              maxLines: 3,
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              textAlign: TextAlign.start,
+                              style: context.theme.textTheme.headline4
+                                  ?.copyWith(
+                                      color: context.colorScheme.onBackground),
+                            ),
+
+                            /// labels
+                            if (_labels.isNotEmpty) ...{
+                              Padding(
+                                padding: const EdgeInsets.only(top: 24),
+                                child: Text(
+                                  'Labels',
+                                  style: context.theme.textTheme.subtitle1
+                                      ?.copyWith(
+                                          color: context.colorScheme.secondary),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                child: Wrap(
+                                  runSpacing: 12,
+                                  spacing: 8,
+                                  alignment: WrapAlignment.start,
+                                  runAlignment: WrapAlignment.start,
+                                  children:
+                                      AnimationConfiguration.toStaggeredList(
+                                    duration: kListAnimationDuration,
+                                    childAnimationBuilder: (child) =>
+                                        SlideAnimation(
+                                      horizontalOffset: kListSlideOffset,
+                                      child: FadeInAnimation(child: child),
+                                    ),
+                                    children: _labels
+                                        .map((e) => TagItem(
+                                              label: e,
+                                              onClosed: () => setState(() =>
+                                                  _labels.removeWhere(
+                                                      (element) =>
+                                                          e == element)),
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                            },
+
+                            /// description
+                            TextFormField(
+                              controller: _descController,
+                              enabled: !_loading,
+                              validator: (input) =>
+                                  input == null || input.isEmpty
+                                      ? 'Required'
+                                      : null,
+                              decoration: _inputDecorator(
+                                  'What do you wish to accomplish today?',
+                                  style: context.theme.textTheme.bodyText1),
+                              maxLines: 10,
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              textAlign: TextAlign.start,
+                              style: context.theme.textTheme.bodyText1
+                                  ?.copyWith(
+                                      color: context.colorScheme.onBackground),
+                            ),
+
+                            /// todos
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: StreamBuilder<bool>(
+                    stream: _authCubit.loginStatus,
+                    initialData: false,
+                    builder: (context, snapshot) =>
+                        FloatingActionButton.extended(
+                      heroTag: kHomeFabTag,
+                      onPressed: () => _validateAndCreateNote(
+                          snapshot.hasData && snapshot.data!),
+                      label: const Text('Create note'),
+                      icon: const Icon(TablerIcons.note),
+                      enableFeedback: true,
+                      isExtended: !_loading,
+                      backgroundColor: context.colorScheme.secondary,
+                      foregroundColor: context.colorScheme.onSecondary,
                     ),
                   ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  sliver: SliverToBoxAdapter(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          AppTextField(
-                            "What's on your mind?",
-                            controller: _titleController,
-                            maxLength: 50,
-                            enabled: !_loading,
-                            validator: (input) => input == null || input.isEmpty
-                                ? 'Required'
-                                : null,
-                            capitalization: TextCapitalization.sentences,
-                          ),
-                          StreamBuilder<bool>(
-                              stream: _authCubit.loginStatus,
-                              initialData: false,
-                              builder: (context, snapshot) {
-                                return AppRoundedButton(
-                                  text: 'Create note',
-                                  icon: TablerIcons.note,
-                                  enabled: !_loading,
-                                  onTap: () => _validateAndCreateNote(
-                                      snapshot.hasData && snapshot.data!),
-                                );
-                              }),
-                        ],
-                      ),
-                    ),
-                  ),
+                const SizedBox(width: 16),
+                FloatingActionButton(
+                  heroTag: kOptionsFabTag,
+                  onPressed: _showOptionsSheet,
+                  child: const Icon(TablerIcons.dots),
                 ),
               ],
             ),
@@ -132,12 +230,166 @@ class _CreateNotePageState extends State<CreateNotePage> {
     }
   }
 
+  /// input decoration
+  InputDecoration _inputDecorator(String label, {TextStyle? style}) =>
+      InputDecoration(
+        enabled: !_loading,
+        fillColor: context.colorScheme.background,
+        filled: true,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        labelStyle: (style ??= context.theme.textTheme.headline4)
+            ?.copyWith(color: context.theme.disabledColor),
+        border: InputBorder.none,
+        labelText: label,
+        alignLabelWithHint: true,
+      );
+
+  /// create a new note
   void _createNote() {
     var note = Note(
         id: const Uuid().v4(),
         title: _titleController.text.trim(),
+        body: _descController.text.trim(),
+        tags: _labels,
+        todos: _todos,
         updatedAt: DateTime.now());
     logger.i('note to create => $note');
     _noteCubit.createNote(note);
+  }
+
+  /// show options for the note
+  void _showOptionsSheet() {
+    showModalBottomSheet(
+      context: context,
+      clipBehavior: Clip.hardEdge,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(kRadiusLarge),
+          topLeft: Radius.circular(kRadiusLarge),
+        ),
+      ),
+      builder: (context) => AnimatedContainer(
+        duration: kListAnimationDuration,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        color: context.colorScheme.surface,
+        child: SafeArea(
+          top: false,
+          child: AnimatedColumn(
+            animateType: AnimateType.slideUp,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ListTile(
+                title: Text(
+                  'Delete',
+                  style: TextStyle(color: context.colorScheme.onSurface),
+                ),
+                leading: Icon(TablerIcons.trash,
+                    color: context.colorScheme.onSurface),
+                onTap: () {
+                  context.router.pop();
+                  doAfterDelay(context.router.pop);
+                },
+              ),
+              ListTile(
+                title: Text(
+                  '${_showTodosUI ? 'Remove' : 'Add'} Todo list',
+                  style: TextStyle(color: context.colorScheme.onSurface),
+                ),
+                leading: Icon(TablerIcons.checklist,
+                    color: context.colorScheme.onSurface),
+                onTap: () {
+                  setState(() => _showTodosUI = !_showTodosUI);
+                  context.router.pop();
+                },
+              ),
+              ListTile(
+                title: Text(
+                  'Save & Share',
+                  style: TextStyle(color: context.colorScheme.onSurface),
+                ),
+                leading: Icon(TablerIcons.message_share,
+                    color: context.colorScheme.onSurface),
+                // todo => implement this
+                onTap: () => context.showSnackBar(kFeatureUnderDev),
+              ),
+              ListTile(
+                title: Text(
+                  'Labels',
+                  style: TextStyle(color: context.colorScheme.onSurface),
+                ),
+                leading: Icon(TablerIcons.tags,
+                    color: context.colorScheme.onSurface),
+                onTap: () {
+                  context.router.pop();
+                  doAfterDelay(_showAddLabelSheet, 500);
+                },
+              ),
+              const SizedBox(height: 16),
+              FloatingActionButton.extended(
+                heroTag: kOptionsFabTag,
+                onPressed: context.router.pop,
+                label: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Text('Dismiss'),
+                ),
+                enableFeedback: true,
+                backgroundColor: context.colorScheme.onSurface,
+                foregroundColor: context.colorScheme.surface,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// add label
+  void _showAddLabelSheet() async {
+    String? label;
+    showModalBottomSheet(
+      context: context,
+      clipBehavior: Clip.hardEdge,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(kRadiusLarge),
+          topLeft: Radius.circular(kRadiusLarge),
+        ),
+      ),
+      builder: (context) {
+        return SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+            child: AnimatedColumn(
+              animateType: AnimateType.slideUp,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Add a new label',
+                  style: context.theme.textTheme.subtitle1
+                      ?.copyWith(color: context.colorScheme.secondary),
+                ),
+                const SizedBox(height: 24),
+                AppTextField(
+                  'Label',
+                  onChange: (input) => label = input?.trim(),
+                  capitalization: TextCapitalization.words,
+                  suffixIcon: const Icon(Icons.label),
+                ),
+                AppRoundedButton(
+                  text: 'Add',
+                  onTap: () {
+                    if (label != null && label!.isNotEmpty) {
+                      setState(() => _labels.add(label ??= 'Custom Tag'));
+                    }
+                    context.router.pop();
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

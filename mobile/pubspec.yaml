@@ -30,6 +30,7 @@ dependencies:
   get_it:
   uuid:
   string_stats:
+  animated_bottom_navigation_bar:
   flutter_multi_formatter:
   copy_with_extension:
   date_time_format:

@@ -110,8 +110,8 @@ extension ContextX on BuildContext {
           content: Text(
             message,
             style: Theme.of(this).textTheme.bodyText2?.copyWith(
-              color: foreground ?? Theme.of(this).colorScheme.onSecondary,
-            ),
+                  color: foreground ?? Theme.of(this).colorScheme.onSecondary,
+                ),
           ),
           backgroundColor: background ?? Theme.of(this).colorScheme.secondary,
           behavior: SnackBarBehavior.floating,
@@ -126,26 +126,27 @@ extension ContextX on BuildContext {
 }
 
 /// called in initState
-void doAfterDelay(Function() block) =>
-    Future.delayed(const Duration()).then((value) => block());
+void doAfterDelay(Function() block, [int delayInMillis = 0]) =>
+    Future.delayed(Duration(milliseconds: delayInMillis))
+        .then((value) => block());
 
 /// UI overlay
 void kUseDefaultOverlays(
-    BuildContext context, {
-      Color? statusBarColor,
-      Color? navigationBarColor,
-      Brightness statusBarIconBrightness = Brightness.dark,
-      Brightness statusBarBrightness = Brightness.dark,
-      Brightness navigationBarIconBrightness = Brightness.dark,
-    }) =>
+  BuildContext context, {
+  Color? statusBarColor,
+  Color? navigationBarColor,
+  Brightness statusBarIconBrightness = Brightness.dark,
+  Brightness statusBarBrightness = Brightness.dark,
+  Brightness navigationBarIconBrightness = Brightness.dark,
+}) =>
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: statusBarColor ?? context.colorScheme.background,
         systemNavigationBarColor:
-        navigationBarColor ?? context.colorScheme.background,
+            navigationBarColor ?? context.colorScheme.background,
         statusBarIconBrightness: statusBarIconBrightness,
         systemNavigationBarDividerColor:
-        navigationBarColor ?? context.colorScheme.background,
+            navigationBarColor ?? context.colorScheme.background,
         systemNavigationBarIconBrightness: navigationBarIconBrightness,
         statusBarBrightness: statusBarBrightness,
         systemStatusBarContrastEnforced: false,

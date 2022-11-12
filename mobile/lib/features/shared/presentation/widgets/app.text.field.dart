@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:libello/core/extensions.dart';
 
+import '../../../../core/constants.dart';
+
 enum AppTextFieldType { regular, phone, password, select, currency, card }
 
 class AppTextField extends StatefulWidget {
@@ -129,7 +131,9 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
             counter: const SizedBox.shrink(),
             // border: InputBorder.none,
-            labelStyle: TextStyle(color: context.colorScheme.onSurface),
+            labelStyle: TextStyle(
+                color:
+                    context.colorScheme.onSurface.withOpacity(kEmphasisMedium)),
             labelText: widget.label,
             hintText: widget.label.toString().contains('Account Number')
                 ? '#### #### #### ####'
@@ -179,7 +183,9 @@ class _AppTextFieldState extends State<AppTextField> {
                 ),
                 counter: const SizedBox.shrink(),
                 labelText: widget.label,
-                labelStyle: TextStyle(color: context.colorScheme.onSurface),
+                labelStyle: TextStyle(
+                    color: context.colorScheme.onSurface
+                        .withOpacity(kEmphasisMedium)),
                 filled: true,
                 fillColor: context.colorScheme.surface,
                 contentPadding:
@@ -220,7 +226,9 @@ class _AppTextFieldState extends State<AppTextField> {
           ),
           counter: const SizedBox.shrink(),
           labelText: widget.label,
-          labelStyle: TextStyle(color: context.colorScheme.onSurface),
+          labelStyle: TextStyle(
+              color:
+                  context.colorScheme.onSurface.withOpacity(kEmphasisMedium)),
           filled: true,
           fillColor: context.colorScheme.surface,
           contentPadding:
@@ -282,7 +290,9 @@ class _AppTextFieldState extends State<AppTextField> {
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(radius),
             ),
-            labelStyle: TextStyle(color: context.colorScheme.onSurface),
+            labelStyle: TextStyle(
+                color:
+                    context.colorScheme.onSurface.withOpacity(kEmphasisMedium)),
             counter: const SizedBox.shrink(),
             labelText: widget.label,
             filled: true,
@@ -326,7 +336,9 @@ class _AppTextFieldState extends State<AppTextField> {
           ),
           counter: const SizedBox.shrink(),
           labelText: widget.label,
-          labelStyle: TextStyle(color: context.colorScheme.onSurface),
+          labelStyle: TextStyle(
+              color:
+                  context.colorScheme.onSurface.withOpacity(kEmphasisMedium)),
           filled: true,
           fillColor: context.colorScheme.surface,
           contentPadding:
@@ -366,7 +378,9 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
             counter: const SizedBox.shrink(),
             labelText: widget.label,
-            labelStyle: TextStyle(color: context.colorScheme.onSurface),
+            labelStyle: TextStyle(
+                color:
+                    context.colorScheme.onSurface.withOpacity(kEmphasisMedium)),
             filled: true,
             fillColor: context.colorScheme.surface,
             contentPadding:
@@ -435,7 +449,9 @@ class AppDropdownField extends StatelessWidget {
             ),
             counter: const SizedBox.shrink(),
             labelText: label,
-            labelStyle: TextStyle(color: context.colorScheme.onSurface),
+            labelStyle: TextStyle(
+                color:
+                    context.colorScheme.onSurface.withOpacity(kEmphasisMedium)),
             filled: true,
             fillColor: context.colorScheme.surface,
             suffixIcon: Icon(

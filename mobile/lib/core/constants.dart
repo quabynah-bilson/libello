@@ -27,10 +27,13 @@ const kEmphasisMedium = 0.67;
 const kEmphasisLow = 0.38;
 const kEmphasisLowest = 0.1;
 
-/// animation duration
+/// animations & transitions
 const kSampleDelay = Duration(seconds: 2);
 const kListAnimationDuration = Duration(milliseconds: 850);
+const kContentAnimationDuration = Duration(seconds: 1);
 const kListSlideOffset = 100.0;
+const kHomeFabTag = 'libello-home';
+const kOptionsFabTag = 'libello-options-sheet';
 
 /// local storage preferences (keys)
 const kUsernameKey = 'libello-username-key';

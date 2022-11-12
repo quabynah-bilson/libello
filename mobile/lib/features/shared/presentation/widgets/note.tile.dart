@@ -4,11 +4,11 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
+import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
 import 'package:string_stats/string_stats.dart';
 
 /// note list item
@@ -159,40 +159,7 @@ class _NoteTileState extends State<NoteTile> {
                           spacing: 8,
                           children: List.generate(
                             _currentNote.tags.length,
-                            (index) => Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: context.theme.disabledColor
-                                      .withOpacity(kEmphasisLow),
-                                ),
-                                color: context.theme.disabledColor
-                                    .withOpacity(kEmphasisLowest),
-                                borderRadius:
-                                    BorderRadius.circular(kRadiusSmall),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    TablerIcons.tag,
-                                    size: 18,
-                                    color: context.colorScheme.onSurface
-                                        .withOpacity(kEmphasisMedium),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    _currentNote.tags[index],
-                                    style: context.theme.textTheme.caption
-                                        ?.copyWith(
-                                      color: context.colorScheme.onSurface
-                                          .withOpacity(kEmphasisMedium),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            (index) => TagItem(label: _currentNote.tags[index]),
                           ),
                         ),
                       },
