@@ -26,7 +26,8 @@ class _DashboardFolderTabState extends State<_DashboardFolderTab> {
           setState(() => _loading = state is NoteLoading);
 
           if (state is NoteError) {
-            context.showSnackBar(state.message);
+            context.showSnackBar(state.message, context.colorScheme.error,
+                context.colorScheme.onError);
           }
 
           if (state is NoteSuccess<List<NoteFolder>>) {

@@ -7,6 +7,8 @@ part of 'note.dart';
 // **************************************************************************
 
 abstract class _$NoteCWProxy {
+  Note body(String body);
+
   Note folder(String? folder);
 
   Note id(String id);
@@ -34,6 +36,7 @@ abstract class _$NoteCWProxy {
   /// Note(...).copyWith(id: 12, name: "My name")
   /// ````
   Note call({
+    String? body,
     String? folder,
     String? id,
     int? lockPin,
@@ -52,6 +55,9 @@ class _$NoteCWProxyImpl implements _$NoteCWProxy {
   final Note _value;
 
   const _$NoteCWProxyImpl(this._value);
+
+  @override
+  Note body(String body) => this(body: body);
 
   @override
   Note folder(String? folder) => this(folder: folder);
@@ -92,6 +98,7 @@ class _$NoteCWProxyImpl implements _$NoteCWProxy {
   /// Note(...).copyWith(id: 12, name: "My name")
   /// ````
   Note call({
+    Object? body = const $CopyWithPlaceholder(),
     Object? folder = const $CopyWithPlaceholder(),
     Object? id = const $CopyWithPlaceholder(),
     Object? lockPin = const $CopyWithPlaceholder(),
@@ -104,6 +111,10 @@ class _$NoteCWProxyImpl implements _$NoteCWProxy {
     Object? updatedAt = const $CopyWithPlaceholder(),
   }) {
     return Note(
+      body: body == const $CopyWithPlaceholder() || body == null
+          ? _value.body
+          // ignore: cast_nullable_to_non_nullable
+          : body as String,
       folder: folder == const $CopyWithPlaceholder()
           ? _value.folder
           // ignore: cast_nullable_to_non_nullable
@@ -154,6 +165,77 @@ extension $NoteCopyWith on Note {
   _$NoteCWProxy get copyWith => _$NoteCWProxyImpl(this);
 }
 
+abstract class _$NoteTodoCWProxy {
+  NoteTodo completed(bool completed);
+
+  NoteTodo text(String text);
+
+  NoteTodo updatedAt(DateTime updatedAt);
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `NoteTodo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// NoteTodo(...).copyWith(id: 12, name: "My name")
+  /// ````
+  NoteTodo call({
+    bool? completed,
+    String? text,
+    DateTime? updatedAt,
+  });
+}
+
+/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfNoteTodo.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfNoteTodo.copyWith.fieldName(...)`
+class _$NoteTodoCWProxyImpl implements _$NoteTodoCWProxy {
+  final NoteTodo _value;
+
+  const _$NoteTodoCWProxyImpl(this._value);
+
+  @override
+  NoteTodo completed(bool completed) => this(completed: completed);
+
+  @override
+  NoteTodo text(String text) => this(text: text);
+
+  @override
+  NoteTodo updatedAt(DateTime updatedAt) => this(updatedAt: updatedAt);
+
+  @override
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `NoteTodo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// NoteTodo(...).copyWith(id: 12, name: "My name")
+  /// ````
+  NoteTodo call({
+    Object? completed = const $CopyWithPlaceholder(),
+    Object? text = const $CopyWithPlaceholder(),
+    Object? updatedAt = const $CopyWithPlaceholder(),
+  }) {
+    return NoteTodo(
+      completed: completed == const $CopyWithPlaceholder() || completed == null
+          ? _value.completed
+          // ignore: cast_nullable_to_non_nullable
+          : completed as bool,
+      text: text == const $CopyWithPlaceholder() || text == null
+          ? _value.text
+          // ignore: cast_nullable_to_non_nullable
+          : text as String,
+      updatedAt: updatedAt == const $CopyWithPlaceholder() || updatedAt == null
+          ? _value.updatedAt
+          // ignore: cast_nullable_to_non_nullable
+          : updatedAt as DateTime,
+    );
+  }
+}
+
+extension $NoteTodoCopyWith on NoteTodo {
+  /// Returns a callable class that can be used as follows: `instanceOfNoteTodo.copyWith(...)` or like so:`instanceOfNoteTodo.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
+  _$NoteTodoCWProxy get copyWith => _$NoteTodoCWProxyImpl(this);
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -168,6 +250,7 @@ Note _$NoteFromJson(Map<String, dynamic> json) => Note(
           NoteStatus.regular,
       folder: json['folder'] as String?,
       lockPin: json['lockPin'] as int?,
+      body: json['body'] as String? ?? '',
       owner: json['owner'] as String? ?? '',
       todos: (json['todos'] as List<dynamic>?)
               ?.map((e) => NoteTodo.fromJson(e))
@@ -181,6 +264,7 @@ Note _$NoteFromJson(Map<String, dynamic> json) => Note(
 Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
+      'body': instance.body,
       'updatedAt': instance.updatedAt.toIso8601String(),
       'type': _$NoteTypeEnumMap[instance.type]!,
       'status': _$NoteStatusEnumMap[instance.status]!,

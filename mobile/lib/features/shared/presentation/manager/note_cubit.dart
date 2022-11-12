@@ -40,4 +40,13 @@ class NoteCubit extends Cubit<NoteState> {
       (r) => emit(NoteError(r)),
     );
   }
+
+  Future<void> updateNote(Note note) async{
+    emit(NoteLoading());
+    var either = await _repo.updateNote(note);
+    either.fold(
+          (l) => emit(NoteSuccess(l)),
+          (r) => emit(NoteError(r)),
+    );
+  }
 }

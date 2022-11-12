@@ -26,7 +26,8 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
           setState(() => _loading = state is NoteLoading);
 
           if (state is NoteError) {
-            context.showSnackBar(state.message);
+            context.showSnackBar(state.message, context.colorScheme.error,
+                context.colorScheme.onError);
           }
 
           if (state is NoteSuccess<List<Note>>) {
@@ -59,6 +60,7 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
                   onTap: () => context.router.push(const CreateNoteRoute()),
                 ),
               ),
+
               /// all
               SliverToBoxAdapter(
                 child: ListTile(
@@ -117,8 +119,8 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
                 child: ListTile(
                   onTap: () => context.router
                       .push(NotesRoute(status: NoteStatus.deleted)),
-                  leading:
-                      const Icon(TablerIcons.lock_access, color: ThemeConfig.kBlue),
+                  leading: const Icon(TablerIcons.lock_access,
+                      color: ThemeConfig.kBlue),
                   title: const Text('Secret'),
                   trailing: Text(
                     '${_notes.where((element) => element.status == NoteStatus.secret).length}',

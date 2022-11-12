@@ -21,6 +21,7 @@ enum NoteType {
 class Note {
   final String id;
   final String title;
+  final String body;
   final DateTime updatedAt;
   final NoteType type;
   final NoteStatus status;
@@ -38,6 +39,7 @@ class Note {
     this.status = NoteStatus.regular,
     this.folder,
     this.lockPin,
+    this.body = '',
     this.owner = '', // add this when uploading to server
     this.todos = const <NoteTodo>[],
     this.tags = const <String>[],
@@ -53,6 +55,7 @@ class Note {
   String toString() => toJson().toString();
 }
 
+@CopyWith()
 @JsonSerializable()
 class NoteTodo {
   final String text;

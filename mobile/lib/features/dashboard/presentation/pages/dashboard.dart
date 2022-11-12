@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -16,10 +17,15 @@ import 'package:libello/features/shared/domain/entities/folder.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/auth_cubit.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
+import 'package:libello/features/shared/presentation/widgets/animated.column.dart';
+import 'package:date_time_format/date_time_format.dart';
+import 'package:string_stats/string_stats.dart';
 import 'package:libello/features/shared/presentation/widgets/custom.chip.dart';
 import 'package:libello/features/shared/presentation/widgets/filled.button.dart';
 import 'package:libello/features/shared/presentation/widgets/folder.tile.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
+import 'package:lottie/lottie.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 part 'tabs/folder.dart';
 
