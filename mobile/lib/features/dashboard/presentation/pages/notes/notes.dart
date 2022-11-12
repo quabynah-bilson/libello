@@ -28,7 +28,7 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-  var _loading = false, _extendFab = true, _notes = List<Note>.empty();
+  var _loading = false, _notes = List<Note>.empty();
   late final _noteCubit = context.read<NoteCubit>();
 
   @override
@@ -70,62 +70,54 @@ class _NotesPageState extends State<NotesPage> {
         child: LoadingOverlay(
           isLoading: _loading,
           child: AnimationLimiter(
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (!notification.metrics.atEdge) return false;
-                logger.d('scroll metrics: ${notification.metrics.pixels} & at edge: ${notification.metrics.atEdge}');
-                setState(() => _extendFab = notification.metrics.pixels == 0);
-                return true;
-              },
-              child: CustomScrollView(
-                shrinkWrap: true,
-                slivers: [
-                  if (_notes.isEmpty) ...{
-                    SliverToBoxAdapter(
-                      child: AnimatedColumn(
-                        children: [
-                          LottieBuilder.asset(
-                            kAppLoadingAnimation,
-                            repeat: false,
-                            height: context.width * 0.4,
-                            width: context.width * 0.4,
-                          ),
-                          Text(
-                            'You have no recent notes',
-                            style: context.theme.textTheme.subtitle2,
-                          ),
-                        ],
-                      ),
+            child: CustomScrollView(
+              shrinkWrap: true,
+              slivers: [
+                if (_notes.isEmpty) ...{
+                  SliverToBoxAdapter(
+                    child: AnimatedColumn(
+                      children: [
+                        LottieBuilder.asset(
+                          kAppLoadingAnimation,
+                          repeat: false,
+                          height: context.width * 0.4,
+                          width: context.width * 0.4,
+                        ),
+                        Text(
+                          'You have no recent notes',
+                          style: context.theme.textTheme.subtitle2,
+                        ),
+                      ],
                     ),
-                  } else ...{
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
-                      sliver: SliverMasonryGrid(
-                        gridDelegate:
-                            const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) =>
-                              AnimationConfiguration.staggeredGrid(
-                            position: index,
-                            columnCount: index.isEven ? 1 : 2,
-                            duration: kListAnimationDuration,
-                            child: SlideAnimation(
-                              verticalOffset: kListSlideOffset,
-                              child: FadeInAnimation(
-                                child: NoteTile(note: _notes[index]),
-                              ),
+                  ),
+                } else ...{
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
+                    sliver: SliverMasonryGrid(
+                      gridDelegate:
+                          const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) =>
+                            AnimationConfiguration.staggeredGrid(
+                          position: index,
+                          columnCount: index.isEven ? 1 : 2,
+                          duration: kListAnimationDuration,
+                          child: SlideAnimation(
+                            verticalOffset: kListSlideOffset,
+                            child: FadeInAnimation(
+                              child: NoteTile(note: _notes[index]),
                             ),
                           ),
-                          childCount: _notes.length,
                         ),
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 12,
+                        childCount: _notes.length,
                       ),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 12,
                     ),
-                  },
-                ],
-              ),
+                  ),
+                },
+              ],
             ),
           ),
         ),
@@ -136,7 +128,6 @@ class _NotesPageState extends State<NotesPage> {
         foregroundColor: context.colorScheme.onSecondary,
         icon: const Icon(TablerIcons.plus),
         label: const Text('New note'),
-        isExtended: _extendFab,
       ),
     );
   }

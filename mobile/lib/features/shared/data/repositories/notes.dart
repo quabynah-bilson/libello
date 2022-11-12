@@ -101,6 +101,7 @@ class NoteRepository implements BaseNoteRepository {
     try {
       var stream = _kNoteRef
           .orderBy('updatedAt', descending: true)
+          .where('owner', isEqualTo: owner)
           .snapshots()
           .map((event) =>
               event.docs.map((e) => Note.fromJson(e.data())).toList());
