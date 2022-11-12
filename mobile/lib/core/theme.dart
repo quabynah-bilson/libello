@@ -45,7 +45,7 @@ class ThemeConfig {
 
   static ThemeData kLightThemeData(BuildContext context) =>
       ThemeData.light(useMaterial3: true).copyWith(
-        textTheme: _kDefaultTextTheme(context.colorScheme.onBackground),
+        textTheme: _kDefaultTextTheme(Colors.black),
         scaffoldBackgroundColor: const Color(0xffF9F9F9),
         colorScheme: const ColorScheme.dark(
           primary: Color(0xffFDF4A5),
@@ -92,7 +92,7 @@ class ThemeConfig {
 
   static ThemeData kDarkThemeData(BuildContext context) =>
       ThemeData.dark(useMaterial3: true).copyWith(
-        textTheme: _kDefaultTextTheme(context.colorScheme.onBackground),
+        textTheme: _kDefaultTextTheme(Colors.white),
         scaffoldBackgroundColor: const Color(0xff131313),
         colorScheme: const ColorScheme.dark(
           primary: Color(0xff9DC1CE),

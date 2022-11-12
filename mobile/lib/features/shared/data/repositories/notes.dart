@@ -42,9 +42,14 @@ class NoteRepository implements BaseNoteRepository {
   }
 
   @override
-  Future<Either<String, String>> deleteNote(Note note) {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+  Future<Either<String, String>> deleteNote(String id) async {
+    try {
+      await _kNoteRef.doc(id).delete();
+      return const Left('Note deleted successfully');
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while deleting the note');
   }
 
   @override
@@ -59,8 +64,10 @@ class NoteRepository implements BaseNoteRepository {
         (await getIt.getAsync<SharedPreferences>()).getString(kUserIdKey);
     if (owner == null) return const Right(kAuthRequired);
     try {
-      var stream = _kNoteFolderRef.snapshots(includeMetadataChanges: true).map(
-          (event) =>
+      var stream = _kNoteFolderRef
+          .orderBy('updatedAt', descending: true)
+          .snapshots()
+          .map((event) =>
               event.docs.map((e) => NoteFolder.fromJson(e.data())).toList());
       return Left(stream);
     } catch (e) {
@@ -70,12 +77,12 @@ class NoteRepository implements BaseNoteRepository {
   }
 
   @override
-  Future<Either<Stream<Note>, String>> getNote(String id) async {
+  Future<Either<Stream<Note?>, String>> getNote(String id) async {
     try {
       var stream = _kNoteRef
           .doc(id)
-          .snapshots(includeMetadataChanges: true)
-          .map((event) => Note.fromJson(event.data()));
+          .snapshots()
+          .map((event) => event.exists ? Note.fromJson(event.data()) : null);
       return Left(stream);
     } catch (e) {
       logger.e(e);
@@ -88,13 +95,15 @@ class NoteRepository implements BaseNoteRepository {
     NoteStatus status = NoteStatus.regular,
     NoteType type = NoteType.important,
   }) async {
-    await Future.delayed(kListAnimationDuration);
     var owner =
         (await getIt.getAsync<SharedPreferences>()).getString(kUserIdKey);
     if (owner == null) return const Right(kAuthRequired);
     try {
-      var stream = _kNoteRef.snapshots(includeMetadataChanges: true).map(
-          (event) => event.docs.map((e) => Note.fromJson(e.data())).toList());
+      var stream = _kNoteRef
+          .orderBy('updatedAt', descending: true)
+          .snapshots()
+          .map((event) =>
+              event.docs.map((e) => Note.fromJson(e.data())).toList());
       return Left(stream);
     } catch (e) {
       logger.e(e);

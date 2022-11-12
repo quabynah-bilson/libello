@@ -16,32 +16,33 @@ class FilledButtonWithIcon extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: context.colorScheme.surface,
-          border: Border.symmetric(
-            horizontal: BorderSide(
-                color:
-                    context.theme.disabledColor.withOpacity(kEmphasisLowest)),
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            /// label
-            Text(
-              label.toUpperCase(),
-              style: context.theme.textTheme.button?.copyWith(
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          margin: const EdgeInsets.only(top: 12),
+          decoration: BoxDecoration(
+            color: context.colorScheme.surface,
+            border: Border.symmetric(
+              horizontal: BorderSide(
                   color:
-                      context.colorScheme.onSurface.withOpacity(kEmphasisLow)),
+                      context.theme.disabledColor.withOpacity(kEmphasisLowest)),
             ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              /// label
+              Text(
+                label.toUpperCase(),
+                style: context.theme.textTheme.button?.copyWith(
+                    color:
+                        context.colorScheme.onSurface.withOpacity(kEmphasisLow)),
+              ),
 
-            /// icon
-            GestureDetector(
-              onTap: onTap,
-              child: Material(
+              /// icon
+              Material(
                 color: context.colorScheme.tertiary,
                 borderRadius: BorderRadius.circular(kRadiusLarge),
                 child: Center(
@@ -56,8 +57,8 @@ class FilledButtonWithIcon extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      );
+  );
 }

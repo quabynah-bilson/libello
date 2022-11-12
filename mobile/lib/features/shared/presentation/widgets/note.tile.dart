@@ -5,6 +5,7 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
@@ -25,7 +26,7 @@ class NoteTile extends StatefulWidget {
 }
 
 class _NoteTileState extends State<NoteTile> {
-  late var _currentNote = widget.note;
+  late var _currentNote = widget.note, _todos = widget.note.todos;
   final _noteCubit = NoteCubit();
 
   @override
@@ -41,6 +42,10 @@ class _NoteTileState extends State<NoteTile> {
           if (!mounted) return;
 
           if (state is NoteSuccess<Note>) {
+            _todos = state.data.todos;
+            if (state.data.todos.length >= 3) {
+              _todos = state.data.todos.getRange(0, 3).toList();
+            }
             setState(() => _currentNote = state.data);
           }
 
@@ -103,7 +108,7 @@ class _NoteTileState extends State<NoteTile> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     },
-                    if (_currentNote.todos.isNotEmpty) ...{
+                    if (_todos.isNotEmpty) ...{
                       Divider(
                         color: context.theme.disabledColor
                             .withOpacity(kEmphasisLowest),
@@ -114,54 +119,42 @@ class _NoteTileState extends State<NoteTile> {
                           padding: EdgeInsets.zero,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            var todo = _currentNote.todos[index];
+                            var todo = _todos[index];
                             return AnimationConfiguration.synchronized(
                               duration: kListAnimationDuration,
                               child: SlideAnimation(
                                 horizontalOffset: kListSlideOffset,
                                 child: FadeInAnimation(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Checkbox(
-                                        value: todo.completed,
-                                        activeColor:
-                                            context.theme.disabledColor,
-                                        onChanged: (checked) {
-                                          todo = todo.copyWith(
-                                              completed: checked,
-                                              updatedAt: DateTime.now());
-                                          _currentNote.todos[index] = todo;
-                                          _noteCubit.updateNote(_currentNote);
-                                        },
+                                  child: ListTile(
+                                    leading: Icon(
+                                      TablerIcons.checklist,
+                                      color: todo.completed
+                                          ? context.theme.disabledColor
+                                          : context.colorScheme.onSurface,
+                                    ),
+                                    minLeadingWidth: 24,
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      todo.text,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: context.theme.textTheme.subtitle2
+                                          ?.copyWith(
+                                        color: todo.completed
+                                            ? context.theme.disabledColor
+                                            : context.colorScheme.onSurface,
+                                        decoration: todo.completed
+                                            ? TextDecoration.lineThrough
+                                            : null,
                                       ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          todo.text,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: context
-                                              .theme.textTheme.subtitle2
-                                              ?.copyWith(
-                                            color: todo.completed
-                                                ? context.theme.disabledColor
-                                                : context.colorScheme.onSurface,
-                                            decoration: todo.completed
-                                                ? TextDecoration.lineThrough
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
                             );
                           },
                           separatorBuilder: (_, __) => const SizedBox.shrink(),
-                          itemCount: _currentNote.todos.length,
+                          itemCount: _todos.length,
                         ),
                       ),
                       Divider(

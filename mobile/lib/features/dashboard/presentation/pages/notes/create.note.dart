@@ -28,7 +28,7 @@ class CreateNotePage extends StatefulWidget {
 }
 
 class _CreateNotePageState extends State<CreateNotePage> {
-  var _loading = false, _showTodosUI = false;
+  var _loading = false, _showTodosUI = true;
   final _formKey = GlobalKey<FormState>(),
       _titleController = TextEditingController(),
       _descController = TextEditingController(),
@@ -55,25 +55,26 @@ class _CreateNotePageState extends State<CreateNotePage> {
           }
         },
         child: Scaffold(
+          appBar: AppBar(
+              // actions: [
+              // IconButton(
+              //   onPressed: () => context.showSnackBar(kFeatureUnderDev),
+              //   icon: const Icon(Icons.undo),
+              //   tooltip: 'Undo',
+              // ),
+              // IconButton(
+              //   onPressed: () => context.showSnackBar(kFeatureUnderDev),
+              //   icon: const Icon(Icons.redo),
+              //   tooltip: 'Redo',
+              // ),
+              // ],
+              ),
           body: LoadingOverlay(
             isLoading: _loading,
             child: AnimationLimiter(
               child: CustomScrollView(
                 shrinkWrap: true,
                 slivers: [
-                  SliverAppBar(
-                    actions: [
-                      IconButton(
-                        onPressed: () => context.showSnackBar(kFeatureUnderDev),
-                        icon: const Icon(Icons.undo),
-                      ),
-                      IconButton(
-                        onPressed: () => context.showSnackBar(kFeatureUnderDev),
-                        icon: const Icon(Icons.redo),
-                      ),
-                    ],
-                  ),
-
                   /// title, description & labels
                   SliverToBoxAdapter(
                     child: Form(
@@ -92,9 +93,11 @@ class _CreateNotePageState extends State<CreateNotePage> {
                                   input == null || input.isEmpty
                                       ? 'Required'
                                       : null,
+                              autofocus: true,
                               decoration: _inputDecorator('Title*'),
                               maxLines: 3,
                               keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
                               textCapitalization: TextCapitalization.sentences,
                               textAlign: TextAlign.start,
                               style: context.theme.textTheme.headline4
@@ -109,15 +112,12 @@ class _CreateNotePageState extends State<CreateNotePage> {
                             child: TextFormField(
                               controller: _descController,
                               enabled: !_loading,
-                              validator: (input) =>
-                                  input == null || input.isEmpty
-                                      ? 'Required'
-                                      : null,
                               decoration: _inputDecorator(
                                   'What do you wish to accomplish today?',
                                   style: context.theme.textTheme.bodyText1),
-                              maxLines: 5,
-                              keyboardType: TextInputType.text,
+                              maxLines: 3,
+                              keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.newline,
                               textCapitalization: TextCapitalization.sentences,
                               textAlign: TextAlign.start,
                               style: context.theme.textTheme.bodyText1
@@ -223,6 +223,10 @@ class _CreateNotePageState extends State<CreateNotePage> {
                         ),
                       ),
                     },
+                    SliverToBoxAdapter(
+                        child: SizedBox(
+                      height: context.height * 0.15,
+                    )),
                   },
                 ],
               ),
@@ -234,23 +238,24 @@ class _CreateNotePageState extends State<CreateNotePage> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: StreamBuilder<bool>(
-                    stream: _authCubit.loginStatus,
-                    initialData: false,
-                    builder: (context, snapshot) =>
-                        FloatingActionButton.extended(
-                      heroTag: kHomeFabTag,
-                      onPressed: () => _validateAndCreateNote(
-                          snapshot.hasData && snapshot.data!),
-                      label: const Text('Create note'),
-                      icon: const Icon(TablerIcons.note),
-                      enableFeedback: true,
-                      isExtended: !_loading,
-                      backgroundColor: context.colorScheme.secondary,
-                      foregroundColor: context.colorScheme.onSecondary,
+                StreamBuilder<bool>(
+                  stream: _authCubit.loginStatus,
+                  initialData: false,
+                  builder: (context, snapshot) => FloatingActionButton.extended(
+                    heroTag: kHomeFabTag,
+                    onPressed: () => _validateAndCreateNote(
+                        snapshot.hasData && snapshot.data!),
+                    label: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text('Create note'),
                     ),
+                    icon: const Icon(TablerIcons.note),
+                    enableFeedback: true,
+                    isExtended: !_loading,
+                    backgroundColor: context.colorScheme.secondary,
+                    foregroundColor: context.colorScheme.onSecondary,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -366,17 +371,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
               ),
               ListTile(
                 title: Text(
-                  'Save & Share',
-                  style: TextStyle(color: context.colorScheme.onSurface),
-                ),
-                leading: Icon(TablerIcons.message_share,
-                    color: context.colorScheme.onSurface),
-                // todo => implement this
-                onTap: () => context.showSnackBar(kFeatureUnderDev),
-              ),
-              ListTile(
-                title: Text(
-                  'Labels',
+                  'Add a Label',
                   style: TextStyle(color: context.colorScheme.onSurface),
                 ),
                 leading: Icon(TablerIcons.tags,

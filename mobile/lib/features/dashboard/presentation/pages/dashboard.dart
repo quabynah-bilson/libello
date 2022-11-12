@@ -66,6 +66,8 @@ class _DashboardPageState extends State<DashboardPage> {
           return FloatingActionButton(
             heroTag: kHomeFabTag,
             onPressed: () => context.router.push(const CreateNoteRoute()),
+            backgroundColor: context.colorScheme.secondary,
+            foregroundColor: context.colorScheme.onSecondary,
             child: const Icon(TablerIcons.plus),
           );
         },

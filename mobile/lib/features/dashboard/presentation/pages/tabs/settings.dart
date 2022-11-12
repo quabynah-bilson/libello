@@ -22,8 +22,16 @@ class _DashboardSettingsTabState extends State<_DashboardSettingsTab> {
   @override
   Widget build(BuildContext context) => LoadingOverlay(
         isLoading: _loading,
-        child: const Center(
-          child: Text(kFeatureUnderDev),
+        child: CustomScrollView(
+          slivers: [
+            const SliverAppBar(),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: const Center(
+                child: Text(kFeatureUnderDev),
+              ),
+            ),
+          ],
         ),
       );
 }

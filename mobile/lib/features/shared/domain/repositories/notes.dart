@@ -8,9 +8,9 @@ abstract class BaseNoteRepository {
 
   Future<Either<Note, String>> updateNote(Note note);
 
-  Future<Either<String, String>> deleteNote(Note note);
+  Future<Either<String, String>> deleteNote(String id);
 
-  Future<Either<Stream<Note>, String>> getNote(String id);
+  Future<Either<Stream<Note?>, String>> getNote(String id);
 
   Future<Either<Stream<List<Note>>, String>> getNotes(
       {NoteStatus status, NoteType type});

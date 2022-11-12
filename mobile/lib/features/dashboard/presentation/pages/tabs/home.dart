@@ -11,7 +11,8 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
   var _loading = true,
       touchedIndex = -1,
       _greeting = 'Welcome to\n$kAppName',
-      _notes = List<Note>.empty();
+      _notes = List<Note>.empty(),
+      _statsTodos = List<NoteTodo>.empty();
   final animDuration = const Duration(milliseconds: 250),
       _authCubit = AuthCubit();
   late final Timer _timer;
@@ -55,6 +56,10 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
 
         if (state is NoteSuccess<List<Note>>) {
           setState(() => _notes = state.data);
+          _statsTodos = List<NoteTodo>.empty(growable: true);
+          for (var note in state.data) {
+            _statsTodos.addAll(note.todos);
+          }
         }
       },
       child: LoadingOverlay(
@@ -142,17 +147,17 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                               children: [
                                 TextSpan(
                                   text:
-                                      '${_notes.where((note) => note.status == NoteStatus.regular).toList().length}',
+                                      '${_statsTodos.where((note) => note.completed).toList().length}',
                                   style: TextStyle(
                                       color: context.colorScheme.onPrimary),
                                 ),
                                 const TextSpan(text: ' out of '),
                                 TextSpan(
-                                  text: '${_notes.length}',
+                                  text: '${_statsTodos.length}',
                                   style: TextStyle(
                                       color: context.colorScheme.onPrimary),
                                 ),
-                                const TextSpan(text: ' notes today'),
+                                const TextSpan(text: ' tasks completed'),
                               ],
                             ),
                             style: context.theme.textTheme.subtitle1?.copyWith(
@@ -234,7 +239,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                   ),
                 ),
               ),
-              if(!_loading) ... {
+              if (!_loading) ...{
                 if (_notes.isEmpty) ...{
                   SliverToBoxAdapter(
                     child: AnimatedColumn(
@@ -257,10 +262,11 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
                     sliver: SliverMasonryGrid(
                       gridDelegate:
-                      const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
                       delegate: SliverChildBuilderDelegate(
-                            (context, index) => AnimationConfiguration.staggeredGrid(
+                        (context, index) =>
+                            AnimationConfiguration.staggeredGrid(
                           position: index,
                           columnCount: index.isEven ? 1 : 2,
                           duration: kListAnimationDuration,

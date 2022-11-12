@@ -6,6 +6,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
+import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/auth_cubit.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
@@ -29,7 +30,7 @@ class UpdateNotePage extends StatefulWidget {
 }
 
 class _UpdateNotePageState extends State<UpdateNotePage> {
-  late var _loading = false, _showTodosUI = widget.note.todos.isNotEmpty;
+  late var _loading = false, _showTodosUI = true;
   late final _formKey = GlobalKey<FormState>(),
       _titleController = TextEditingController(text: widget.note.title),
       _descController = TextEditingController(text: widget.note.body),
@@ -54,27 +55,21 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
               ..showSnackBar('Note created successfully')
               ..router.pop();
           }
+
+          if (state is NoteSuccess<String>) {
+            context
+              ..showSnackBar(state.data)
+              ..router.pushAndPopUntil(const DashboardRoute(), predicate: (_) => false);
+          }
         },
         child: Scaffold(
+          appBar: AppBar(),
           body: LoadingOverlay(
             isLoading: _loading,
             child: AnimationLimiter(
               child: CustomScrollView(
                 shrinkWrap: true,
                 slivers: [
-                  SliverAppBar(
-                    actions: [
-                      IconButton(
-                        onPressed: () => context.showSnackBar(kFeatureUnderDev),
-                        icon: const Icon(Icons.undo),
-                      ),
-                      IconButton(
-                        onPressed: () => context.showSnackBar(kFeatureUnderDev),
-                        icon: const Icon(Icons.redo),
-                      ),
-                    ],
-                  ),
-
                   /// title, description & labels
                   SliverToBoxAdapter(
                     child: Form(
@@ -93,9 +88,10 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                                   input == null || input.isEmpty
                                       ? 'Required'
                                       : null,
+                              autofocus: true,
                               decoration: _inputDecorator('Title*'),
-                              maxLines: 3,
                               keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
                               textCapitalization: TextCapitalization.sentences,
                               textAlign: TextAlign.start,
                               style: context.theme.textTheme.headline4
@@ -110,15 +106,12 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                             child: TextFormField(
                               controller: _descController,
                               enabled: !_loading,
-                              validator: (input) =>
-                                  input == null || input.isEmpty
-                                      ? 'Required'
-                                      : null,
                               decoration: _inputDecorator(
                                   'What do you wish to accomplish today?',
                                   style: context.theme.textTheme.bodyText1),
-                              maxLines: 5,
-                              keyboardType: TextInputType.text,
+                              maxLines: 3,
+                              keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.newline,
                               textCapitalization: TextCapitalization.sentences,
                               textAlign: TextAlign.start,
                               style: context.theme.textTheme.bodyText1
@@ -198,7 +191,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                     } else ...{
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
-                              (context, index) => ListTile(
+                          (context, index) => ListTile(
                             title: Text(
                               _todos[index].text,
                               style: TextStyle(
@@ -224,6 +217,10 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                         ),
                       ),
                     },
+                    SliverToBoxAdapter(
+                        child: SizedBox(
+                      height: context.height * 0.15,
+                    )),
                   },
                 ],
               ),
@@ -235,23 +232,24 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: StreamBuilder<bool>(
-                    stream: _authCubit.loginStatus,
-                    initialData: false,
-                    builder: (context, snapshot) =>
-                        FloatingActionButton.extended(
-                      heroTag: kHomeFabTag,
-                      onPressed: () => _validateAndUpdateNote(
-                          snapshot.hasData && snapshot.data!),
-                      label: const Text('Update note'),
-                      icon: const Icon(TablerIcons.note),
-                      enableFeedback: true,
-                      isExtended: !_loading,
-                      backgroundColor: context.colorScheme.secondary,
-                      foregroundColor: context.colorScheme.onSecondary,
+                StreamBuilder<bool>(
+                  stream: _authCubit.loginStatus,
+                  initialData: false,
+                  builder: (context, snapshot) => FloatingActionButton.extended(
+                    heroTag: kHomeFabTag,
+                    onPressed: () => _validateAndUpdateNote(
+                        snapshot.hasData && snapshot.data!),
+                    label: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text('Update note'),
                     ),
+                    icon: const Icon(TablerIcons.note),
+                    enableFeedback: true,
+                    isExtended: !_loading,
+                    backgroundColor: context.colorScheme.secondary,
+                    foregroundColor: context.colorScheme.onSecondary,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -350,7 +348,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                     color: context.colorScheme.onSurface),
                 onTap: () {
                   context.router.pop();
-                  doAfterDelay(context.router.pop);
+                  _noteCubit.deleteNote(widget.note.id);
                 },
               ),
               ListTile(
@@ -367,17 +365,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
               ),
               ListTile(
                 title: Text(
-                  'Save & Share',
-                  style: TextStyle(color: context.colorScheme.onSurface),
-                ),
-                leading: Icon(TablerIcons.message_share,
-                    color: context.colorScheme.onSurface),
-                // todo => implement this
-                onTap: () => context.showSnackBar(kFeatureUnderDev),
-              ),
-              ListTile(
-                title: Text(
-                  'Labels',
+                  'Add a Label',
                   style: TextStyle(color: context.colorScheme.onSurface),
                 ),
                 leading: Icon(TablerIcons.tags,

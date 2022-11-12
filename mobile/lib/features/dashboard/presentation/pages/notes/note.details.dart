@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -9,6 +10,7 @@ import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/animated.column.dart';
+import 'package:libello/features/shared/presentation/widgets/animated.list.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
 
@@ -33,8 +35,19 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(TablerIcons.message_share),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(TablerIcons.trash),
+              color: context.colorScheme.error,
+            ),
+          ],
+        ),
         body: LoadingOverlay(
           isLoading: _loading,
           child: BlocListener(
@@ -52,143 +65,141 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
               }
             },
             child: AnimationLimiter(
-              child: CustomScrollView(
-                slivers: [
-                  const SliverAppBar(),
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
-                    sliver: SliverToBoxAdapter(
-                      child: AnimatedColumn(
-                        animateType: AnimateType.slideLeft,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _currentNote.title,
-                            style: context.theme.textTheme.headline4?.copyWith(
-                                color: context.colorScheme.onBackground),
-                          ),
+              child: AnimatedListView(
+                animateType: AnimateType.slideLeft,
+                padding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
+                children: [
+                  Text(
+                    _currentNote.title,
+                    style: context.theme.textTheme.headline4
+                        ?.copyWith(color: context.colorScheme.onBackground),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    _currentNote.updatedAt.format('d M, y (g:i a)'),
+                    style: context.theme.textTheme.overline?.copyWith(
+                      color: context.colorScheme.onSurface
+                          .withOpacity(kEmphasisMedium),
+                    ),
+                  ),
 
-                          /// labels
-                          if (_currentNote.tags.isNotEmpty) ...{
-                            Padding(
-                              padding: const EdgeInsets.only(top: 24),
-                              child: Text(
-                                'Labels',
-                                style: context.theme.textTheme.subtitle1
-                                    ?.copyWith(
-                                        color: context.colorScheme.secondary),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              child: Wrap(
-                                runSpacing: 12,
-                                spacing: 8,
-                                alignment: WrapAlignment.start,
-                                runAlignment: WrapAlignment.start,
-                                children:
-                                    AnimationConfiguration.toStaggeredList(
-                                  duration: kListAnimationDuration,
-                                  childAnimationBuilder: (child) =>
-                                      SlideAnimation(
-                                    horizontalOffset: kListSlideOffset,
-                                    child: FadeInAnimation(child: child),
-                                  ),
-                                  children: _currentNote.tags
-                                      .map(
-                                        (e) => TagItem(
-                                          label: e,
+                  /// labels
+                  if (_currentNote.tags.isNotEmpty) ...{
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: Text(
+                        'Labels',
+                        style: context.theme.textTheme.subtitle1
+                            ?.copyWith(color: context.colorScheme.secondary),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Wrap(
+                        runSpacing: 12,
+                        spacing: 8,
+                        alignment: WrapAlignment.start,
+                        runAlignment: WrapAlignment.start,
+                        children: AnimationConfiguration.toStaggeredList(
+                          duration: kListAnimationDuration,
+                          childAnimationBuilder: (child) => SlideAnimation(
+                            horizontalOffset: kListSlideOffset,
+                            child: FadeInAnimation(child: child),
+                          ),
+                          children: _currentNote.tags
+                              .map((e) => TagItem(label: e))
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                  },
+
+                  /// description
+                  if (_currentNote.body.isNotEmpty) ...{
+                    Text(
+                      _currentNote.body,
+                      style: context.theme.textTheme.bodyText1?.copyWith(
+                          color: context.colorScheme.onBackground
+                              .withOpacity(kEmphasisMedium)),
+                    ),
+                  },
+
+                  /// todos
+                  if (_currentNote.todos.isNotEmpty) ...{
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: Text(
+                        'To-Do',
+                        style: context.theme.textTheme.subtitle1
+                            ?.copyWith(color: context.colorScheme.secondary),
+                      ),
+                    ),
+                    AnimationLimiter(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(bottom: context.height * 0.1),
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          var todo = _currentNote.todos[index];
+                          return AnimationConfiguration.synchronized(
+                            duration: kListAnimationDuration,
+                            child: SlideAnimation(
+                              horizontalOffset: kListSlideOffset,
+                              child: FadeInAnimation(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    todo = todo.copyWith(
+                                        completed: !todo.completed,
+                                        updatedAt: DateTime.now());
+                                    _currentNote.todos[index] = todo;
+                                    _noteCubit.updateNote(_currentNote);
+                                  },
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Checkbox(
+                                        value: todo.completed,
+                                        activeColor:
+                                            context.theme.disabledColor,
+                                        onChanged: (checked) {
+                                          todo = todo.copyWith(
+                                              completed: checked,
+                                              updatedAt: DateTime.now());
+                                          _currentNote.todos[index] = todo;
+                                          _noteCubit.updateNote(_currentNote);
+                                        },
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          todo.text,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: context
+                                              .theme.textTheme.subtitle2
+                                              ?.copyWith(
+                                            color: todo.completed
+                                                ? context.theme.disabledColor
+                                                : context.colorScheme.onSurface,
+                                            decoration: todo.completed
+                                                ? TextDecoration.lineThrough
+                                                : null,
+                                          ),
                                         ),
-                                      )
-                                      .toList(),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          },
-
-                          /// description
-                          if (_currentNote.body.isNotEmpty) ...{
-                            Text(
-                              _currentNote.body,
-                              style: context.theme.textTheme.bodyText1
-                                  ?.copyWith(
-                                      color: context.colorScheme.onBackground
-                                          .withOpacity(kEmphasisMedium)),
-                            ),
-                          },
-
-                          /// todos
-                          if(_currentNote.todos.isNotEmpty) ... {
-                            Padding(
-                              padding: const EdgeInsets.only(top: 24),
-                              child: Text(
-                                'To-Do',
-                                style: context.theme.textTheme.subtitle1
-                                    ?.copyWith(
-                                    color: context.colorScheme.secondary),
-                              ),
-                            ),
-                            AnimationLimiter(
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                padding: EdgeInsets.zero,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  var todo = _currentNote.todos[index];
-                                  return AnimationConfiguration.synchronized(
-                                    duration: kListAnimationDuration,
-                                    child: SlideAnimation(
-                                      horizontalOffset: kListSlideOffset,
-                                      child: FadeInAnimation(
-                                        child: Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: [
-                                            Checkbox(
-                                              value: todo.completed,
-                                              activeColor:
-                                              context.theme.disabledColor,
-                                              onChanged: (checked) {
-                                                todo = todo.copyWith(
-                                                    completed: checked,
-                                                    updatedAt: DateTime.now());
-                                                _currentNote.todos[index] = todo;
-                                                _noteCubit.updateNote(_currentNote);
-                                              },
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Expanded(
-                                              child: Text(
-                                                todo.text,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: context
-                                                    .theme.textTheme.subtitle2
-                                                    ?.copyWith(
-                                                  color: todo.completed
-                                                      ? context.theme.disabledColor
-                                                      : context.colorScheme.onSurface,
-                                                  decoration: todo.completed
-                                                      ? TextDecoration.lineThrough
-                                                      : null,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                separatorBuilder: (_, __) => const SizedBox.shrink(),
-                                itemCount: _currentNote.todos.length,
-                              ),
-                            ),
-                          },
-                        ],
+                          );
+                        },
+                        separatorBuilder: (_, __) => const SizedBox.shrink(),
+                        itemCount: _currentNote.todos.length,
                       ),
                     ),
-                  ),
+                  },
                 ],
               ),
             ),

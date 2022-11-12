@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
+import 'package:libello/core/theme.dart';
 
 class TagItem extends StatelessWidget {
   final String label;
@@ -23,10 +24,10 @@ class TagItem extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.label_important_outline,
+            const Icon(
+              Icons.label_important,
               size: 18,
-              color: context.colorScheme.onSurface.withOpacity(kEmphasisMedium),
+              color: ThemeConfig.kAmber,
             ),
             const SizedBox(width: 6),
             Text(

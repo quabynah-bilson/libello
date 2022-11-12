@@ -54,7 +54,18 @@ class NoteCubit extends Cubit<NoteState> {
     emit(NoteLoading());
     var either = await _repo.getNote(id);
     either.fold(
-      (l) => l.listen((event) => emit(NoteSuccess<Note>(event))),
+      (l) => l.listen((event) => event == null
+          ? emit(const NoteError('Note deleted from your library'))
+          : emit(NoteSuccess<Note>(event))),
+      (r) => emit(NoteError(r)),
+    );
+  }
+
+  Future<void> deleteNote(String id) async {
+    emit(NoteLoading());
+    var either = await _repo.deleteNote(id);
+    either.fold(
+      (l) => emit(NoteSuccess(l)),
       (r) => emit(NoteError(r)),
     );
   }
