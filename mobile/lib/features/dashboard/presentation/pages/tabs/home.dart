@@ -27,12 +27,12 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
   void initState() {
     super.initState();
     doAfterDelay(() async {
-      _noteCubit.getNotes();
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
         if (!mounted || !timer.isActive) return;
         _greeting = await generateGreeting(context);
         setState(() {});
       });
+      _noteCubit.getNotes();
     });
   }
 
@@ -251,197 +251,41 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                     ],
                   ),
                 ),
-                SliverToBoxAdapter(
-                    child: SizedBox(height: context.height * 0.1)),
               } else ...{
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
-                  sliver: SliverMasonryGrid.count(
-                    crossAxisCount: 2,
-                    itemBuilder: (context, index) =>
-                        AnimationConfiguration.staggeredGrid(
-                      position: index,
-                      columnCount: 2,
-                      duration: kListAnimationDuration,
-                      child: SlideAnimation(
-                        verticalOffset: kListSlideOffset,
-                        child: FadeInAnimation(
-                          child: GestureDetector(
-                            // todo => show note details
-                            onTap: () => context.showSnackBar(kFeatureUnderDev),
-                            child: ClipRect(
-                              child: BackdropFilter(
-                                filter:
-                                    ImageFilter.blur(sigmaY: 10, sigmaX: 10),
-                                child: Container(
-                                  // height: 200,
-                                  clipBehavior: Clip.hardEdge,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(16, 20, 16, 24),
-                                  decoration: BoxDecoration(
-                                    color: context.colorScheme.surface
-                                        .withOpacity(kEmphasisMedium),
-                                    borderRadius:
-                                        BorderRadius.circular(kRadiusMedium),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      /// title
-                                      Text(
-                                        'Remind me to travel to the next location',
-                                        style: context.theme.textTheme.subtitle1
-                                            ?.copyWith(
-                                                color: context
-                                                    .colorScheme.secondary),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        '~${wordCount(kSampleDesc)} words',
-                                        style: context.theme.textTheme.caption
-                                            ?.copyWith(
-                                          color: context.colorScheme.onSurface
-                                              .withOpacity(kEmphasisMedium),
-                                        ),
-                                      ),
-
-                                      /// description / body
-                                      Divider(
-                                        height: 24,
-                                        color: context.theme.disabledColor
-                                            .withOpacity(kEmphasisLowest),
-                                      ),
-                                      Text(
-                                        kSampleDesc,
-                                        style: context.theme.textTheme.subtitle2
-                                            ?.copyWith(
-                                          color: context.colorScheme.onSurface
-                                              .withOpacity(kEmphasisMedium),
-                                        ),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 24),
-
-                                      /// tag
-                                      Wrap(
-                                        runSpacing: 12,
-                                        spacing: 8,
-                                        children: List.generate(
-                                          3,
-                                          (index) => Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: context
-                                                    .theme.disabledColor
-                                                    .withOpacity(kEmphasisLow),
-                                              ),
-                                              color: context.theme.disabledColor
-                                                  .withOpacity(kEmphasisLowest),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      kRadiusSmall),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12, vertical: 8),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(
-                                                  TablerIcons.tag,
-                                                  size: 18,
-                                                  color: context
-                                                      .colorScheme.onSurface
-                                                      .withOpacity(
-                                                          kEmphasisMedium),
-                                                ),
-                                                const SizedBox(width: 6),
-                                                Text(
-                                                  'Art',
-                                                  style: context
-                                                      .theme.textTheme.caption
-                                                      ?.copyWith(
-                                                    color: context
-                                                        .colorScheme.onSurface
-                                                        .withOpacity(
-                                                            kEmphasisMedium),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-
-                                      /// timestamp
-                                      const SizedBox(height: 16),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          DateTime.now()
-                                              .format('d M, y (g:i a)'),
-                                          style: context
-                                              .theme.textTheme.overline
-                                              ?.copyWith(
-                                            color: context.colorScheme.onSurface
-                                                .withOpacity(kEmphasisMedium),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+                  sliver: SliverMasonryGrid(
+                    gridDelegate:
+                        const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => AnimationConfiguration.staggeredGrid(
+                        position: index,
+                        columnCount: index.isEven ? 1 : 2,
+                        duration: kListAnimationDuration,
+                        child: SlideAnimation(
+                          verticalOffset: kListSlideOffset,
+                          child: FadeInAnimation(
+                            child: NoteTile(note: _notes[index]),
                           ),
                         ),
                       ),
+                      childCount: _notes.length,
                     ),
-                    childCount: 12,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 12,
                   ),
                 ),
               },
+              SliverToBoxAdapter(
+                child: SizedBox(height: context.height * 0.1),
+              ),
             ],
           ),
         ),
       ),
     );
   }
-
-  // todo => add line chart values from database
-  List<BarChartGroupData> showingGroups() => List.generate(
-        20,
-        (i) => makeGroupData(i, ++i * Random().nextDouble(),
-            isTouched: i == touchedIndex),
-      );
-
-  BarChartGroupData makeGroupData(int x, double y,
-          {bool isTouched = false, double width = 2}) =>
-      BarChartGroupData(
-        x: x,
-        barRods: [
-          BarChartRodData(
-            toY: isTouched ? y + 1 : y,
-            color: isTouched
-                ? context.colorScheme.primary
-                : context.colorScheme.secondary,
-            width: width,
-            borderSide: isTouched
-                ? BorderSide(color: context.colorScheme.secondary)
-                : const BorderSide(color: Colors.white, width: 0),
-            backDrawRodData: BackgroundBarChartRodData(
-              show: true,
-              toY: 20,
-              color: context.colorScheme.background,
-            ),
-          ),
-        ],
-      );
 
   /// generate greeting
   Future<String> generateGreeting(BuildContext context) async {

@@ -80,6 +80,7 @@ class NoteRepository implements BaseNoteRepository {
     NoteStatus status = NoteStatus.regular,
     NoteType type = NoteType.important,
   }) async {
+    await Future.delayed(kListAnimationDuration);
     var owner =
         (await getIt.getAsync<SharedPreferences>()).getString(kUserIdKey);
     if (owner == null) return const Right(kAuthRequired);

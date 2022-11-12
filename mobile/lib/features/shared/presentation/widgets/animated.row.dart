@@ -44,6 +44,7 @@ class AnimatedRow extends StatelessWidget {
         child: Row(
           mainAxisAlignment: mainAxisAlignment,
           mainAxisSize: mainAxisSize,
+          crossAxisAlignment: crossAxisAlignment,
           children: AnimationConfiguration.toStaggeredList(
             duration: Duration(milliseconds: duration),
             childAnimationBuilder: (widget) => SlideAnimation(

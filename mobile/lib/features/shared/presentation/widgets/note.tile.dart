@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,8 @@ import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
 import 'package:string_stats/string_stats.dart';
+
+import '../../../../core/router/route.gr.dart';
 
 /// note list item
 class NoteTile extends StatefulWidget {
@@ -42,8 +45,8 @@ class _NoteTileState extends State<NoteTile> {
         },
         builder: (context, state) {
           return GestureDetector(
-            // todo => show note details
-            onTap: () => context.showSnackBar(kFeatureUnderDev),
+            onTap: () =>
+                context.router.push(NoteDetailsRoute(note: _currentNote)),
             child: ClipRect(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),

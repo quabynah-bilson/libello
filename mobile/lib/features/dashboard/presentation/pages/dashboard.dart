@@ -1,11 +1,7 @@
 import 'dart:async';
-import 'dart:math';
-import 'dart:ui';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:date_time_format/date_time_format.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -25,8 +21,8 @@ import 'package:libello/features/shared/presentation/widgets/custom.chip.dart';
 import 'package:libello/features/shared/presentation/widgets/filled.button.dart';
 import 'package:libello/features/shared/presentation/widgets/folder.tile.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
+import 'package:libello/features/shared/presentation/widgets/note.tile.dart';
 import 'package:lottie/lottie.dart';
-import 'package:string_stats/string_stats.dart';
 
 part 'tabs/folder.dart';
 

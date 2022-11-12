@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:libello/features/dashboard/presentation/pages/dashboard.dart';
 import 'package:libello/features/dashboard/presentation/pages/folder/folder.notes.dart';
 import 'package:libello/features/dashboard/presentation/pages/notes/create.note.dart';
+import 'package:libello/features/dashboard/presentation/pages/notes/note.details.dart';
 import 'package:libello/features/dashboard/presentation/pages/notes/notes.dart';
 
 @CustomAutoRouter(
@@ -14,6 +15,7 @@ import 'package:libello/features/dashboard/presentation/pages/notes/notes.dart';
     AutoRoute(page: FolderNotesPage),
     AutoRoute(page: CreateNotePage),
     AutoRoute(page: NotesPage),
+    AutoRoute(page: NoteDetailsPage),
   ],
 )
 class $LibelloAppRouter {}
