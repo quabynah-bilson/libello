@@ -239,51 +239,49 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                   ),
                 ),
               ),
-              if (!_loading) ...{
-                if (_notes.isEmpty) ...{
-                  SliverToBoxAdapter(
-                    child: AnimatedColumn(
-                      children: [
-                        LottieBuilder.asset(
-                          kAppLoadingAnimation,
-                          repeat: false,
-                          height: context.width * 0.4,
-                          width: context.width * 0.4,
-                        ),
-                        Text(
-                          'You have no recent notes',
-                          style: context.theme.textTheme.subtitle2,
-                        ),
-                      ],
-                    ),
+              if (_notes.isEmpty) ...{
+                SliverToBoxAdapter(
+                  child: AnimatedColumn(
+                    children: [
+                      LottieBuilder.asset(
+                        kAppLoadingAnimation,
+                        repeat: false,
+                        height: context.width * 0.4,
+                        width: context.width * 0.4,
+                      ),
+                      Text(
+                        'You have no recent notes',
+                        style: context.theme.textTheme.subtitle2,
+                      ),
+                    ],
                   ),
-                } else ...{
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
-                    sliver: SliverMasonryGrid(
-                      gridDelegate:
-                          const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) =>
-                            AnimationConfiguration.staggeredGrid(
-                          position: index,
-                          columnCount: index.isEven ? 1 : 2,
-                          duration: kListAnimationDuration,
-                          child: SlideAnimation(
-                            verticalOffset: kListSlideOffset,
-                            child: FadeInAnimation(
-                              child: NoteTile(note: _notes[index]),
+                ),
+              } else ...{
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
+                  sliver: SliverMasonryGrid(
+                    gridDelegate:
+                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2),
+                    delegate: SliverChildBuilderDelegate(
+                          (context, index) =>
+                          AnimationConfiguration.staggeredGrid(
+                            position: index,
+                            columnCount: index.isEven ? 1 : 2,
+                            duration: kListAnimationDuration,
+                            child: SlideAnimation(
+                              verticalOffset: kListSlideOffset,
+                              child: FadeInAnimation(
+                                child: NoteTile(note: _notes[index]),
+                              ),
                             ),
                           ),
-                        ),
-                        childCount: _notes.length,
-                      ),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 12,
+                      childCount: _notes.length,
                     ),
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 12,
                   ),
-                },
+                ),
               },
               SliverToBoxAdapter(
                 child: SizedBox(height: context.height * 0.1),
