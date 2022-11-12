@@ -42,7 +42,7 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
               icon: Icon(TablerIcons.message_share),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () => _noteCubit.deleteNote(_currentNote.id),
               icon: Icon(TablerIcons.trash),
               color: context.colorScheme.error,
             ),
@@ -62,6 +62,13 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
               }
               if (state is NoteSuccess<Note>) {
                 setState(() => _currentNote = state.data);
+              }
+
+              if (state is NoteSuccess<String>) {
+                context
+                  ..showSnackBar(state.data)
+                  ..router.pushAndPopUntil(const DashboardRoute(),
+                      predicate: (_) => false);
               }
             },
             child: AnimationLimiter(

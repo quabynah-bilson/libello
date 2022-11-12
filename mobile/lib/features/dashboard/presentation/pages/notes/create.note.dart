@@ -94,6 +94,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                                       ? 'Required'
                                       : null,
                               autofocus: true,
+                              cursorColor: context.colorScheme.secondary,
                               decoration: _inputDecorator('Title*'),
                               maxLines: 3,
                               keyboardType: TextInputType.text,
@@ -116,6 +117,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                                   'What do you wish to accomplish today?',
                                   style: context.theme.textTheme.bodyText1),
                               maxLines: 3,
+                              cursorColor: context.colorScheme.secondary,
                               keyboardType: TextInputType.multiline,
                               textInputAction: TextInputAction.newline,
                               textCapitalization: TextCapitalization.sentences,
@@ -195,38 +197,39 @@ class _CreateNotePageState extends State<CreateNotePage> {
                         ),
                       ),
                     } else ...{
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) => ListTile(
-                            title: Text(
-                              _todos[index].text,
-                              style: TextStyle(
-                                decoration: _todos[index].completed
-                                    ? TextDecoration.lineThrough
-                                    : null,
-                                color: _todos[index].completed
-                                    ? context.theme.disabledColor
-                                    : null,
+                      SliverPadding(
+                        padding: const EdgeInsets.only(top: 16),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) => ListTile(
+                              title: Text(
+                                _todos[index].text,
+                                style: TextStyle(
+                                  decoration: _todos[index].completed
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                  color: _todos[index].completed
+                                      ? context.theme.disabledColor
+                                      : null,
+                                ),
+                              ),
+                              leading: Checkbox(
+                                value: _todos[index].completed,
+                                activeColor: context.theme.disabledColor,
+                                onChanged: (completed) {
+                                  var todo = _todos[index];
+                                  todo = todo.copyWith(completed: completed);
+                                  setState(() => _todos[index] = todo);
+                                },
                               ),
                             ),
-                            leading: Checkbox(
-                              value: _todos[index].completed,
-                              activeColor: context.theme.disabledColor,
-                              onChanged: (completed) {
-                                var todo = _todos[index];
-                                todo = todo.copyWith(completed: completed);
-                                setState(() => _todos[index] = todo);
-                              },
-                            ),
+                            childCount: _todos.length,
                           ),
-                          childCount: _todos.length,
                         ),
                       ),
                     },
                     SliverToBoxAdapter(
-                        child: SizedBox(
-                      height: context.height * 0.15,
-                    )),
+                        child: SizedBox(height: context.height * 0.15)),
                   },
                 ],
               ),
@@ -318,7 +321,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
         title: _titleController.text.trim(),
         body: _descController.text.trim(),
         tags: _labels,
-        todos: _todos,
+        todos: _showTodosUI ? _todos : List<NoteTodo>.empty(),
         updatedAt: DateTime.now());
     logger.i('note to create => $note');
     _noteCubit.createNote(note);
@@ -431,7 +434,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                   'Label',
                   onChange: (input) => label = input?.trim(),
                   capitalization: TextCapitalization.words,
-                  suffixIcon: const Icon(Icons.label),
+                  suffixIcon: Icon(Icons.label, color: context.colorScheme.secondary,),
                 ),
                 AppRoundedButton(
                   text: 'Add',
@@ -480,7 +483,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                 AppTextField(
                   'Item',
                   onChange: (input) => label = input?.trim(),
-                  capitalization: TextCapitalization.words,
+                  capitalization: TextCapitalization.sentences,
                   suffixIcon: const Icon(TablerIcons.checkup_list),
                 ),
                 AppRoundedButton(

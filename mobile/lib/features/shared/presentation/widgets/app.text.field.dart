@@ -102,6 +102,7 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   Widget _cardTextField() => TextFormField(
+        cursorColor: context.colorScheme.secondary,
         maxLength: widget.maxLength,
         controller: widget.controller,
         keyboardType: TextInputType.number,
@@ -145,11 +146,11 @@ class _AppTextFieldState extends State<AppTextField> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: context.colorScheme.primary),
+              borderSide: BorderSide(color: context.colorScheme.secondary),
               borderRadius: BorderRadius.circular(radius),
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: const BorderSide(color: Colors.transparent),
+              borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(radius),
             ),
             suffixIcon: widget.suffixIcon),
@@ -160,6 +161,7 @@ class _AppTextFieldState extends State<AppTextField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
+              cursorColor: context.colorScheme.secondary,
               maxLength: widget.maxLength,
               controller: widget.controller,
               keyboardType:
@@ -191,11 +193,11 @@ class _AppTextFieldState extends State<AppTextField> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: context.colorScheme.primary),
+                  borderSide: BorderSide(color: context.colorScheme.secondary),
                   borderRadius: BorderRadius.circular(radius),
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
+                  borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(radius),
                 ),
                 suffixIcon: widget.suffixIcon,
@@ -204,6 +206,7 @@ class _AppTextFieldState extends State<AppTextField> {
       );
 
   Widget _selectTextField() => TextFormField(
+        cursorColor: context.colorScheme.secondary,
         maxLength: widget.maxLength,
         controller: widget.controller,
         keyboardType: widget.inputType,
@@ -234,12 +237,11 @@ class _AppTextFieldState extends State<AppTextField> {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: context.colorScheme.primary),
+            borderSide: BorderSide(color: context.colorScheme.secondary),
             borderRadius: BorderRadius.circular(radius),
           ),
           enabledBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: context.theme.disabledColor.withOpacity(0.3)),
+            borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(radius),
           ),
           suffixIcon: const Icon(Icons.arrow_drop_down_circle_outlined),
@@ -270,6 +272,7 @@ class _AppTextFieldState extends State<AppTextField> {
       );
 
   Widget _regularTextField() => TextFormField(
+        cursorColor: context.colorScheme.secondary,
         maxLength: widget.maxLength,
         controller: widget.controller,
         keyboardType: widget.inputType,
@@ -286,10 +289,7 @@ class _AppTextFieldState extends State<AppTextField> {
         maxLines: widget.maxLines,
         textCapitalization: widget.capitalization,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(radius),
-            ),
+            border: InputBorder.none,
             labelStyle: TextStyle(
                 color:
                     context.colorScheme.onSurface.withOpacity(kEmphasisMedium)),
@@ -300,18 +300,18 @@ class _AppTextFieldState extends State<AppTextField> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: context.colorScheme.primary),
+              borderSide: BorderSide(color: context.colorScheme.secondary),
               borderRadius: BorderRadius.circular(radius),
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: context.theme.disabledColor.withOpacity(0.3)),
+              borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(radius),
             ),
             suffixIcon: widget.suffixIcon),
       );
 
   Widget _phoneTextField() => TextFormField(
+        cursorColor: context.colorScheme.secondary,
         maxLength: widget.maxLength,
         controller: widget.controller,
         keyboardType: TextInputType.phone,
@@ -344,11 +344,11 @@ class _AppTextFieldState extends State<AppTextField> {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: context.colorScheme.primary),
+            borderSide: BorderSide(color: context.colorScheme.secondary),
             borderRadius: BorderRadius.circular(radius),
           ),
           enabledBorder: UnderlineInputBorder(
-            borderSide: const BorderSide(color: Colors.transparent),
+            borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(radius),
           ),
           suffixIcon: widget.suffixIcon,
@@ -356,6 +356,7 @@ class _AppTextFieldState extends State<AppTextField> {
       );
 
   Widget _passwordTextField() => TextFormField(
+        cursorColor: context.colorScheme.secondary,
         maxLength: widget.maxLength,
         controller: widget.controller,
         keyboardType: widget.inputType,
@@ -386,11 +387,11 @@ class _AppTextFieldState extends State<AppTextField> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: context.colorScheme.primary),
+              borderSide: BorderSide(color: context.colorScheme.secondary),
               borderRadius: BorderRadius.circular(radius),
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: const BorderSide(color: Colors.transparent),
+              borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(radius),
             ),
             suffixIcon: UnconstrainedBox(
@@ -438,6 +439,7 @@ class AppDropdownField extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: TextFormField(
+          cursorColor: context.colorScheme.secondary,
           controller: TextEditingController(text: current),
           readOnly: true,
           onTap: null,
@@ -461,11 +463,11 @@ class AppDropdownField extends StatelessWidget {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: context.colorScheme.primary),
+              borderSide: BorderSide(color: context.colorScheme.secondary),
               borderRadius: BorderRadius.circular(radius),
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: const BorderSide(color: Colors.transparent),
+              borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(radius),
             ),
           ),
