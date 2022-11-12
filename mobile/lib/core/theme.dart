@@ -6,6 +6,7 @@ class ThemeConfig {
   static const kOrange = Colors.orange,
       kAmber = Colors.amber,
       kGreen = Colors.green,
+      kBlue = Colors.lightBlue,
       kRed = Colors.red;
 
   static const _defaultFont = GoogleFonts.spaceGrotesk,

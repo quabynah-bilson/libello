@@ -10,7 +10,7 @@ class _DashboardHomeTab extends StatefulWidget {
 class _DashboardHomeTabState extends State<_DashboardHomeTab> {
   var _loading = true,
       touchedIndex = -1,
-      _greeting = 'Welcome to $kAppName',
+      _greeting = 'Welcome to\n$kAppName',
       _notes = List<Note>.empty();
   final animDuration = const Duration(milliseconds: 250),
       _authCubit = AuthCubit();
@@ -28,9 +28,10 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
     super.initState();
     doAfterDelay(() async {
       _noteCubit.getNotes();
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
         if (!mounted || !timer.isActive) return;
-        setState(() => _greeting = generateGreeting(context));
+        _greeting = await generateGreeting(context);
+        setState(() {});
       });
     });
   }
@@ -137,7 +138,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                             children: [
                               TextSpan(
                                 text:
-                                    '${_notes.where((note) => note.completed).toList().length}',
+                                    '${_notes.where((note) => note.status == NoteStatus.regular).toList().length}',
                                 style: TextStyle(
                                     color: context.colorScheme.onPrimary),
                               ),
@@ -147,7 +148,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                                 style: TextStyle(
                                     color: context.colorScheme.onPrimary),
                               ),
-                              const TextSpan(text: ' tasks today'),
+                              const TextSpan(text: ' notes today'),
                             ],
                           ),
                           style: context.theme.textTheme.subtitle1?.copyWith(
@@ -326,18 +327,18 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
       );
 
   /// generate greeting
-  String generateGreeting(BuildContext context) {
+  Future<String> generateGreeting(BuildContext context) async {
     var now = TimeOfDay.now(), timestamp = DateTime.now(), greeting = '';
     if (now.period == DayPeriod.am) {
-      greeting = 'Good\nmorning!';
+      greeting = 'Good\nmorning';
     } else if (timestamp.hour >= 12 && timestamp.hour < 16) {
-      greeting = 'Good\nafternoon!';
+      greeting = 'Good\nafternoon';
     } else if (timestamp.hour >= 16 && timestamp.hour < 21) {
-      greeting = 'Good\nevening!';
+      greeting = 'Good\nevening';
     } else {
       greeting = 'Goodnight';
     }
 
-    return greeting;
+    return 'Hello, ${(await _authCubit.displayName) ?? greeting}!';
   }
 }

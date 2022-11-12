@@ -22,5 +22,5 @@ class AuthCubit extends Cubit<AuthState> {
 
   Stream<bool> get loginStatus => _repo.loginStatus;
 
-  String? get displayName => _repo.displayName;
+  Future<String?> get displayName => _repo.displayName;
 }

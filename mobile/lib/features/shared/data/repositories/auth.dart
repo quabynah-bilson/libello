@@ -9,8 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// implementation of [BaseAuthRepository]
 class AuthRepository implements BaseAuthRepository {
   @override
-  String? get displayName =>
-      getIt.get<SharedPreferences>().getString(kUsernameKey);
+  Future<String?> get displayName async =>
+      (await getIt.getAsync<SharedPreferences>()).getString(kUsernameKey);
 
   @override
   Future<Either<User, String>> login() async {
@@ -39,7 +39,11 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<void> logout() async => await getIt.get<SharedPreferences>().clear();
+  Future<void> logout() async {
+    await getIt.get<GoogleSignIn>().signOut();
+    await getIt.get<FirebaseAuth>().signOut();
+    await (await getIt.getAsync<SharedPreferences>()).clear();
+  }
 
   @override
   Stream<bool> get loginStatus => getIt

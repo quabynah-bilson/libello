@@ -12,7 +12,6 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i5;
-import 'package:flutter/foundation.dart' as _i7;
 import 'package:flutter/material.dart' as _i6;
 
 import '../../features/dashboard/presentation/pages/dashboard.dart'
@@ -23,8 +22,8 @@ import '../../features/dashboard/presentation/pages/notes/create.note.dart'
     deferred as _i3;
 import '../../features/dashboard/presentation/pages/notes/notes.dart'
     deferred as _i4;
-import '../../features/shared/domain/entities/folder.dart' as _i8;
-import '../../features/shared/domain/entities/note.dart' as _i9;
+import '../../features/shared/domain/entities/folder.dart' as _i7;
+import '../../features/shared/domain/entities/note.dart' as _i8;
 
 class LibelloAppRouter extends _i5.RootStackRouter {
   LibelloAppRouter([_i6.GlobalKey<_i6.NavigatorState>? navigatorKey])
@@ -134,8 +133,8 @@ class DashboardRoute extends _i5.PageRouteInfo<void> {
 /// [_i2.FolderNotesPage]
 class FolderNotesRoute extends _i5.PageRouteInfo<FolderNotesRouteArgs> {
   FolderNotesRoute({
-    _i7.Key? key,
-    required _i8.NoteFolder folder,
+    _i6.Key? key,
+    required _i7.NoteFolder folder,
   }) : super(
           FolderNotesRoute.name,
           path: '/folder-notes-page',
@@ -154,9 +153,9 @@ class FolderNotesRouteArgs {
     required this.folder,
   });
 
-  final _i7.Key? key;
+  final _i6.Key? key;
 
-  final _i8.NoteFolder folder;
+  final _i7.NoteFolder folder;
 
   @override
   String toString() {
@@ -180,9 +179,9 @@ class CreateNoteRoute extends _i5.PageRouteInfo<void> {
 /// [_i4.NotesPage]
 class NotesRoute extends _i5.PageRouteInfo<NotesRouteArgs> {
   NotesRoute({
-    _i7.Key? key,
-    _i9.NoteType? type,
-    _i9.NoteStatus? status,
+    _i6.Key? key,
+    _i8.NoteType? type,
+    _i8.NoteStatus? status,
     bool showAll = false,
   }) : super(
           NotesRoute.name,
@@ -206,11 +205,11 @@ class NotesRouteArgs {
     this.showAll = false,
   });
 
-  final _i7.Key? key;
+  final _i6.Key? key;
 
-  final _i9.NoteType? type;
+  final _i8.NoteType? type;
 
-  final _i9.NoteStatus? status;
+  final _i8.NoteStatus? status;
 
   final bool showAll;
 

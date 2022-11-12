@@ -62,11 +62,16 @@ class _NotesPageState extends State<NotesPage> {
           child: CustomScrollView(
             shrinkWrap: true,
             slivers: [
-              SliverAppBar(
+              const SliverAppBar(
                 title: Text('My notes'),
               ),
               SliverToBoxAdapter(
-                child: Center(child: Text('You have ${_notes.length} notes')),
+                child: Center(
+                  child: Text(
+                    'You have ${_notes.length} notes',
+                    style: TextStyle(color: context.colorScheme.onBackground),
+                  ),
+                ),
               ),
             ],
           ),

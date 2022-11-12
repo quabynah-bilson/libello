@@ -7,7 +7,7 @@ import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/features/shared/domain/entities/folder.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:timeago_flutter/timeago_flutter.dart' as timeago;
 
 /// folder list item
 class FolderTile extends StatelessWidget {

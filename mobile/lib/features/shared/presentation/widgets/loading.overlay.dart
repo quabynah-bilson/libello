@@ -70,43 +70,43 @@ class _LoadingOverlayState extends State<LoadingOverlay>
 
   @override
   Widget build(BuildContext context) => Stack(
-      children: [
-        /// underlying UI
-        Positioned.fill(child: widget.child),
+        children: [
+          /// underlying UI
+          Positioned.fill(child: widget.child),
 
-        /// loading indicator semi-opaque background
-        if (_overlayVisible) ...{
-          FadeTransition(
-            opacity: _animation,
-            child: Stack(
-              children: <Widget>[
-                Positioned.fill(
-                  child: Opacity(
-                    opacity: kEmphasisHigh,
-                    child: ModalBarrier(
-                      dismissible: false,
-                      color: (widget.color ?? context.colorScheme.surface)
-                          .withOpacity(kEmphasisMedium),
+          /// loading indicator semi-opaque background
+          if (_overlayVisible) ...{
+            FadeTransition(
+              opacity: _animation,
+              child: Stack(
+                children: <Widget>[
+                  Positioned.fill(
+                    child: Opacity(
+                      opacity: kEmphasisHigh,
+                      child: ModalBarrier(
+                        dismissible: false,
+                        color: (widget.color ?? context.colorScheme.surface)
+                            .withOpacity(kEmphasisMedium),
+                      ),
                     ),
                   ),
-                ),
 
-                /// loading indicator
-                Positioned.fill(
-                  child: Center(
-                    child: LoadingIndicatorItem(
-                      message: widget.message,
-                      foregroundColor: widget.foregroundColor,
-                      loadingAnimationUrl: widget.lottieAnimResource,
+                  /// loading indicator
+                  Positioned.fill(
+                    child: Center(
+                      child: LoadingIndicatorItem(
+                        message: widget.message,
+                        foregroundColor: widget.foregroundColor,
+                        loadingAnimationUrl: widget.lottieAnimResource,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        },
-      ],
-    );
+          },
+        ],
+      );
 }
 
 class LoadingIndicatorItem extends StatelessWidget {
@@ -135,7 +135,7 @@ class LoadingIndicatorItem extends StatelessWidget {
               animate: true,
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Text(
             message,
             style: context.theme.textTheme.subtitle1?.copyWith(

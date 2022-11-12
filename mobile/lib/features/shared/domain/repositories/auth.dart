@@ -6,7 +6,7 @@ abstract class BaseAuthRepository {
 
   Future<void> logout();
 
-  String? get displayName;
+  Future<String?> get displayName;
 
   Stream<bool> get loginStatus;
 }

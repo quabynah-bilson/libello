@@ -7,6 +7,7 @@ enum NoteStatus {
   regular,
   archived,
   deleted,
+  secret,
 }
 
 enum NoteType {
@@ -24,23 +25,49 @@ class Note {
   final NoteType type;
   final NoteStatus status;
   final String? folder;
+  final int? lockPin;
   final String owner;
-  final bool completed;
+  final List<String> tags;
+  final List<NoteTodo> todos;
 
-  const Note({
+  Note({
     required this.id,
     required this.title,
     required this.updatedAt,
     this.type = NoteType.important,
     this.status = NoteStatus.regular,
     this.folder,
+    this.lockPin,
     this.owner = '', // add this when uploading to server
-    this.completed = false,
-  });
+    this.todos = const <NoteTodo>[],
+    this.tags = const <String>[],
+  }) : assert(status == NoteStatus.secret &&
+            lockPin != null &&
+            lockPin.bitLength >= 4);
 
   factory Note.fromJson(json) => _$NoteFromJson(json);
 
   Map<String, dynamic> toJson() => _$NoteToJson(this);
+
+  @override
+  String toString() => toJson().toString();
+}
+
+@JsonSerializable()
+class NoteTodo {
+  final String text;
+  final bool completed;
+  final DateTime updatedAt;
+
+  const NoteTodo({
+    required this.text,
+    required this.completed,
+    required this.updatedAt,
+  });
+
+  factory NoteTodo.fromJson(json) => _$NoteTodoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NoteTodoToJson(this);
 
   @override
   String toString() => toJson().toString();

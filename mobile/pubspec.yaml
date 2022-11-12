@@ -26,16 +26,16 @@ dependencies:
   shared_preferences:
   google_fonts:
   logger:
-  fluttericon:
   flutter_tabler_icons:
   get_it:
   uuid:
+  string_stats:
   flutter_multi_formatter:
   copy_with_extension:
   date_time_format:
   timeago_flutter:
   fl_chart: ^0.55.2
-  upgrader:
+  flutter_palette:
   google_sign_in:
   firebase_core: ^2.1.1
   cloud_firestore: ^4.0.4

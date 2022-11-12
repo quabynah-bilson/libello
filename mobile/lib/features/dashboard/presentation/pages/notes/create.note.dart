@@ -111,7 +111,10 @@ class _CreateNotePageState extends State<CreateNotePage> {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       _formKey.currentState?.save();
 
-      if (!loggedIn) {
+      if (loggedIn) {
+        _createNote();
+      } else {
+        // ignore: use_build_context_synchronously
         var user = await Navigator.of(context).push(
           LoginDialog(
             _authCubit,
@@ -125,8 +128,6 @@ class _CreateNotePageState extends State<CreateNotePage> {
               'Signed in as ${user.displayName}! Proceeding to create your note...');
           _createNote();
         }
-      } else {
-        _createNote();
       }
     }
   }
