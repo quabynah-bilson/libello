@@ -19,7 +19,6 @@ import 'package:libello/features/shared/presentation/widgets/rounded.button.dart
 import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
 
 /// update note
-/// todo => show todo list
 class UpdateNotePage extends StatefulWidget {
   final Note note;
 
@@ -82,44 +81,36 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                           /// title
                           Padding(
                             padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
-                            child: TextFormField(
+                            child: AppTransparentTextField(
+                              label: 'Title*',
                               controller: _titleController,
-                              enabled: !_loading,
+                              style: context.theme.textTheme.headline4
+                                  ?.copyWith(
+                                      color: context.colorScheme.onBackground),
                               validator: (input) =>
                                   input == null || input.isEmpty
                                       ? 'Required'
                                       : null,
                               autofocus: true,
-                              cursorColor: context.colorScheme.secondary,
-                              decoration: _inputDecorator('Title*'),
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.next,
-                              textCapitalization: TextCapitalization.sentences,
-                              textAlign: TextAlign.start,
-                              style: context.theme.textTheme.headline4
-                                  ?.copyWith(
-                                      color: context.colorScheme.onBackground),
+                              capitalization: TextCapitalization.sentences,
+                              action: TextInputAction.next,
+                              inputType: TextInputType.text,
                             ),
                           ),
 
                           /// description
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: TextFormField(
+                            child: AppTransparentTextField(
+                              label: 'What do you wish to accomplish today?',
                               controller: _descController,
-                              enabled: !_loading,
-                              decoration: _inputDecorator(
-                                  'What do you wish to accomplish today?',
-                                  style: context.theme.textTheme.bodyText1),
-                              maxLines: 3,
-                              cursorColor: context.colorScheme.secondary,
-                              keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.newline,
-                              textCapitalization: TextCapitalization.sentences,
-                              textAlign: TextAlign.start,
                               style: context.theme.textTheme.bodyText1
                                   ?.copyWith(
                                       color: context.colorScheme.onBackground),
+                              capitalization: TextCapitalization.sentences,
+                              action: TextInputAction.newline,
+                              inputType: TextInputType.multiline,
+                              maxLines: 3,
                             ),
                           ),
 
@@ -196,7 +187,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                         padding: const EdgeInsets.only(top: 16),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
-                                (context, index) => ListTile(
+                            (context, index) => ListTile(
                               title: Text(
                                 _todos[index].text,
                                 style: TextStyle(
@@ -294,20 +285,6 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
       }
     }
   }
-
-  /// input decoration
-  InputDecoration _inputDecorator(String label, {TextStyle? style}) =>
-      InputDecoration(
-        enabled: !_loading,
-        fillColor: context.colorScheme.background,
-        filled: true,
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        labelStyle: (style ??= context.theme.textTheme.headline4)
-            ?.copyWith(color: context.theme.disabledColor),
-        border: InputBorder.none,
-        labelText: label,
-        alignLabelWithHint: true,
-      );
 
   /// create a new note
   void _updateNote() {
@@ -429,7 +406,10 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                   'Label',
                   onChange: (input) => label = input?.trim(),
                   capitalization: TextCapitalization.words,
-                  suffixIcon: Icon(Icons.label, color: context.colorScheme.secondary,),
+                  suffixIcon: Icon(
+                    Icons.label,
+                    color: context.colorScheme.secondary,
+                  ),
                 ),
                 AppRoundedButton(
                   text: 'Add',

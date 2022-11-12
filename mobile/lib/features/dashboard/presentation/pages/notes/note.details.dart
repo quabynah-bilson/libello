@@ -14,6 +14,7 @@ import 'package:libello/features/shared/presentation/widgets/animated.list.dart'
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
 
+/// note details
 class NoteDetailsPage extends StatefulWidget {
   final Note note;
 

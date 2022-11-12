@@ -476,3 +476,54 @@ class AppDropdownField extends StatelessWidget {
     );
   }
 }
+
+class AppTransparentTextField extends StatelessWidget {
+  final String label;
+  final TextStyle? style;
+  final bool enabled;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
+  final bool autofocus;
+  final TextCapitalization capitalization;
+  final TextInputAction action;
+  final TextInputType inputType;
+  final int? maxLines;
+
+  const AppTransparentTextField({
+    Key? key,
+    required this.label,
+    required this.controller,
+    this.enabled = true,
+    this.capitalization = TextCapitalization.none,
+    this.action = TextInputAction.done,
+    this.inputType = TextInputType.text,
+    this.style,
+    this.validator,
+    this.autofocus = false,
+    this.maxLines,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => TextFormField(
+        controller: controller,
+        autofocus: autofocus,
+        enabled: enabled,
+        textCapitalization: capitalization,
+        keyboardType: inputType,
+        textInputAction: action,
+        maxLines: maxLines,
+        validator: validator,
+        style: style,
+        decoration: InputDecoration(
+          enabled: enabled,
+          fillColor: context.colorScheme.background,
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          labelStyle: (style ?? context.theme.textTheme.headline4)
+              ?.copyWith(color: context.theme.disabledColor),
+          border: InputBorder.none,
+          labelText: label,
+          alignLabelWithHint: true,
+        ),
+      );
+}
