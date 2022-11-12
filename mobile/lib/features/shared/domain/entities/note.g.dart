@@ -253,7 +253,8 @@ Note _$NoteFromJson(Map<String, dynamic> json) => Note(
       body: json['body'] as String? ?? '',
       owner: json['owner'] as String? ?? '',
       todos: (json['todos'] as List<dynamic>?)
-              ?.map((e) => NoteTodo.fromJson(e))
+              ?.map((e) => const NoteTodoSerializer()
+                  .fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <NoteTodo>[],
       tags:
@@ -272,7 +273,7 @@ Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
       'lockPin': instance.lockPin,
       'owner': instance.owner,
       'tags': instance.tags,
-      'todos': instance.todos,
+      'todos': instance.todos.map(const NoteTodoSerializer().toJson).toList(),
     };
 
 const _$NoteTypeEnumMap = {
@@ -290,8 +291,8 @@ const _$NoteStatusEnumMap = {
 
 NoteTodo _$NoteTodoFromJson(Map<String, dynamic> json) => NoteTodo(
       text: json['text'] as String,
-      completed: json['completed'] as bool,
       updatedAt: DateTime.parse(json['updatedAt'] as String),
+      completed: json['completed'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$NoteTodoToJson(NoteTodo instance) => <String, dynamic>{

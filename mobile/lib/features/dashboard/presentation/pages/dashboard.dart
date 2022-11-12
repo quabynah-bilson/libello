@@ -59,10 +59,16 @@ class _DashboardPageState extends State<DashboardPage> {
       body: _pages[_selectedIndex],
       extendBody: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        heroTag: kHomeFabTag,
-        onPressed: () => context.router.push(const CreateNoteRoute()),
-        child: const Icon(TablerIcons.plus),
+      floatingActionButton: BlocBuilder(
+        bloc: context.read<NoteCubit>(),
+        builder: (context, state) {
+          if (state is NoteLoading) return const SizedBox.shrink();
+          return FloatingActionButton(
+            heroTag: kHomeFabTag,
+            onPressed: () => context.router.push(const CreateNoteRoute()),
+            child: const Icon(TablerIcons.plus),
+          );
+        },
       ),
       bottomNavigationBar: AnimatedBottomNavigationBar(
         icons: [

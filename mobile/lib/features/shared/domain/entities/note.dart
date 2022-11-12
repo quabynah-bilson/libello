@@ -29,6 +29,7 @@ class Note {
   final int? lockPin;
   final String owner;
   final List<String> tags;
+  @NoteTodoSerializer()
   final List<NoteTodo> todos;
 
   Note({
@@ -62,8 +63,8 @@ class NoteTodo {
 
   const NoteTodo({
     required this.text,
-    required this.completed,
     required this.updatedAt,
+    this.completed = false,
   });
 
   factory NoteTodo.fromJson(json) => _$NoteTodoFromJson(json);
@@ -72,4 +73,15 @@ class NoteTodo {
 
   @override
   String toString() => toJson().toString();
+}
+
+class NoteTodoSerializer
+    implements JsonConverter<NoteTodo, Map<String, dynamic>> {
+  const NoteTodoSerializer();
+
+  @override
+  NoteTodo fromJson(Map<String, dynamic> json) => NoteTodo.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson(NoteTodo object) => object.toJson();
 }

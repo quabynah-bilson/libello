@@ -16,26 +16,27 @@ import 'package:libello/features/shared/presentation/widgets/filled.button.dart'
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 import 'package:libello/features/shared/presentation/widgets/rounded.button.dart';
 import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
-import 'package:uuid/uuid.dart';
 
-/// create note
+/// update note
 /// todo => show todo list
-class CreateNotePage extends StatefulWidget {
-  const CreateNotePage({Key? key}) : super(key: key);
+class UpdateNotePage extends StatefulWidget {
+  final Note note;
+
+  const UpdateNotePage({Key? key, required this.note}) : super(key: key);
 
   @override
-  State<CreateNotePage> createState() => _CreateNotePageState();
+  State<UpdateNotePage> createState() => _UpdateNotePageState();
 }
 
-class _CreateNotePageState extends State<CreateNotePage> {
-  var _loading = false, _showTodosUI = false;
-  final _formKey = GlobalKey<FormState>(),
-      _titleController = TextEditingController(),
-      _descController = TextEditingController(),
+class _UpdateNotePageState extends State<UpdateNotePage> {
+  late var _loading = false, _showTodosUI = widget.note.todos.isNotEmpty;
+  late final _formKey = GlobalKey<FormState>(),
+      _titleController = TextEditingController(text: widget.note.title),
+      _descController = TextEditingController(text: widget.note.body),
       _authCubit = AuthCubit(),
       _noteCubit = NoteCubit(),
-      _todos = List<NoteTodo>.empty(growable: true),
-      _labels = List<String>.empty(growable: true)..addAll(['Personal']);
+      _todos = widget.note.todos,
+      _labels = widget.note.tags;
 
   @override
   Widget build(BuildContext context) => BlocListener(
@@ -197,7 +198,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                     } else ...{
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
-                          (context, index) => ListTile(
+                              (context, index) => ListTile(
                             title: Text(
                               _todos[index].text,
                               style: TextStyle(
@@ -242,9 +243,9 @@ class _CreateNotePageState extends State<CreateNotePage> {
                     builder: (context, snapshot) =>
                         FloatingActionButton.extended(
                       heroTag: kHomeFabTag,
-                      onPressed: () => _validateAndCreateNote(
+                      onPressed: () => _validateAndUpdateNote(
                           snapshot.hasData && snapshot.data!),
-                      label: const Text('Create note'),
+                      label: const Text('Update note'),
                       icon: const Icon(TablerIcons.note),
                       enableFeedback: true,
                       isExtended: !_loading,
@@ -267,12 +268,12 @@ class _CreateNotePageState extends State<CreateNotePage> {
         ),
       );
 
-  void _validateAndCreateNote(bool loggedIn) async {
+  void _validateAndUpdateNote(bool loggedIn) async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       _formKey.currentState?.save();
 
       if (loggedIn) {
-        _createNote();
+        _updateNote();
       } else {
         // ignore: use_build_context_synchronously
         var user = await Navigator.of(context).push(
@@ -286,7 +287,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
           // ignore: use_build_context_synchronously
           context.showSnackBar(
               'Signed in as ${user.displayName}! Proceeding to create your note...');
-          _createNote();
+          _updateNote();
         }
       }
     }
@@ -307,16 +308,16 @@ class _CreateNotePageState extends State<CreateNotePage> {
       );
 
   /// create a new note
-  void _createNote() {
-    var note = Note(
-        id: const Uuid().v4(),
-        title: _titleController.text.trim(),
-        body: _descController.text.trim(),
-        tags: _labels,
-        todos: _todos,
-        updatedAt: DateTime.now());
-    logger.i('note to create => $note');
-    _noteCubit.createNote(note);
+  void _updateNote() {
+    var note = widget.note.copyWith(
+      title: _titleController.text.trim(),
+      body: _descController.text.trim(),
+      tags: _labels,
+      todos: _todos,
+      updatedAt: DateTime.now(),
+    );
+    logger.i('note to update => $note');
+    _noteCubit.updateNote(note);
   }
 
   /// show options for the note

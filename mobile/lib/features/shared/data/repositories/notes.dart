@@ -70,9 +70,17 @@ class NoteRepository implements BaseNoteRepository {
   }
 
   @override
-  Future<Either<Stream<Note>, String>> getNote(String id) {
-    // TODO: implement getNote
-    throw UnimplementedError();
+  Future<Either<Stream<Note>, String>> getNote(String id) async {
+    try {
+      var stream = _kNoteRef
+          .doc(id)
+          .snapshots(includeMetadataChanges: true)
+          .map((event) => Note.fromJson(event.data()));
+      return Left(stream);
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while getting this note');
   }
 
   @override
