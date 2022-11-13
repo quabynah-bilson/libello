@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '578565313797',
     projectId: 'libello-notes',
     storageBucket: 'libello-notes.appspot.com',
+    androidClientId: '578565313797-6sh01pk89q6lltjnaioicgk9d9i9j8m6.apps.googleusercontent.com',
     iosClientId: '578565313797-j6ubqtjvbqtlpoc8buljllr1899gluls.apps.googleusercontent.com',
     iosBundleId: 'io.qcodelabs.libello',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '578565313797',
     projectId: 'libello-notes',
     storageBucket: 'libello-notes.appspot.com',
+    androidClientId: '578565313797-6sh01pk89q6lltjnaioicgk9d9i9j8m6.apps.googleusercontent.com',
     iosClientId: '578565313797-j6ubqtjvbqtlpoc8buljllr1899gluls.apps.googleusercontent.com',
     iosBundleId: 'io.qcodelabs.libello',
   );
