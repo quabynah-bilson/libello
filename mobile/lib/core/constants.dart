@@ -21,13 +21,14 @@ bool kIsReleased = kReleaseMode;
 /// app constants
 const kAppName = 'Libello.';
 const kAppDesc = 'A note taking mobile application for pros';
-final kAppDevTeam = 'Created and maintained by Quabynah Codelabs LLC © ${DateTime.now().year}';
+final kAppDevTeam =
+    'Created and maintained by Quabynah Codelabs LLC © ${DateTime.now().year}';
 const kAppLogo = 'assets/logo.png';
 const kAppLoadingAnimation = 'assets/notes_doc.json';
-const kFeatureUnderDev = 'This feature will be available in the next major release';
+const kFeatureUnderDev =
+    'This feature will be available in the next major release';
 const kScanNoteTitle = 'Scan your note';
-const kScanNoteDescription =
-    'Create notes from your camera in real-time';
+const kScanNoteDescription = 'Create notes from your camera in real-time';
 const kDrawNoteTitle = 'Draw your note';
 const kDrawNoteDescription = 'Beautifully design your note with art effects';
 const kAuthRequired = 'Sign in to access your notes';
@@ -202,7 +203,7 @@ Future<void> showAppDetailsSheet(BuildContext context) async {
                 kAppDevTeam,
                 style: context.theme.textTheme.caption?.copyWith(
                   color:
-                  context.colorScheme.onSurface.withOpacity(kEmphasisLow),
+                      context.colorScheme.onSurface.withOpacity(kEmphasisLow),
                 ),
                 textAlign: TextAlign.center,
               ),
