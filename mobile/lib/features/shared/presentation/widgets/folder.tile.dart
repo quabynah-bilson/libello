@@ -14,11 +14,13 @@ import 'package:timeago_flutter/timeago_flutter.dart' as timeago;
 class FolderTile extends StatefulWidget {
   final NoteFolder folder;
   final void Function()? onTap;
+  final bool readOnly;
 
   const FolderTile({
     Key? key,
     required this.folder,
     this.onTap,
+    this.readOnly = false,
   }) : super(key: key);
 
   @override
@@ -26,7 +28,7 @@ class FolderTile extends StatefulWidget {
 }
 
 class _FolderTileState extends State<FolderTile> {
-  final _noteCubit = NoteCubit();
+  final _noteCubit = NoteCubit(), _folderCubit = NoteCubit();
 
   @override
   void initState() {
@@ -35,50 +37,64 @@ class _FolderTileState extends State<FolderTile> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder(
-        bloc: _noteCubit,
-        builder: (context, state) => ListTile(
-          onTap: widget.onTap ??
-              () =>
-                  context.router.push(FolderNotesRoute(folder: widget.folder)),
-          leading: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.colorScheme.secondary.withOpacity(kEmphasisLowest),
+  Widget build(BuildContext context) => BlocListener(
+        bloc: _folderCubit,
+        listener: (context, state) {
+          if (!mounted) return;
+
+          if (state is NoteError) {
+            context.showSnackBar(state.message, context.colorScheme.error,
+                context.colorScheme.onError);
+          }
+        },
+        child: BlocBuilder(
+          bloc: _noteCubit,
+          builder: (context, state) => ListTile(
+            onTap: widget.onTap ??
+                () => context.router
+                    .push(FolderNotesRoute(folder: widget.folder)),
+            leading: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.colorScheme.primary.withOpacity(kEmphasisLowest),
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                TablerIcons.folder,
+                color: context.colorScheme.primary,
+              ),
             ),
-            padding: const EdgeInsets.all(12),
-            child: Icon(
-              TablerIcons.folder,
-              color: context.colorScheme.secondary,
+            title: Text(widget.folder.label),
+            subtitle: state is NoteSuccess<List<Note>>
+                ? Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text:
+                              '${state.data.where((element) => element.folder == widget.folder.id).length}',
+                          style: TextStyle(color: context.colorScheme.primary),
+                        ),
+                        const TextSpan(text: ' notes /'),
+                        TextSpan(
+                            text:
+                                ' updated ${timeago.format(widget.folder.updatedAt)}'),
+                      ],
+                    ),
+                    style: TextStyle(
+                        color: context.colorScheme.onBackground
+                            .withOpacity(kEmphasisMedium)),
+                  )
+                : Text(
+                    '...',
+                    style: TextStyle(
+                        color: context.colorScheme.onBackground
+                            .withOpacity(kEmphasisMedium)),
+                  ),
+            trailing: widget.readOnly ? null : IconButton(
+              onPressed: () => _folderCubit.deleteFolder(widget.folder.id),
+              icon: const Icon(TablerIcons.trash),
             ),
           ),
-          title: Text(widget.folder.label),
-          subtitle: state is NoteSuccess<List<Note>>
-              ? Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text:
-                            '${state.data.where((element) => element.folder == widget.folder.id).length}',
-                        style: TextStyle(color: context.colorScheme.secondary),
-                      ),
-                      const TextSpan(text: ' notes /'),
-                      TextSpan(
-                          text:
-                              ' updated ${timeago.format(widget.folder.updatedAt)}'),
-                    ],
-                  ),
-                  style: TextStyle(
-                      color: context.colorScheme.onBackground
-                          .withOpacity(kEmphasisMedium)),
-                )
-              : Text(
-                  '...',
-                  style: TextStyle(
-                      color: context.colorScheme.onBackground
-                          .withOpacity(kEmphasisMedium)),
-                ),
-          trailing: const Icon(TablerIcons.chevron_right),
         ),
       );
 }

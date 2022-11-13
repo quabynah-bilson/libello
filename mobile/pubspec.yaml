@@ -35,7 +35,6 @@ dependencies:
   copy_with_extension:
   date_time_format:
   timeago_flutter:
-  fl_chart: ^0.55.2
   flutter_palette:
   google_sign_in:
   firebase_core: ^2.1.1
@@ -43,6 +42,7 @@ dependencies:
   firebase_auth: ^4.1.1
   share_plus:
   package_info_plus:
+  new_version:
 
 dev_dependencies:
   flutter_test:

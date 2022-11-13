@@ -8,7 +8,7 @@ class ThemeConfig {
       kBlue = Colors.lightBlue,
       kRed = Colors.red;
 
-  static const _defaultFont = GoogleFonts.spaceGrotesk,
+  static const _defaultFont = GoogleFonts.dmSans,
       _secondaryFont = GoogleFonts.dmSans,
       _tertiaryFont = GoogleFonts.dmMono;
 
@@ -47,18 +47,21 @@ class ThemeConfig {
         textTheme: _kDefaultTextTheme(Colors.black),
         scaffoldBackgroundColor: const Color(0xffF9F9F9),
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xffFDF4A5),
-          secondary: Color(0xff4120E9),
-          secondaryContainer: Color(0xffECFDC7),
+          primary: Color(0xff121E35),
+          secondary: Color(0xffCBFC56),
+          secondaryContainer: Color(0xff121E35),
           tertiary: Colors.white,
           tertiaryContainer: Color(0xffdddddd),
+          error: Color(0xffFC4B19),
           background: Color(0xffF9F9F9),
           surface: Colors.white,
           onBackground: Colors.black,
           onSurface: Colors.black,
-          onPrimary: Colors.black,
-          onSecondary: Colors.white,
+          onPrimary: Colors.white,
+          onSecondary: Colors.black,
+          // onSecondary: Colors.white,
           onTertiary: Colors.black,
+          onError: Colors.white,
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: const Color(0xff4120E9),

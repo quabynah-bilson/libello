@@ -41,9 +41,7 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
             slivers: [
               /// top app bar
               SliverAppBar(
-                title: Text('Library',
-                    style: TextStyle(color: context.colorScheme.onSecondary)),
-                backgroundColor: context.colorScheme.secondary,
+                title: const Text('Library'),
                 actions: [
                   IconButton(
                     onPressed: () => Navigator.of(context).push(
@@ -54,7 +52,6 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
                             Offset(context.width * 0.8, context.height * 0.1),
                       ),
                     ),
-                    color: context.colorScheme.onSecondary,
                     icon: const Icon(TablerIcons.file_search),
                   ),
                   const SizedBox(width: 12),

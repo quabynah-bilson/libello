@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:ui';
 
@@ -56,15 +58,16 @@ class _DashboardPageState extends State<DashboardPage> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    kUseDefaultOverlays(context,
-        statusBarBrightness: _selectedIndex == 0 ||  _selectedIndex == 3
-            ? context.invertedThemeBrightness
-            : context.theme.brightness);
+  void initState() {
+    super.initState();
+    doAfterDelay(_checkAppVersion);
+  }
 
-    return Scaffold(
+  @override
+  Widget build(BuildContext context) => Scaffold(
       body: _pages[_selectedIndex],
       extendBody: true,
+      extendBodyBehindAppBar: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: BlocBuilder(
         bloc: context.read<NoteCubit>(),
@@ -72,7 +75,10 @@ class _DashboardPageState extends State<DashboardPage> {
           if (state is NoteLoading) return const SizedBox.shrink();
           return FloatingActionButton(
             heroTag: kHomeFabTag,
-            onPressed: () => context.router.push(const CreateNoteRoute()),
+            onPressed: () async {
+              await context.router.push(const CreateNoteRoute());
+              context.read<NoteCubit>().getNotes();
+            },
             backgroundColor: context.colorScheme.secondary,
             foregroundColor: context.colorScheme.onSecondary,
             child: const Icon(TablerIcons.notes),
@@ -108,9 +114,14 @@ class _DashboardPageState extends State<DashboardPage> {
               leftCornerRadius: 32,
               rightCornerRadius: 32,
               backgroundColor: context.colorScheme.surface,
-              activeColor: context.colorScheme.secondary,
+              activeColor: context.colorScheme.primary,
+              inactiveColor: context.theme.disabledColor,
             );
           }),
     );
+
+  /// check for new app updates
+  void _checkAppVersion() async {
+    await kAppVersionUpgrader?.showAlertIfNecessary(context: context);
   }
 }

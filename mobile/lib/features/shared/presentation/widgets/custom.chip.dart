@@ -21,7 +21,7 @@ class CustomChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       margin: const EdgeInsets.only(right: 16),
       decoration: BoxDecoration(
-        color: context.colorScheme.secondary.withOpacity(kEmphasisLowest),
+        color: context.colorScheme.primary.withOpacity(kEmphasisLowest),
         border: Border.all(
             color:
                 context.theme.disabledColor.withOpacity(kEmphasisLowest)),
@@ -33,13 +33,13 @@ class CustomChip extends StatelessWidget {
         children: [
           Icon(leadingIcon,
               size: context.theme.textTheme.subtitle1?.fontSize,
-              color: context.colorScheme.secondary
+              color: context.colorScheme.primary
                   .withOpacity(kEmphasisMedium)),
           const SizedBox(width: 8),
           Text(
             label,
             style: context.theme.textTheme.subtitle1?.copyWith(
-              color: context.colorScheme.secondary
+              color: context.colorScheme.primary
                   .withOpacity(kEmphasisMedium),
             ),
           ),

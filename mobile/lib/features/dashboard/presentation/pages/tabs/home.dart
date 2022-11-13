@@ -13,8 +13,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
       _greeting = '...',
       _notes = List<Note>.empty(),
       _statsTodos = List<NoteTodo>.empty();
-  final animDuration = const Duration(milliseconds: 250),
-      _authCubit = AuthCubit();
+  final animDuration = const Duration(milliseconds: 250);
   late final Timer _timer;
   late final _noteCubit = context.read<NoteCubit>();
 
@@ -43,7 +42,6 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
   Widget build(BuildContext context) {
     kUseDefaultOverlays(context,
         statusBarBrightness: context.invertedThemeBrightness);
-
     return BlocListener(
       bloc: _noteCubit,
       listener: (context, state) {
@@ -74,7 +72,6 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
               /// top section
               SliverToBoxAdapter(
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                   decoration: BoxDecoration(
                     color: context.colorScheme.primary,
                     borderRadius: const BorderRadius.only(
@@ -88,44 +85,40 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        /// actions
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            /// logo
-                            GestureDetector(
-                              onTap: () => showAppDetailsSheet(context),
-                              child: Container(
-                                padding: const EdgeInsets.only(right: 16),
-                                decoration: BoxDecoration(
-                                  color: context.colorScheme.onPrimary,
-                                  borderRadius:
-                                      BorderRadius.circular(kRadiusLarge),
-                                ),
-                                child: AnimatedRow(
-                                  animateType: AnimateType.slideRight,
-                                  children: [
-                                    Hero(
-                                      tag: kAppLoadingAnimation,
-                                      child: LottieBuilder.asset(
-                                        kAppLoadingAnimation,
-                                        height: 40,
-                                        repeat: true,
-                                      ),
+                        AppBar(
+                          backgroundColor: context.colorScheme.primary,
+                          centerTitle: false,
+                          title: GestureDetector(
+                            onTap: () => showAppDetailsSheet(context),
+                            child: Container(
+                              padding: const EdgeInsets.only(right: 16),
+                              decoration: BoxDecoration(
+                                color: context.colorScheme.onPrimary,
+                                borderRadius:
+                                    BorderRadius.circular(kRadiusLarge),
+                              ),
+                              child: AnimatedRow(
+                                animateType: AnimateType.slideRight,
+                                children: [
+                                  Hero(
+                                    tag: kAppLoadingAnimation,
+                                    child: LottieBuilder.asset(
+                                      kAppLoadingAnimation,
+                                      height: 40,
+                                      repeat: true,
                                     ),
-                                    Text(
-                                      kAppName,
-                                      style: context.theme.textTheme.subtitle2
-                                          ?.copyWith(
-                                              color:
-                                                  context.colorScheme.primary),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  Text(
+                                    kAppName,
+                                    style: context.theme.textTheme.subtitle2
+                                        ?.copyWith(
+                                            color: context.colorScheme.primary),
+                                  ),
+                                ],
                               ),
                             ),
-
+                          ),
+                          actions: [
                             /// search
                             IconButton(
                               onPressed: () =>
@@ -133,7 +126,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                                 page: const NoteSearchPage(),
                                 maxRadius: context.height,
                                 centerOffset: Offset(
-                                    context.width * 0.8, context.height * 0.1),
+                                    context.width * 0.85, context.height * 0.1),
                               )),
                               icon: const Icon(TablerIcons.file_search),
                               color: context.colorScheme.onPrimary,
@@ -148,10 +141,15 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                           child: SlideAnimation(
                             horizontalOffset: kListSlideOffset,
                             child: FadeInAnimation(
-                              child: Text(
-                                _greeting,
-                                style: context.theme.textTheme.headline2
-                                    ?.copyWith(color: context.colorScheme.onPrimary),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  _greeting,
+                                  style: context.theme.textTheme.headline2
+                                      ?.copyWith(
+                                          color: context.colorScheme.onPrimary),
+                                ),
                               ),
                             ),
                           ),
@@ -164,42 +162,46 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                           child: SlideAnimation(
                             horizontalOffset: -kListSlideOffset,
                             child: FadeInAnimation(
-                              child: _notes.isEmpty
-                                  ? Text(
-                                      'You have no notes at the moment',
-                                      style: context.theme.textTheme.subtitle1
-                                          ?.copyWith(
-                                        color: context.colorScheme.onPrimary
-                                            .withOpacity(kEmphasisLow),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                                child: _notes.isEmpty
+                                    ? Text(
+                                        'You have no notes at the moment',
+                                        style: context.theme.textTheme.subtitle1
+                                            ?.copyWith(
+                                          color: context.colorScheme.onPrimary
+                                              .withOpacity(kEmphasisLow),
+                                        ),
+                                      )
+                                    : Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  '${_statsTodos.where((note) => note.completed).toList().length}',
+                                              style: TextStyle(
+                                                  color: context
+                                                      .colorScheme.onPrimary),
+                                            ),
+                                            const TextSpan(text: ' out of '),
+                                            TextSpan(
+                                              text: '${_statsTodos.length}',
+                                              style: TextStyle(
+                                                  color: context
+                                                      .colorScheme.onPrimary),
+                                            ),
+                                            const TextSpan(
+                                                text: ' tasks completed'),
+                                          ],
+                                        ),
+                                        style: context.theme.textTheme.subtitle1
+                                            ?.copyWith(
+                                          color: context.colorScheme.onPrimary
+                                              .withOpacity(kEmphasisLow),
+                                        ),
                                       ),
-                                    )
-                                  : Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text:
-                                                '${_statsTodos.where((note) => note.completed).toList().length}',
-                                            style: TextStyle(
-                                                color: context
-                                                    .colorScheme.onPrimary),
-                                          ),
-                                          const TextSpan(text: ' out of '),
-                                          TextSpan(
-                                            text: '${_statsTodos.length}',
-                                            style: TextStyle(
-                                                color: context
-                                                    .colorScheme.onPrimary),
-                                          ),
-                                          const TextSpan(
-                                              text: ' tasks completed'),
-                                        ],
-                                      ),
-                                      style: context.theme.textTheme.subtitle1
-                                          ?.copyWith(
-                                        color: context.colorScheme.onPrimary
-                                            .withOpacity(kEmphasisLow),
-                                      ),
-                                    ),
+                              ),
                             ),
                           ),
                         ),
@@ -323,9 +325,9 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                     elevation: 0,
                     onPressed: () =>
                         context.router.push(NotesRoute(showAll: true)),
-                    backgroundColor: context.colorScheme.secondary
+                    backgroundColor: context.colorScheme.primary
                         .withOpacity(kEmphasisLowest),
-                    foregroundColor: context.colorScheme.secondary,
+                    foregroundColor: context.colorScheme.primary,
                   ),
                 ),
               ),

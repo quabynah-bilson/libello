@@ -121,7 +121,7 @@ class _DashboardFolderTabState extends State<_DashboardFolderTab> {
                                 Icon(
                                   TablerIcons.folder_minus,
                                   size: context.width * 0.2,
-                                  color: context.colorScheme.secondary,
+                                  color: context.colorScheme.primary,
                                 ),
                                 const SizedBox(height: 24),
                                 Text('Create a new folder',

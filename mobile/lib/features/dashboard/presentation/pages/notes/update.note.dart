@@ -63,7 +63,15 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
           }
         },
         child: Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            actions: [
+              IconButton(
+                onPressed: _showOptionsSheet,
+                icon: const Icon(TablerIcons.dots),
+                tooltip: 'More options',
+              ),
+            ],
+          ),
           body: LoadingOverlay(
             isLoading: _loading,
             child: AnimationLimiter(
@@ -247,14 +255,6 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                     foregroundColor: context.colorScheme.onSecondary,
                   ),
                 ),
-                const SizedBox(width: 16),
-                FloatingActionButton(
-                  heroTag: kOptionsFabTag,
-                  onPressed: _showOptionsSheet,
-                  backgroundColor: context.colorScheme.onPrimary,
-                  foregroundColor: context.colorScheme.primary,
-                  child: const Icon(TablerIcons.dots),
-                ),
               ],
             ),
           ),
@@ -401,6 +401,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                   'Label',
                   onChange: (input) => label = input?.trim(),
                   capitalization: TextCapitalization.words,
+                  maxLength: 15,
                   suffixIcon: Icon(
                     Icons.label,
                     color: context.colorScheme.secondary,

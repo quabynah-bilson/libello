@@ -42,7 +42,7 @@ Future<NoteFolder?> createFolder(BuildContext context) async {
               Text(
                 'Create your new folder',
                 style: context.theme.textTheme.subtitle1
-                    ?.copyWith(color: context.colorScheme.secondary),
+                    ?.copyWith(color: context.colorScheme.secondaryContainer),
               ),
               const SizedBox(height: 24),
               AppTextField(
@@ -125,8 +125,7 @@ Future<void> showAppDetailsSheet(BuildContext context) async {
               Text(
                 kAppName,
                 style: context.theme.textTheme.headline4?.copyWith(
-                  color: context.colorScheme.secondary
-                      .withOpacity(kEmphasisMedium),
+                  color: context.colorScheme.secondary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -183,51 +182,52 @@ Future<User?> showLoginSheet(BuildContext context, [String? tag]) async {
       ),
     ),
     builder: (context) => StatefulBuilder(
-        builder: (context, setState) => SafeArea(
-              top: false,
-              child: BlocConsumer(
-                bloc: authCubit,
-                listener: (context, state) {
-                  if (state is AuthSuccess<User>) {
-                    Navigator.of(context).pop(state.data);
-                  }
-                },
-                builder: (context, state) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: AnimatedColumn(
-                    animateType: AnimateType.slideUp,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      LottieBuilder.asset(kAppLoadingAnimation,
-                          height: context.height * 0.25),
-                      Text(
-                        'Sign in to get the best out of $kAppName',
-                        style: context.theme.textTheme.subtitle1?.copyWith(
-                          color: context.colorScheme.onSurface,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      if (state is AuthLoading) ...{
-                        const CircularProgressIndicator.adaptive(),
-                      } else ...{
-                        FloatingActionButton.extended(
-                          heroTag: kOptionsFabTag,
-                          onPressed: authCubit.login,
-                          label: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24),
-                            child: Text('Sign in with Google'),
-                          ),
-                          icon: const Icon(TablerIcons.brand_google),
-                          enableFeedback: true,
-                          backgroundColor: context.colorScheme.secondary,
-                          foregroundColor: context.colorScheme.onSecondary,
-                        ),
-                      },
-                    ],
+      builder: (context, setState) => SafeArea(
+        top: false,
+        child: BlocConsumer(
+          bloc: authCubit,
+          listener: (context, state) {
+            if (state is AuthSuccess<User>) {
+              Navigator.of(context).pop(state.data);
+            }
+          },
+          builder: (context, state) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: AnimatedColumn(
+              animateType: AnimateType.slideUp,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                LottieBuilder.asset(kAppLoadingAnimation,
+                    height: context.height * 0.25),
+                Text(
+                  'Sign in to get the best out of $kAppName',
+                  style: context.theme.textTheme.subtitle1?.copyWith(
+                    color: context.colorScheme.onSurface,
                   ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-            )),
+                const SizedBox(height: 24),
+                if (state is AuthLoading) ...{
+                  const CircularProgressIndicator.adaptive(),
+                } else ...{
+                  FloatingActionButton.extended(
+                    heroTag: kOptionsFabTag,
+                    onPressed: authCubit.login,
+                    label: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text('Sign in with Google'),
+                    ),
+                    icon: const Icon(TablerIcons.brand_google),
+                    enableFeedback: true,
+                    backgroundColor: context.colorScheme.secondary,
+                    foregroundColor: context.colorScheme.onSecondary,
+                  ),
+                },
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
   );
 }

@@ -64,6 +64,7 @@ class _FolderNotesPageState extends State<FolderNotesPage> {
         child: AnimationLimiter(
           child: Scaffold(
             appBar: AppBar(
+              centerTitle: false,
               title: Text(widget.folder.label),
               actions: [
                 if (!kIsReleased) ...{

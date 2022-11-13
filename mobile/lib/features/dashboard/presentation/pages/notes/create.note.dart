@@ -55,19 +55,14 @@ class _CreateNotePageState extends State<CreateNotePage> {
         },
         child: Scaffold(
           appBar: AppBar(
-              // actions: [
-              // IconButton(
-              //   onPressed: () => context.showSnackBar(kFeatureUnderDev),
-              //   icon: const Icon(Icons.undo),
-              //   tooltip: 'Undo',
-              // ),
-              // IconButton(
-              //   onPressed: () => context.showSnackBar(kFeatureUnderDev),
-              //   icon: const Icon(Icons.redo),
-              //   tooltip: 'Redo',
-              // ),
-              // ],
+            actions: [
+              IconButton(
+                onPressed: _showOptionsSheet,
+                icon: const Icon(TablerIcons.dots),
+                tooltip: 'More options',
               ),
+            ],
+          ),
           body: LoadingOverlay(
             isLoading: _loading,
             child: AnimationLimiter(
@@ -173,7 +168,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                             children: [
                               Icon(TablerIcons.checklist,
                                   size: 48,
-                                  color: context.colorScheme.secondary),
+                                  color: context.colorScheme.primary),
                               const SizedBox(height: 16),
                               Text(
                                 'You have no todos for this note',
@@ -250,14 +245,6 @@ class _CreateNotePageState extends State<CreateNotePage> {
                     backgroundColor: context.colorScheme.secondary,
                     foregroundColor: context.colorScheme.onSecondary,
                   ),
-                ),
-                const SizedBox(width: 16),
-                FloatingActionButton(
-                  heroTag: kOptionsFabTag,
-                  onPressed: _showOptionsSheet,
-                  backgroundColor: context.colorScheme.onPrimary,
-                  foregroundColor: context.colorScheme.primary,
-                  child: const Icon(TablerIcons.dots),
                 ),
               ],
             ),
@@ -397,16 +384,17 @@ class _CreateNotePageState extends State<CreateNotePage> {
               Text(
                 'Add a new label',
                 style: context.theme.textTheme.subtitle1
-                    ?.copyWith(color: context.colorScheme.secondary),
+                    ?.copyWith(color: context.colorScheme.primary),
               ),
               const SizedBox(height: 24),
               AppTextField(
                 'Label',
                 onChange: (input) => label = input?.trim(),
                 capitalization: TextCapitalization.words,
+                maxLength: 15,
                 suffixIcon: Icon(
                   Icons.label,
-                  color: context.colorScheme.secondary,
+                  color: context.colorScheme.primary,
                 ),
               ),
               SafeArea(
@@ -453,7 +441,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
               Text(
                 'Add a todo item',
                 style: context.theme.textTheme.subtitle1
-                    ?.copyWith(color: context.colorScheme.secondary),
+                    ?.copyWith(color: context.colorScheme.primary),
               ),
               const SizedBox(height: 24),
               AppTextField(

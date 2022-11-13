@@ -53,8 +53,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                   _updateNoteCubit.updateNote(_currentNote);
                   context.showSnackBar(
                       _currentNote.status == NoteStatus.archived
-                          ? 'Note unarchived'
-                          : 'Note has been added to your archives');
+                          ? 'Note has been added to your archives'
+                          : 'Note unarchived');
                 },
                 icon: Icon(_currentNote.status == NoteStatus.archived
                     ? TablerIcons.archive_off
@@ -182,7 +182,7 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                       child: Text(
                         'Labels',
                         style: context.theme.textTheme.subtitle1
-                            ?.copyWith(color: context.colorScheme.secondary),
+                            ?.copyWith(color: context.colorScheme.secondaryContainer),
                       ),
                     ),
                     Padding(
@@ -223,7 +223,7 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                       child: Text(
                         'To-Do',
                         style: context.theme.textTheme.subtitle1
-                            ?.copyWith(color: context.colorScheme.secondary),
+                            ?.copyWith(color: context.colorScheme.secondaryContainer),
                       ),
                     ),
                     AnimationLimiter(
@@ -340,7 +340,7 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                       Icon(
                         TablerIcons.folder_minus,
                         size: context.width * 0.2,
-                        color: context.colorScheme.secondary,
+                        color: context.colorScheme.secondaryContainer,
                       ),
                       const SizedBox(height: 24),
                       Text('Oops!', style: context.theme.textTheme.headline6),
@@ -374,13 +374,15 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                     child: Text(
                       'Your Folders',
                       style: context.theme.textTheme.subtitle1
-                          ?.copyWith(color: context.colorScheme.secondary),
+                          ?.copyWith(color: context.colorScheme.secondaryContainer),
                     ),
                   ),
+                  const SizedBox(height: 16),
                   ...folders
                       .map(
                         (folder) => FolderTile(
                           folder: folder,
+                          readOnly: true,
                           onTap: () {
                             context.router.pop();
                             doAfterDelay(() {

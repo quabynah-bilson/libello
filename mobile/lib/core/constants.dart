@@ -4,11 +4,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:logger/logger.dart';
+import 'package:new_version/new_version.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// for debugging
 final logger = Logger();
 bool kIsReleased = kReleaseMode;
+
+/// app versioning
+NewVersion? kAppVersionUpgrader;
 
 /// app constants
 const kAppName = 'Libello.';

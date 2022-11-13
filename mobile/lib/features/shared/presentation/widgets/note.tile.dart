@@ -68,6 +68,9 @@ class _NoteTileState extends State<NoteTile> {
                   color:
                       context.colorScheme.surface.withOpacity(kEmphasisMedium),
                   borderRadius: BorderRadius.circular(kRadiusMedium),
+                  border: Border.all(
+                      color: context.theme.disabledColor
+                          .withOpacity(kEmphasisLowest)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +79,7 @@ class _NoteTileState extends State<NoteTile> {
                     Text(
                       _currentNote.title,
                       style: context.theme.textTheme.subtitle1
-                          ?.copyWith(color: context.colorScheme.secondary),
+                          ?.copyWith(color: context.colorScheme.primary),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
