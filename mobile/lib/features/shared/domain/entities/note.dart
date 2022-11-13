@@ -31,6 +31,8 @@ class Note {
   final List<String> tags;
   @NoteTodoSerializer()
   final List<NoteTodo> todos;
+  @NoteRgbColorSerializer()
+  final NoteRgbColor? color;
 
   Note({
     required this.id,
@@ -40,6 +42,7 @@ class Note {
     this.status = NoteStatus.regular,
     this.folder,
     this.lockPin,
+    this.color,
     this.body = '',
     this.owner = '', // add this when uploading to server
     this.todos = const <NoteTodo>[],
@@ -75,6 +78,27 @@ class NoteTodo {
   String toString() => toJson().toString();
 }
 
+@CopyWith()
+@JsonSerializable()
+class NoteRgbColor {
+  final int red, green, blue;
+  final double opacity;
+
+  NoteRgbColor({
+    required this.red,
+    required this.green,
+    required this.blue,
+    required this.opacity,
+  });
+
+  factory NoteRgbColor.fromJson(json) => _$NoteRgbColorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NoteRgbColorToJson(this);
+
+  @override
+  String toString() => toJson().toString();
+}
+
 class NoteTodoSerializer
     implements JsonConverter<NoteTodo, Map<String, dynamic>> {
   const NoteTodoSerializer();
@@ -84,4 +108,16 @@ class NoteTodoSerializer
 
   @override
   Map<String, dynamic> toJson(NoteTodo object) => object.toJson();
+}
+
+class NoteRgbColorSerializer
+    implements JsonConverter<NoteRgbColor?, Map<String, dynamic>?> {
+  const NoteRgbColorSerializer();
+
+  @override
+  NoteRgbColor? fromJson(Map<String, dynamic>? json) =>
+      json == null ? null : NoteRgbColor.fromJson(json);
+
+  @override
+  Map<String, dynamic>? toJson(NoteRgbColor? object) => object?.toJson();
 }

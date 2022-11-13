@@ -8,12 +8,11 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
+import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
 import 'package:string_stats/string_stats.dart';
-
-import '../../../../core/router/route.gr.dart';
 
 /// note list item
 class NoteTile extends StatefulWidget {
@@ -65,8 +64,14 @@ class _NoteTileState extends State<NoteTile> {
                 clipBehavior: Clip.hardEdge,
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
                 decoration: BoxDecoration(
-                  color:
-                      context.colorScheme.surface.withOpacity(kEmphasisMedium),
+                  color: widget.note.color == null
+                      ? context.colorScheme.surface
+                          .withOpacity(kEmphasisNoteBackground)
+                      : Color.fromRGBO(
+                          widget.note.color!.red,
+                          widget.note.color!.green,
+                          widget.note.color!.blue,
+                          widget.note.color!.opacity),
                   borderRadius: BorderRadius.circular(kRadiusMedium),
                   border: Border.all(
                       color: context.theme.disabledColor
@@ -78,8 +83,9 @@ class _NoteTileState extends State<NoteTile> {
                     /// title
                     Text(
                       _currentNote.title,
-                      style: context.theme.textTheme.subtitle1
-                          ?.copyWith(color: context.colorScheme.primary),
+                      style: context.theme.textTheme.subtitle1?.copyWith(
+                        color: _generateForegroundColor(),
+                      ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -88,7 +94,7 @@ class _NoteTileState extends State<NoteTile> {
                       Text(
                         '~${wordCount(_currentNote.body)} words',
                         style: context.theme.textTheme.caption?.copyWith(
-                          color: context.colorScheme.onSurface
+                          color: _generateForegroundColor()
                               .withOpacity(kEmphasisMedium),
                         ),
                       ),
@@ -104,7 +110,7 @@ class _NoteTileState extends State<NoteTile> {
                       Text(
                         _currentNote.body,
                         style: context.theme.textTheme.subtitle2?.copyWith(
-                          color: context.colorScheme.onSurface
+                          color: _generateForegroundColor()
                               .withOpacity(kEmphasisMedium),
                         ),
                         maxLines: 3,
@@ -133,7 +139,7 @@ class _NoteTileState extends State<NoteTile> {
                                       TablerIcons.checklist,
                                       color: todo.completed
                                           ? context.theme.disabledColor
-                                          : context.colorScheme.onSurface,
+                                          : _generateForegroundColor(),
                                     ),
                                     minLeadingWidth: 24,
                                     contentPadding: EdgeInsets.zero,
@@ -145,7 +151,7 @@ class _NoteTileState extends State<NoteTile> {
                                           ?.copyWith(
                                         color: todo.completed
                                             ? context.theme.disabledColor
-                                            : context.colorScheme.onSurface,
+                                            : _generateForegroundColor(),
                                         decoration: todo.completed
                                             ? TextDecoration.lineThrough
                                             : null,
@@ -186,7 +192,7 @@ class _NoteTileState extends State<NoteTile> {
                       child: Text(
                         _currentNote.updatedAt.format('d M, y (g:i a)'),
                         style: context.theme.textTheme.overline?.copyWith(
-                          color: context.colorScheme.onSurface
+                          color: _generateForegroundColor()
                               .withOpacity(kEmphasisMedium),
                         ),
                       ),
@@ -198,4 +204,13 @@ class _NoteTileState extends State<NoteTile> {
           ),
         ),
       );
+
+  Color _generateForegroundColor() {
+    var generatedColor = context.colorScheme.onSurface;
+    if (widget.note.color != null) {
+      generatedColor = Colors.black;
+    }
+    return generatedColor;
+  }
 }
+//Color(0xffa898cf)

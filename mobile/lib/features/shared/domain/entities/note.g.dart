@@ -9,6 +9,8 @@ part of 'note.dart';
 abstract class _$NoteCWProxy {
   Note body(String body);
 
+  Note color(NoteRgbColor? color);
+
   Note folder(String? folder);
 
   Note id(String id);
@@ -37,6 +39,7 @@ abstract class _$NoteCWProxy {
   /// ````
   Note call({
     String? body,
+    NoteRgbColor? color,
     String? folder,
     String? id,
     int? lockPin,
@@ -58,6 +61,9 @@ class _$NoteCWProxyImpl implements _$NoteCWProxy {
 
   @override
   Note body(String body) => this(body: body);
+
+  @override
+  Note color(NoteRgbColor? color) => this(color: color);
 
   @override
   Note folder(String? folder) => this(folder: folder);
@@ -99,6 +105,7 @@ class _$NoteCWProxyImpl implements _$NoteCWProxy {
   /// ````
   Note call({
     Object? body = const $CopyWithPlaceholder(),
+    Object? color = const $CopyWithPlaceholder(),
     Object? folder = const $CopyWithPlaceholder(),
     Object? id = const $CopyWithPlaceholder(),
     Object? lockPin = const $CopyWithPlaceholder(),
@@ -115,6 +122,10 @@ class _$NoteCWProxyImpl implements _$NoteCWProxy {
           ? _value.body
           // ignore: cast_nullable_to_non_nullable
           : body as String,
+      color: color == const $CopyWithPlaceholder()
+          ? _value.color
+          // ignore: cast_nullable_to_non_nullable
+          : color as NoteRgbColor?,
       folder: folder == const $CopyWithPlaceholder()
           ? _value.folder
           // ignore: cast_nullable_to_non_nullable
@@ -236,6 +247,88 @@ extension $NoteTodoCopyWith on NoteTodo {
   _$NoteTodoCWProxy get copyWith => _$NoteTodoCWProxyImpl(this);
 }
 
+abstract class _$NoteRgbColorCWProxy {
+  NoteRgbColor blue(int blue);
+
+  NoteRgbColor green(int green);
+
+  NoteRgbColor opacity(double opacity);
+
+  NoteRgbColor red(int red);
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `NoteRgbColor(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// NoteRgbColor(...).copyWith(id: 12, name: "My name")
+  /// ````
+  NoteRgbColor call({
+    int? blue,
+    int? green,
+    double? opacity,
+    int? red,
+  });
+}
+
+/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfNoteRgbColor.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfNoteRgbColor.copyWith.fieldName(...)`
+class _$NoteRgbColorCWProxyImpl implements _$NoteRgbColorCWProxy {
+  final NoteRgbColor _value;
+
+  const _$NoteRgbColorCWProxyImpl(this._value);
+
+  @override
+  NoteRgbColor blue(int blue) => this(blue: blue);
+
+  @override
+  NoteRgbColor green(int green) => this(green: green);
+
+  @override
+  NoteRgbColor opacity(double opacity) => this(opacity: opacity);
+
+  @override
+  NoteRgbColor red(int red) => this(red: red);
+
+  @override
+
+  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `NoteRgbColor(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  ///
+  /// Usage
+  /// ```dart
+  /// NoteRgbColor(...).copyWith(id: 12, name: "My name")
+  /// ````
+  NoteRgbColor call({
+    Object? blue = const $CopyWithPlaceholder(),
+    Object? green = const $CopyWithPlaceholder(),
+    Object? opacity = const $CopyWithPlaceholder(),
+    Object? red = const $CopyWithPlaceholder(),
+  }) {
+    return NoteRgbColor(
+      blue: blue == const $CopyWithPlaceholder() || blue == null
+          ? _value.blue
+          // ignore: cast_nullable_to_non_nullable
+          : blue as int,
+      green: green == const $CopyWithPlaceholder() || green == null
+          ? _value.green
+          // ignore: cast_nullable_to_non_nullable
+          : green as int,
+      opacity: opacity == const $CopyWithPlaceholder() || opacity == null
+          ? _value.opacity
+          // ignore: cast_nullable_to_non_nullable
+          : opacity as double,
+      red: red == const $CopyWithPlaceholder() || red == null
+          ? _value.red
+          // ignore: cast_nullable_to_non_nullable
+          : red as int,
+    );
+  }
+}
+
+extension $NoteRgbColorCopyWith on NoteRgbColor {
+  /// Returns a callable class that can be used as follows: `instanceOfNoteRgbColor.copyWith(...)` or like so:`instanceOfNoteRgbColor.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
+  _$NoteRgbColorCWProxy get copyWith => _$NoteRgbColorCWProxyImpl(this);
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -250,6 +343,8 @@ Note _$NoteFromJson(Map<String, dynamic> json) => Note(
           NoteStatus.regular,
       folder: json['folder'] as String?,
       lockPin: json['lockPin'] as int?,
+      color: const NoteRgbColorSerializer()
+          .fromJson(json['color'] as Map<String, dynamic>?),
       body: json['body'] as String? ?? '',
       owner: json['owner'] as String? ?? '',
       todos: (json['todos'] as List<dynamic>?)
@@ -274,6 +369,7 @@ Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
       'owner': instance.owner,
       'tags': instance.tags,
       'todos': instance.todos.map(const NoteTodoSerializer().toJson).toList(),
+      'color': const NoteRgbColorSerializer().toJson(instance.color),
     };
 
 const _$NoteTypeEnumMap = {
@@ -299,4 +395,19 @@ Map<String, dynamic> _$NoteTodoToJson(NoteTodo instance) => <String, dynamic>{
       'text': instance.text,
       'completed': instance.completed,
       'updatedAt': instance.updatedAt.toIso8601String(),
+    };
+
+NoteRgbColor _$NoteRgbColorFromJson(Map<String, dynamic> json) => NoteRgbColor(
+      red: json['red'] as int,
+      green: json['green'] as int,
+      blue: json['blue'] as int,
+      opacity: (json['opacity'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$NoteRgbColorToJson(NoteRgbColor instance) =>
+    <String, dynamic>{
+      'red': instance.red,
+      'green': instance.green,
+      'blue': instance.blue,
+      'opacity': instance.opacity,
     };

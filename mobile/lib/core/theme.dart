@@ -8,7 +8,7 @@ class ThemeConfig {
       kBlue = Colors.lightBlue,
       kRed = Colors.red;
 
-  static const _defaultFont = GoogleFonts.dmSans,
+  static const _defaultFont = GoogleFonts.spaceGrotesk,
       _secondaryFont = GoogleFonts.dmSans,
       _tertiaryFont = GoogleFonts.dmMono;
 

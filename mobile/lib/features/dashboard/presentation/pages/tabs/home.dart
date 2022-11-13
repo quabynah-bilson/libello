@@ -146,7 +146,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                                     const EdgeInsets.symmetric(horizontal: 16),
                                 child: Text(
                                   _greeting,
-                                  style: context.theme.textTheme.headline2
+                                  style: context.theme.textTheme.headline3
                                       ?.copyWith(
                                           color: context.colorScheme.onPrimary),
                                 ),

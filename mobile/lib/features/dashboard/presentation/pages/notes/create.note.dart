@@ -2,11 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_palette/flutter_palette.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/core/modals.dart';
+import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/auth_cubit.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
@@ -27,7 +29,9 @@ class CreateNotePage extends StatefulWidget {
 }
 
 class _CreateNotePageState extends State<CreateNotePage> {
-  var _loading = false, _showTodosUI = true;
+  var _loading = false,
+      _showTodosUI = true,
+      _generatedColors = List<RgbColor>.empty(growable: true);
   final _formKey = GlobalKey<FormState>(),
       _titleController = TextEditingController(),
       _descController = TextEditingController(),
@@ -35,6 +39,14 @@ class _CreateNotePageState extends State<CreateNotePage> {
       _noteCubit = NoteCubit(),
       _todos = List<NoteTodo>.empty(growable: true),
       _labels = List<String>.empty(growable: true);
+  late RgbColor _selectedNoteColor =
+      RgbColor.fromColor(context.colorScheme.surface);
+
+  @override
+  void initState() {
+    super.initState();
+    doAfterDelay(_generateColorPalette);
+  }
 
   @override
   Widget build(BuildContext context) => BlocListener(
@@ -50,7 +62,8 @@ class _CreateNotePageState extends State<CreateNotePage> {
           if (state is NoteSuccess<Note>) {
             context
               ..showSnackBar('Note created successfully')
-              ..router.pop();
+              ..router.pushAndPopUntil(const DashboardRoute(),
+                  predicate: (_) => false);
           }
         },
         child: Scaffold(
@@ -167,8 +180,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                           child: AnimatedColumn(
                             children: [
                               Icon(TablerIcons.checklist,
-                                  size: 48,
-                                  color: context.colorScheme.primary),
+                                  size: 48, color: context.colorScheme.primary),
                               const SizedBox(height: 16),
                               Text(
                                 'You have no todos for this note',
@@ -206,6 +218,12 @@ class _CreateNotePageState extends State<CreateNotePage> {
                                   todo = todo.copyWith(completed: completed);
                                   setState(() => _todos[index] = todo);
                                 },
+                              ),
+                              trailing: IconButton(
+                                onPressed: () =>
+                                    setState(() => _todos.removeAt(index)),
+                                icon: const Icon(TablerIcons.trash),
+                                color: context.colorScheme.error,
                               ),
                             ),
                             childCount: _todos.length,
@@ -273,12 +291,18 @@ class _CreateNotePageState extends State<CreateNotePage> {
   /// create a new note
   void _createNote() {
     var note = Note(
-        id: const Uuid().v4(),
-        title: _titleController.text.trim(),
-        body: _descController.text.trim(),
-        tags: _labels,
-        todos: _showTodosUI ? _todos : List<NoteTodo>.empty(),
-        updatedAt: DateTime.now());
+      id: const Uuid().v4(),
+      title: _titleController.text.trim(),
+      body: _descController.text.trim(),
+      tags: _labels,
+      todos: _showTodosUI ? _todos : List<NoteTodo>.empty(),
+      updatedAt: DateTime.now(),
+      color: NoteRgbColor(
+          red: _selectedNoteColor.red,
+          green: _selectedNoteColor.green,
+          blue: _selectedNoteColor.blue,
+          opacity: _selectedNoteColor.opacity),
+    );
     logger.i('note to create => $note');
     _noteCubit.createNote(note);
   }
@@ -294,65 +318,89 @@ class _CreateNotePageState extends State<CreateNotePage> {
           topLeft: Radius.circular(kRadiusLarge),
         ),
       ),
-      builder: (context) => AnimatedContainer(
-        duration: kListAnimationDuration,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        color: context.colorScheme.surface,
-        child: SafeArea(
-          top: false,
-          child: AnimatedColumn(
-            animateType: AnimateType.slideUp,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ListTile(
-                title: Text(
-                  'Delete',
-                  style: TextStyle(color: context.colorScheme.onSurface),
-                ),
-                leading: Icon(TablerIcons.trash,
-                    color: context.colorScheme.onSurface),
-                onTap: () {
-                  context.router.pop();
-                  doAfterDelay(context.router.pop);
-                },
+      builder: (context) => StatefulBuilder(
+        builder: (context, setter) => AnimationLimiter(
+          child: AnimatedContainer(
+            duration: kListAnimationDuration,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            color: context.colorScheme.surface,
+            child: SafeArea(
+              top: false,
+              child: AnimatedColumn(
+                animateType: AnimateType.slideUp,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (_generatedColors.isNotEmpty) ...{
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: AnimationConfiguration.toStaggeredList(
+                        duration: kListAnimationDuration,
+                        childAnimationBuilder: (child) => SlideAnimation(
+                          horizontalOffset: kListSlideOffset,
+                          child: FadeInAnimation(child: child),
+                        ),
+                        children: _generatedColors
+                            .map((rgbColor) => _buildColorPicker(
+                                rgbColor,
+                                () => setter(
+                                    () => _selectedNoteColor = rgbColor)))
+                            .toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  },
+                  ListTile(
+                    title: Text(
+                      'Delete',
+                      style: TextStyle(color: context.colorScheme.onSurface),
+                    ),
+                    leading: Icon(TablerIcons.trash,
+                        color: context.colorScheme.onSurface),
+                    onTap: () {
+                      context.router.pop();
+                      doAfterDelay(context.router.pop);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      '${_showTodosUI ? 'Remove' : 'Add'} Todo list',
+                      style: TextStyle(color: context.colorScheme.onSurface),
+                    ),
+                    leading: Icon(TablerIcons.checklist,
+                        color: context.colorScheme.onSurface),
+                    onTap: () {
+                      setState(() => _showTodosUI = !_showTodosUI);
+                      context.router.pop();
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Add a Label',
+                      style: TextStyle(color: context.colorScheme.onSurface),
+                    ),
+                    leading: Icon(TablerIcons.tags,
+                        color: context.colorScheme.onSurface),
+                    onTap: () {
+                      context.router.pop();
+                      doAfterDelay(_showAddLabelSheet, 500);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  FloatingActionButton.extended(
+                    heroTag: kOptionsFabTag,
+                    onPressed: context.router.pop,
+                    label: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text('Dismiss'),
+                    ),
+                    enableFeedback: true,
+                    backgroundColor: context.colorScheme.onSurface,
+                    foregroundColor: context.colorScheme.surface,
+                  ),
+                ],
               ),
-              ListTile(
-                title: Text(
-                  '${_showTodosUI ? 'Remove' : 'Add'} Todo list',
-                  style: TextStyle(color: context.colorScheme.onSurface),
-                ),
-                leading: Icon(TablerIcons.checklist,
-                    color: context.colorScheme.onSurface),
-                onTap: () {
-                  setState(() => _showTodosUI = !_showTodosUI);
-                  context.router.pop();
-                },
-              ),
-              ListTile(
-                title: Text(
-                  'Add a Label',
-                  style: TextStyle(color: context.colorScheme.onSurface),
-                ),
-                leading: Icon(TablerIcons.tags,
-                    color: context.colorScheme.onSurface),
-                onTap: () {
-                  context.router.pop();
-                  doAfterDelay(_showAddLabelSheet, 500);
-                },
-              ),
-              const SizedBox(height: 16),
-              FloatingActionButton.extended(
-                heroTag: kOptionsFabTag,
-                onPressed: context.router.pop,
-                label: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Text('Dismiss'),
-                ),
-                enableFeedback: true,
-                backgroundColor: context.colorScheme.onSurface,
-                foregroundColor: context.colorScheme.surface,
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -473,5 +521,70 @@ class _CreateNotePageState extends State<CreateNotePage> {
         ),
       ),
     );
+  }
+
+  /// color picker widget
+  Widget _buildColorPicker(RgbColor rgbColor, void Function() onTap) =>
+      GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: context.width * 0.15,
+          width: context.width * 0.15,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+                color:
+                    context.theme.disabledColor.withOpacity(kEmphasisLowest)),
+          ),
+          padding: const EdgeInsets.all(4),
+          child: Stack(
+            children: [
+              /// background color
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromRGBO(rgbColor.red, rgbColor.green,
+                        rgbColor.blue, rgbColor.opacity),
+                  ),
+                ),
+              ),
+
+              Positioned.fill(
+                child: AnimatedOpacity(
+                  opacity: _selectedNoteColor == rgbColor ? 1 : 0,
+                  duration: kListAnimationDuration,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.black54),
+                    alignment: Alignment.center,
+                    child: const Icon(TablerIcons.check, color: Colors.white),
+                  ),
+                ),
+              ),
+
+              if (_selectedNoteColor == rgbColor) ...{
+                Positioned.fill(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.black54),
+                    alignment: Alignment.center,
+                    child: const Icon(TablerIcons.check, color: Colors.white),
+                  ),
+                ),
+              },
+            ],
+          ),
+        ),
+      );
+
+  /// generate color palette
+  void _generateColorPalette() async {
+    var palette = ColorPalette.random(5, minBrightness: 100);
+    _generatedColors = palette.colors
+        .map((e) => RgbColor(e.red, e.green, e.blue, e.alpha))
+        .toList();
+    if (mounted) setState(() {});
   }
 }
