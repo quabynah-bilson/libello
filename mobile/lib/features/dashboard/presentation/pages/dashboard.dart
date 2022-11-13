@@ -18,6 +18,7 @@ import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/auth_cubit.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/animated.column.dart';
+import 'package:libello/features/shared/presentation/widgets/animated.row.dart';
 import 'package:libello/features/shared/presentation/widgets/custom.chip.dart';
 import 'package:libello/features/shared/presentation/widgets/filled.button.dart';
 import 'package:libello/features/shared/presentation/widgets/folder.tile.dart';

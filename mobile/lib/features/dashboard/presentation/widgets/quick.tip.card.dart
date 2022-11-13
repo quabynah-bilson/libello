@@ -71,7 +71,7 @@ class QuickTipCard extends StatelessWidget {
                                 .withOpacity(kEmphasisMedium),
                       ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                      maxLines: 2,
                     ),
                   ],
                 ),

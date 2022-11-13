@@ -9,6 +9,7 @@ import 'package:libello/features/shared/domain/entities/folder.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/widgets/app.text.field.dart';
 import 'package:logger/logger.dart';
+import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../features/shared/presentation/widgets/animated.column.dart';
@@ -20,12 +21,13 @@ bool kIsReleased = kReleaseMode;
 /// app constants
 const kAppName = 'Libello.';
 const kAppDesc = 'A note taking mobile application for pros';
+final kAppDevTeam = 'Created and maintained by Quabynah Codelabs LLC © ${DateTime.now().year}';
 const kAppLogo = 'assets/logo.png';
 const kAppLoadingAnimation = 'assets/notes_doc.json';
-const kFeatureUnderDev = 'Feature under development';
+const kFeatureUnderDev = 'This feature will be available in the next major release';
 const kScanNoteTitle = 'Scan your note';
 const kScanNoteDescription =
-    'Transfer your note with an image capture directly from your camera';
+    'Create notes from your camera in real-time';
 const kDrawNoteTitle = 'Draw your note';
 const kDrawNoteDescription = 'Beautifully design your note with art effects';
 const kAuthRequired = 'Sign in to access your notes';
@@ -138,6 +140,74 @@ Future<NoteFolder?> createFolder(BuildContext context) async {
               ),
             ],
           ),
+        ),
+      ),
+    ),
+  );
+}
+
+/// app details
+Future<void> showAppDetailsSheet(BuildContext context) async {
+  await showModalBottomSheet(
+    context: context,
+    clipBehavior: Clip.hardEdge,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(kRadiusLarge),
+        topLeft: Radius.circular(kRadiusLarge),
+      ),
+    ),
+    builder: (context) => StatefulBuilder(
+      builder: (context, setState) => SafeArea(
+        top: false,
+        child: AnimatedColumn(
+          animateType: AnimateType.slideUp,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Hero(
+              tag: kAppLoadingAnimation,
+              child: LottieBuilder.asset(
+                kAppLoadingAnimation,
+                height: context.height * 0.2,
+                repeat: false,
+              ),
+            ),
+            Text(
+              kAppName,
+              style: context.theme.textTheme.headline4,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              kAppDesc,
+              style: context.theme.textTheme.subtitle2?.copyWith(
+                color:
+                    context.colorScheme.onSurface.withOpacity(kEmphasisMedium),
+              ),
+            ),
+            const SizedBox(height: 40),
+            FloatingActionButton.extended(
+              heroTag: kHomeFabTag,
+              onPressed: context.router.pop,
+              label: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Text('Dismiss'),
+              ),
+              backgroundColor: context.colorScheme.secondary,
+              foregroundColor: context.colorScheme.onSecondary,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
+              child: Text(
+                kAppDevTeam,
+                style: context.theme.textTheme.caption?.copyWith(
+                  color:
+                  context.colorScheme.onSurface.withOpacity(kEmphasisLow),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
         ),
       ),
     ),

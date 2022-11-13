@@ -116,7 +116,7 @@ extension ContextX on BuildContext {
           backgroundColor: background ?? Theme.of(this).colorScheme.secondary,
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
-            label: 'Dismiss',
+            label: 'Okay',
             textColor: foreground ?? Theme.of(this).colorScheme.onSecondary,
             onPressed: () => messenger.hideCurrentSnackBar(),
           ),

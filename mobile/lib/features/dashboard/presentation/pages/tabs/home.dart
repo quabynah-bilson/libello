@@ -91,22 +91,47 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            /// user profile
-                            IconButton(
-                              onPressed: () =>
-                                  // todo => show profile
-                                  context.showSnackBar(kFeatureUnderDev),
-                              icon: const Icon(TablerIcons.user),
-                              color: context.colorScheme.onPrimary,
+                            /// logo
+                            GestureDetector(
+                              onTap: () => showAppDetailsSheet(context),
+                              child: Container(
+                                padding: const EdgeInsets.only(right: 16),
+                                decoration: BoxDecoration(
+                                  color: context.colorScheme.onPrimary,
+                                  borderRadius:
+                                      BorderRadius.circular(kRadiusLarge),
+                                ),
+                                child: AnimatedRow(
+                                  animateType: AnimateType.slideRight,
+                                  children: [
+                                    Hero(
+                                      tag: kAppLoadingAnimation,
+                                      child: LottieBuilder.asset(
+                                        kAppLoadingAnimation,
+                                        height: 40,
+                                        repeat: true,
+                                      ),
+                                    ),
+                                    Text(
+                                      kAppName,
+                                      style: context.theme.textTheme.subtitle2
+                                          ?.copyWith(
+                                              color:
+                                                  context.colorScheme.primary),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
 
-                            /// notifications
+                            /// search
                             IconButton(
                               onPressed: () => Navigator.of(context).push(
                                 RevealRoute(
                                   page: const NoteSearchPage(),
                                   maxRadius: context.height,
-                                  centerOffset:  Offset(context.width * 0.8, context.height * 0.1),
+                                  centerOffset: Offset(context.width * 0.8,
+                                      context.height * 0.1),
                                 ),
                               ),
                               icon: const Icon(TablerIcons.file_search),
@@ -116,7 +141,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                         ),
 
                         /// greeting
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 8),
                         StreamBuilder<bool>(
                           stream: _authCubit.loginStatus,
                           initialData: false,
@@ -189,7 +214,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                 padding: const EdgeInsets.only(top: 28, left: 20, bottom: 20),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    'Quick Tips',
+                    'Quick Tips ${!kIsReleased ? '(Coming soon)' : ''}',
                     style: context.theme.textTheme.subtitle1
                         ?.copyWith(color: context.colorScheme.onBackground),
                   ),
@@ -198,7 +223,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
               SliverToBoxAdapter(
                 child: SizedBox(
                   width: context.width,
-                  height: context.height * 0.15,
+                  height: context.height * 0.18,
                   child: ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     scrollDirection: Axis.horizontal,
