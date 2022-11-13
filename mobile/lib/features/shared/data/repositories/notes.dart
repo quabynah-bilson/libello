@@ -126,8 +126,8 @@ class NoteRepository implements BaseNoteRepository {
 
   @override
   Future<Either<Stream<List<Note>>, String>> getNotes({
-    NoteStatus status = NoteStatus.regular,
-    NoteType type = NoteType.important,
+    NoteStatus? status,
+    NoteType? type,
   }) async {
     var owner =
         (await getIt.getAsync<SharedPreferences>()).getString(kUserIdKey);
@@ -148,8 +148,15 @@ class NoteRepository implements BaseNoteRepository {
 
   @override
   Future<Either<NoteFolder, String>> updateFolder(NoteFolder folder) async {
-    // TODO: implement updateFolder
-    throw UnimplementedError();
+    try {
+      await _kNoteFolderRef
+          .doc(folder.id)
+          .set(folder.toJson(), SetOptions(merge: true));
+      return Left(folder);
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while updating the note');
   }
 
   @override
@@ -160,6 +167,47 @@ class NoteRepository implements BaseNoteRepository {
     } catch (e) {
       logger.e(e);
     }
-    return const Right('An error occurred while creating the note');
+    return const Right('An error occurred while updating the note');
+  }
+
+  @override
+  Future<Either<Stream<List<Note>>, String>> getRecentNotes(
+      [int pageSize = 5]) async {
+    var owner =
+        (await getIt.getAsync<SharedPreferences>()).getString(kUserIdKey);
+    if (owner == null) return const Right(kAuthRequired);
+    try {
+      var stream = _kNoteRef
+          .orderBy('updatedAt', descending: true)
+          .where('owner', isEqualTo: owner)
+          .limit(pageSize)
+          .snapshots()
+          .map((event) =>
+              event.docs.map((e) => Note.fromJson(e.data())).toList());
+      return Left(stream);
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while getting your notes');
+  }
+
+  @override
+  Future<Either<Stream<List<Note>>, String>> getArchivedNotes() async {
+    var owner =
+        (await getIt.getAsync<SharedPreferences>()).getString(kUserIdKey);
+    if (owner == null) return const Right(kAuthRequired);
+    try {
+      var stream = _kNoteRef
+          .orderBy('updatedAt', descending: true)
+          .where('owner', isEqualTo: owner)
+          .where('status', isEqualTo: NoteStatus.archived.name)
+          .snapshots()
+          .map((event) =>
+              event.docs.map((e) => Note.fromJson(e.data())).toList());
+      return Left(stream);
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while getting your notes');
   }
 }

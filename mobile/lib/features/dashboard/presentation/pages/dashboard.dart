@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_route/auto_route.dart';
@@ -57,7 +58,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     kUseDefaultOverlays(context,
-        statusBarBrightness: _selectedIndex == 0
+        statusBarBrightness: _selectedIndex == 0 ||  _selectedIndex == 3
             ? context.invertedThemeBrightness
             : context.theme.brightness);
 

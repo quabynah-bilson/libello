@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/features/shared/domain/entities/folder.dart';
@@ -193,37 +192,40 @@ Future<User?> showLoginSheet(BuildContext context, [String? tag]) async {
                     Navigator.of(context).pop(state.data);
                   }
                 },
-                builder: (context, state) => AnimatedColumn(
-                  animateType: AnimateType.slideUp,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    LottieBuilder.asset(kAppLoadingAnimation,
-                        height: context.height * 0.25),
-                    Text(
-                      'Sign in to get the best out of $kAppName',
-                      style: context.theme.textTheme.subtitle1?.copyWith(
-                        color: context.colorScheme.onSurface,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    if (state is AuthLoading) ...{
-                      const CircularProgressIndicator.adaptive(),
-                    } else ...{
-                      FloatingActionButton.extended(
-                        heroTag: kOptionsFabTag,
-                        onPressed: authCubit.login,
-                        label: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
-                          child: Text('Sign in with Google'),
+                builder: (context, state) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: AnimatedColumn(
+                    animateType: AnimateType.slideUp,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      LottieBuilder.asset(kAppLoadingAnimation,
+                          height: context.height * 0.25),
+                      Text(
+                        'Sign in to get the best out of $kAppName',
+                        style: context.theme.textTheme.subtitle1?.copyWith(
+                          color: context.colorScheme.onSurface,
                         ),
-                        icon: const Icon(TablerIcons.brand_google),
-                        enableFeedback: true,
-                        backgroundColor: context.colorScheme.secondary,
-                        foregroundColor: context.colorScheme.onSecondary,
+                        textAlign: TextAlign.center,
                       ),
-                    },
-                  ],
+                      const SizedBox(height: 24),
+                      if (state is AuthLoading) ...{
+                        const CircularProgressIndicator.adaptive(),
+                      } else ...{
+                        FloatingActionButton.extended(
+                          heroTag: kOptionsFabTag,
+                          onPressed: authCubit.login,
+                          label: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 24),
+                            child: Text('Sign in with Google'),
+                          ),
+                          icon: const Icon(TablerIcons.brand_google),
+                          enableFeedback: true,
+                          backgroundColor: context.colorScheme.secondary,
+                          foregroundColor: context.colorScheme.onSecondary,
+                        ),
+                      },
+                    ],
+                  ),
                 ),
               ),
             )),

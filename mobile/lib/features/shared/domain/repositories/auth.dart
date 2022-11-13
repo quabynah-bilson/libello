@@ -8,5 +8,7 @@ abstract class BaseAuthRepository {
 
   Future<String?> get displayName;
 
+  Future<String?> get emailAddress;
+
   Stream<bool> get loginStatus;
 }

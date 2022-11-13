@@ -102,7 +102,9 @@ class LibelloAppRouter extends _i7.RootStackRouter {
             key: args.key,
             type: args.type,
             status: args.status,
+            title: args.title,
             showAll: args.showAll,
+            showNotesWithTodos: args.showNotesWithTodos,
           ),
         ),
         transitionsBuilder: _i7.TransitionsBuilders.fadeIn,
@@ -262,7 +264,9 @@ class NotesRoute extends _i7.PageRouteInfo<NotesRouteArgs> {
     _i8.Key? key,
     _i10.NoteType? type,
     _i10.NoteStatus? status,
+    String title = 'My notes',
     bool showAll = false,
+    bool showNotesWithTodos = false,
   }) : super(
           NotesRoute.name,
           path: '/notes-page',
@@ -270,7 +274,9 @@ class NotesRoute extends _i7.PageRouteInfo<NotesRouteArgs> {
             key: key,
             type: type,
             status: status,
+            title: title,
             showAll: showAll,
+            showNotesWithTodos: showNotesWithTodos,
           ),
         );
 
@@ -282,7 +288,9 @@ class NotesRouteArgs {
     this.key,
     this.type,
     this.status,
+    this.title = 'My notes',
     this.showAll = false,
+    this.showNotesWithTodos = false,
   });
 
   final _i8.Key? key;
@@ -291,11 +299,15 @@ class NotesRouteArgs {
 
   final _i10.NoteStatus? status;
 
+  final String title;
+
   final bool showAll;
+
+  final bool showNotesWithTodos;
 
   @override
   String toString() {
-    return 'NotesRouteArgs{key: $key, type: $type, status: $status, showAll: $showAll}';
+    return 'NotesRouteArgs{key: $key, type: $type, status: $status, title: $title, showAll: $showAll, showNotesWithTodos: $showNotesWithTodos}';
   }
 }
 

@@ -43,6 +43,27 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           actions: [
+            if (_currentNote.status != NoteStatus.secret) ...{
+              IconButton(
+                onPressed: () {
+                  _currentNote = _currentNote.copyWith(
+                      status: _currentNote.status == NoteStatus.archived
+                          ? NoteStatus.regular
+                          : NoteStatus.archived);
+                  _updateNoteCubit.updateNote(_currentNote);
+                  context.showSnackBar(
+                      _currentNote.status == NoteStatus.archived
+                          ? 'Note unarchived'
+                          : 'Note has been added to your archives');
+                },
+                icon: Icon(_currentNote.status == NoteStatus.archived
+                    ? TablerIcons.archive_off
+                    : TablerIcons.archive),
+                tooltip: _currentNote.status == NoteStatus.archived
+                    ? 'Unarchive'
+                    : 'Archive',
+              ),
+            },
             IconButton(
               onPressed: _noteCubit.getNoteFolders,
               icon: const Icon(TablerIcons.folder_plus),

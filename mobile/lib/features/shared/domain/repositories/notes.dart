@@ -12,8 +12,14 @@ abstract class BaseNoteRepository {
 
   Future<Either<Stream<Note?>, String>> getNote(String id);
 
-  Future<Either<Stream<List<Note>>, String>> getNotes(
-      {NoteStatus status, NoteType type});
+  Future<Either<Stream<List<Note>>, String>> getNotes({
+    NoteStatus? status,
+    NoteType? type,
+  });
+
+  Future<Either<Stream<List<Note>>, String>> getRecentNotes([int pageSize]);
+
+  Future<Either<Stream<List<Note>>, String>> getArchivedNotes();
 
   /// endregion notes
 

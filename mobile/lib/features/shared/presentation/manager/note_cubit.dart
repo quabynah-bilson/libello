@@ -20,12 +20,27 @@ class NoteCubit extends Cubit<NoteState> {
     );
   }
 
-  Future<void> getNotes({
-    NoteStatus status = NoteStatus.regular,
-    NoteType type = NoteType.important,
-  }) async {
+  Future<void> getNotes({NoteStatus? status, NoteType? type}) async {
     emit(NoteLoading());
     var either = await _repo.getNotes();
+    either.fold(
+      (l) => l.listen((event) => emit(NoteSuccess<List<Note>>(event))),
+      (r) => emit(NoteError(r)),
+    );
+  }
+
+  Future<void> getRecentNotes([int? pageSize]) async {
+    emit(NoteLoading());
+    var either = await _repo.getRecentNotes(pageSize ?? 5);
+    either.fold(
+      (l) => l.listen((event) => emit(NoteSuccess<List<Note>>(event))),
+      (r) => emit(NoteError(r)),
+    );
+  }
+
+  Future<void> getArchivedNotes() async {
+    emit(NoteLoading());
+    var either = await _repo.getArchivedNotes();
     either.fold(
       (l) => l.listen((event) => emit(NoteSuccess<List<Note>>(event))),
       (r) => emit(NoteError(r)),
@@ -83,10 +98,10 @@ class NoteCubit extends Cubit<NoteState> {
     emit(NoteLoading());
     var either = await _repo.getFolder(folder);
     either.fold(
-          (l) => l.listen((event) => event == null
+      (l) => l.listen((event) => event == null
           ? emit(const NoteError('Folder deleted from your library'))
           : emit(NoteSuccess<NoteFolder>(event))),
-          (r) => emit(NoteError(r)),
+      (r) => emit(NoteError(r)),
     );
   }
 
@@ -94,8 +109,8 @@ class NoteCubit extends Cubit<NoteState> {
     emit(NoteLoading());
     var either = await _repo.deleteFolder(id);
     either.fold(
-          (l) => emit(NoteSuccess(l)),
-          (r) => emit(NoteError(r)),
+      (l) => emit(NoteSuccess(l)),
+      (r) => emit(NoteError(r)),
     );
   }
 }

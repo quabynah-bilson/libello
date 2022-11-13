@@ -18,9 +18,15 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future<void> logout() async => _repo.logout();
+  Future<void> logout() async {
+    emit(AuthLoading());
+    await _repo.logout();
+    emit(const AuthSuccess('Signed out successfully'));
+  }
 
   Stream<bool> get loginStatus => _repo.loginStatus;
 
   Future<String?> get displayName => _repo.displayName;
+
+  Future<String?> get emailAddress => _repo.emailAddress;
 }

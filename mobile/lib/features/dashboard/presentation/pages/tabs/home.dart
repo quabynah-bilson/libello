@@ -10,7 +10,7 @@ class _DashboardHomeTab extends StatefulWidget {
 class _DashboardHomeTabState extends State<_DashboardHomeTab> {
   var _loading = true,
       touchedIndex = -1,
-      _greeting = 'Welcome to\n$kAppName',
+      _greeting = '...',
       _notes = List<Note>.empty(),
       _statsTodos = List<NoteTodo>.empty();
   final animDuration = const Duration(milliseconds: 250),
@@ -33,7 +33,9 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
         _greeting = await generateGreeting(context);
         setState(() {});
       });
-      _noteCubit.getNotes();
+      _greeting = await generateGreeting(context);
+      if (mounted) setState(() {});
+      _noteCubit.getRecentNotes();
     });
   }
 
@@ -126,12 +128,13 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
 
                             /// search
                             IconButton(
-                              onPressed: () => Navigator.of(context).push(RevealRoute(
-                                  page: const NoteSearchPage(),
-                                  maxRadius: context.height,
-                                  centerOffset: Offset(context.width * 0.8,
-                                      context.height * 0.1),
-                                )),
+                              onPressed: () =>
+                                  Navigator.of(context).push(RevealRoute(
+                                page: const NoteSearchPage(),
+                                maxRadius: context.height,
+                                centerOffset: Offset(
+                                    context.width * 0.8, context.height * 0.1),
+                              )),
                               icon: const Icon(TablerIcons.file_search),
                               color: context.colorScheme.onPrimary,
                             ),
@@ -140,67 +143,66 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
 
                         /// greeting
                         const SizedBox(height: 8),
-                        StreamBuilder<bool>(
-                          stream: _authCubit.loginStatus,
-                          initialData: false,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.hasData &&
-                                snapshot.data!) {
-                              return Text(
-                                '${_greeting.replaceAll('!', ',')}${_authCubit.displayName}',
-                                style:
-                                    context.theme.textTheme.headline2?.copyWith(
-                                  color: context.colorScheme.onPrimary,
-                                ),
-                              );
-                            }
-                            return Text(
-                              _greeting,
-                              style:
-                                  context.theme.textTheme.headline2?.copyWith(
-                                color: context.colorScheme.onPrimary,
+                        AnimationConfiguration.synchronized(
+                          duration: kGridAnimationDuration,
+                          child: SlideAnimation(
+                            horizontalOffset: kListSlideOffset,
+                            child: FadeInAnimation(
+                              child: Text(
+                                _greeting,
+                                style: context.theme.textTheme.headline2
+                                    ?.copyWith(color: context.colorScheme.onPrimary),
                               ),
-                            );
-                          },
+                            ),
+                          ),
                         ),
 
                         /// notes counter
                         const SizedBox(height: 24),
-                        if (_notes.isNotEmpty) ...{
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text:
-                                      '${_statsTodos.where((note) => note.completed).toList().length}',
-                                  style: TextStyle(
-                                      color: context.colorScheme.onPrimary),
-                                ),
-                                const TextSpan(text: ' out of '),
-                                TextSpan(
-                                  text: '${_statsTodos.length}',
-                                  style: TextStyle(
-                                      color: context.colorScheme.onPrimary),
-                                ),
-                                const TextSpan(text: ' tasks completed'),
-                              ],
-                            ),
-                            style: context.theme.textTheme.subtitle1?.copyWith(
-                              color: context.colorScheme.onPrimary
-                                  .withOpacity(kEmphasisLow),
+                        AnimationConfiguration.synchronized(
+                          duration: kContentAnimationDuration,
+                          child: SlideAnimation(
+                            horizontalOffset: -kListSlideOffset,
+                            child: FadeInAnimation(
+                              child: _notes.isEmpty
+                                  ? Text(
+                                      'You have no notes at the moment',
+                                      style: context.theme.textTheme.subtitle1
+                                          ?.copyWith(
+                                        color: context.colorScheme.onPrimary
+                                            .withOpacity(kEmphasisLow),
+                                      ),
+                                    )
+                                  : Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                '${_statsTodos.where((note) => note.completed).toList().length}',
+                                            style: TextStyle(
+                                                color: context
+                                                    .colorScheme.onPrimary),
+                                          ),
+                                          const TextSpan(text: ' out of '),
+                                          TextSpan(
+                                            text: '${_statsTodos.length}',
+                                            style: TextStyle(
+                                                color: context
+                                                    .colorScheme.onPrimary),
+                                          ),
+                                          const TextSpan(
+                                              text: ' tasks completed'),
+                                        ],
+                                      ),
+                                      style: context.theme.textTheme.subtitle1
+                                          ?.copyWith(
+                                        color: context.colorScheme.onPrimary
+                                            .withOpacity(kEmphasisLow),
+                                      ),
+                                    ),
                             ),
                           ),
-                        } else ...{
-                          Text(
-                            'You have no notes at the moment',
-                            style: context.theme.textTheme.subtitle1?.copyWith(
-                              color: context.colorScheme.onPrimary
-                                  .withOpacity(kEmphasisLow),
-                            ),
-                          ),
-                        },
+                        ),
                       ],
                     ),
                   ),
@@ -310,7 +312,25 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                 ),
               },
               SliverToBoxAdapter(
-                child: SizedBox(height: context.height * 0.1),
+                child: Center(
+                  child: FloatingActionButton.extended(
+                    label: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text('See more notes'),
+                    ),
+                    icon: const Icon(TablerIcons.arrow_autofit_right),
+                    enableFeedback: true,
+                    elevation: 0,
+                    onPressed: () =>
+                        context.router.push(NotesRoute(showAll: true)),
+                    backgroundColor: context.colorScheme.secondary
+                        .withOpacity(kEmphasisLowest),
+                    foregroundColor: context.colorScheme.secondary,
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: context.height * 0.17),
               ),
             ],
           ),
@@ -323,15 +343,15 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
   Future<String> generateGreeting(BuildContext context) async {
     var now = TimeOfDay.now(), timestamp = DateTime.now(), greeting = '';
     if (now.period == DayPeriod.am) {
-      greeting = 'Good\nmorning';
+      greeting = 'Good morning';
     } else if (timestamp.hour >= 12 && timestamp.hour < 16) {
-      greeting = 'Good\nafternoon';
+      greeting = 'Good afternoon';
     } else if (timestamp.hour >= 16 && timestamp.hour < 21) {
-      greeting = 'Good\nevening';
+      greeting = 'Good evening';
     } else {
       greeting = 'Goodnight';
     }
 
-    return 'Hello, ${(await _authCubit.displayName) ?? greeting}!';
+    return '$greeting!';
   }
 }

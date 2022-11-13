@@ -13,6 +13,10 @@ class AuthRepository implements BaseAuthRepository {
       (await getIt.getAsync<SharedPreferences>()).getString(kUsernameKey);
 
   @override
+  Future<String?> get emailAddress async =>
+      (await getIt.getAsync<SharedPreferences>()).getString(kEmailAddressKey);
+
+  @override
   Future<Either<User, String>> login() async {
     try {
       var account = await getIt.get<GoogleSignIn>().signIn();
@@ -29,6 +33,8 @@ class AuthRepository implements BaseAuthRepository {
           await prefs.setString(kUserIdKey, userCredential.user!.uid);
           await prefs.setString(kUsernameKey,
               userCredential.user!.displayName ?? 'Cherished user');
+          await prefs.setString(
+              kEmailAddressKey, userCredential.user!.email ?? '');
           return Left(userCredential.user!);
         }
       }
