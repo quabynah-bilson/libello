@@ -6,14 +6,15 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
+import 'package:libello/core/router/route.gr.dart';
+import 'package:libello/features/dashboard/presentation/pages/notes/search.dart';
 import 'package:libello/features/shared/domain/entities/folder.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 import 'package:libello/features/shared/presentation/widgets/note.tile.dart';
+import 'package:libello/features/shared/presentation/widgets/reveal.route.dart';
 import 'package:lottie/lottie.dart';
-
-import '../../../../../core/router/route.gr.dart';
 
 class FolderNotesPage extends StatefulWidget {
   final NoteFolder folder;
@@ -52,15 +53,41 @@ class _FolderNotesPageState extends State<FolderNotesPage> {
                 .where((element) => element.folder == widget.folder.id)
                 .toList());
           }
+
+          if (state is NoteSuccess<String>) {
+            context
+              ..showSnackBar(state.data)
+              ..router.pushAndPopUntil(const DashboardRoute(),
+                  predicate: (_) => false);
+          }
         },
         child: AnimationLimiter(
           child: Scaffold(
             appBar: AppBar(
               title: Text(widget.folder.label),
               actions: [
+                if (!kIsReleased) ...{
+                  IconButton(
+                    // todo => edit folder
+                    onPressed: () => context.showSnackBar(kFeatureUnderDev),
+                    icon: const Icon(TablerIcons.edit),
+                  ),
+                },
                 IconButton(
-                  onPressed: () => context.showSnackBar(kFeatureUnderDev),
-                  icon: const Icon(TablerIcons.edit),
+                  onPressed: () => Navigator.of(context).push(
+                    RevealRoute(
+                      page: const NoteSearchPage(),
+                      maxRadius: context.height,
+                      centerOffset:
+                          Offset(context.width * 0.75, context.height * 0.1),
+                    ),
+                  ),
+                  icon: const Icon(TablerIcons.file_search),
+                ),
+                IconButton(
+                  onPressed: () => _noteCubit.deleteFolder(widget.folder.id),
+                  icon: const Icon(TablerIcons.trash),
+                  color: context.colorScheme.error,
                 ),
               ],
             ),

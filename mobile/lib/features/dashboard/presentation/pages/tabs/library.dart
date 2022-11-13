@@ -41,11 +41,21 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
             slivers: [
               /// top app bar
               SliverAppBar(
-                title: const Text('Library'),
+                title: Text('Library',
+                    style: TextStyle(color: context.colorScheme.onSecondary)),
+                backgroundColor: context.colorScheme.secondary,
                 actions: [
                   IconButton(
-                    onPressed: () => context.showSnackBar(kFeatureUnderDev),
-                    icon: const Icon(TablerIcons.search),
+                    onPressed: () => Navigator.of(context).push(
+                      RevealRoute(
+                        page: const NoteSearchPage(),
+                        maxRadius: context.height,
+                        centerOffset:
+                            Offset(context.width * 0.8, context.height * 0.1),
+                      ),
+                    ),
+                    color: context.colorScheme.onSecondary,
+                    icon: const Icon(TablerIcons.file_search),
                   ),
                   const SizedBox(width: 12),
                 ],
@@ -113,43 +123,46 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
               ),
 
               /// labels
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: FilledButtonWithIcon(
-                    label: 'Labels',
-                    // todo => add action
-                    onTap: () => context.showSnackBar(kFeatureUnderDev),
+              /// fixme: v2: show labels for notes
+              if (!kIsReleased) ...{
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: FilledButtonWithIcon(
+                      label: 'Labels',
+                      // todo => add action
+                      onTap: () => context.showSnackBar(kFeatureUnderDev),
+                    ),
                   ),
                 ),
-              ),
-              // important
-              SliverToBoxAdapter(
-                child: ListTile(
-                  onTap: () =>
-                      context.router.push(NotesRoute(type: NoteType.important)),
-                  leading: const Icon(TablerIcons.star),
-                  title: const Text('Important'),
+                // important
+                SliverToBoxAdapter(
+                  child: ListTile(
+                    onTap: () => context.router
+                        .push(NotesRoute(type: NoteType.important)),
+                    leading: const Icon(TablerIcons.star),
+                    title: const Text('Important'),
+                  ),
                 ),
-              ),
-              // to-do list
-              SliverToBoxAdapter(
-                child: ListTile(
-                  onTap: () =>
-                      context.router.push(NotesRoute(type: NoteType.todoList)),
-                  leading: const Icon(TablerIcons.list_check),
-                  title: const Text('To-do List'),
+                // to-do list
+                SliverToBoxAdapter(
+                  child: ListTile(
+                    onTap: () => context.router
+                        .push(NotesRoute(type: NoteType.todoList)),
+                    leading: const Icon(TablerIcons.list_check),
+                    title: const Text('To-do List'),
+                  ),
                 ),
-              ),
-              // business
-              SliverToBoxAdapter(
-                child: ListTile(
-                  onTap: () =>
-                      context.router.push(NotesRoute(type: NoteType.business)),
-                  leading: const Icon(TablerIcons.briefcase),
-                  title: const Text('Business'),
+                // business
+                SliverToBoxAdapter(
+                  child: ListTile(
+                    onTap: () => context.router
+                        .push(NotesRoute(type: NoteType.business)),
+                    leading: const Icon(TablerIcons.briefcase),
+                    title: const Text('Business'),
+                  ),
                 ),
-              ),
+              },
             ],
           ),
         ),

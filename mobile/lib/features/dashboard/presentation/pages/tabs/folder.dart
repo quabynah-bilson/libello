@@ -40,7 +40,11 @@ class _DashboardFolderTabState extends State<_DashboardFolderTab> {
             shrinkWrap: true,
             slivers: [
               /// header bar
-              const SliverAppBar(title: Text('Folders')),
+              SliverAppBar(
+                title: Text('Folders',
+                    style: TextStyle(color: context.colorScheme.onSecondary)),
+                backgroundColor: context.colorScheme.secondary,
+              ),
 
               /// action to create new folder
               SliverToBoxAdapter(

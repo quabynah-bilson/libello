@@ -481,18 +481,19 @@ class AppTransparentTextField extends StatelessWidget {
   final String label;
   final TextStyle? style;
   final bool enabled;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String? Function(String?)? validator;
   final bool autofocus;
   final TextCapitalization capitalization;
   final TextInputAction action;
   final TextInputType inputType;
   final int? maxLines;
+  final void Function(String?)? onChanged;
 
   const AppTransparentTextField({
     Key? key,
     required this.label,
-    required this.controller,
+    this.controller,
     this.enabled = true,
     this.capitalization = TextCapitalization.none,
     this.action = TextInputAction.done,
@@ -501,6 +502,7 @@ class AppTransparentTextField extends StatelessWidget {
     this.validator,
     this.autofocus = false,
     this.maxLines,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -514,6 +516,7 @@ class AppTransparentTextField extends StatelessWidget {
         maxLines: maxLines,
         validator: validator,
         style: style,
+        onChanged: onChanged,
         decoration: InputDecoration(
           enabled: enabled,
           fillColor: context.colorScheme.background,

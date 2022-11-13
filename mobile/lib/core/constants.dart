@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/extensions.dart';
@@ -14,6 +15,7 @@ import '../features/shared/presentation/widgets/animated.column.dart';
 
 /// for debugging
 final logger = Logger();
+bool kIsReleased = kReleaseMode;
 
 /// app constants
 const kAppName = 'Libello.';

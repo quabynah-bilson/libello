@@ -47,9 +47,25 @@ class NoteRepository implements BaseNoteRepository {
   }
 
   @override
-  Future<Either<String, String>> deleteFolder(String id) {
-    // TODO: implement deleteFolder
-    throw UnimplementedError();
+  Future<Either<String, String>> deleteFolder(String id) async {
+    try {
+      /// revert all notes with folder
+      var snapshot = await _kNoteRef.where('folder', isEqualTo: id).get();
+      if (snapshot.size != 0 && snapshot.docs.isNotEmpty) {
+        for (var note in snapshot.docs) {
+          if (note.exists) {
+            var noteFromJson = Note.fromJson(note.data());
+            noteFromJson = noteFromJson.copyWith(folder: null);
+            await _kNoteRef.doc(note.id).update(noteFromJson.toJson());
+          }
+        }
+      }
+      await _kNoteFolderRef.doc(id).delete();
+      return const Left('Folder deleted successfully');
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while deleting the folder');
   }
 
   @override

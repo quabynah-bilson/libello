@@ -102,9 +102,13 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
 
                             /// notifications
                             IconButton(
-                              onPressed: () =>
-                                  // todo => show search
-                                  context.showSnackBar(kFeatureUnderDev),
+                              onPressed: () => Navigator.of(context).push(
+                                RevealRoute(
+                                  page: const NoteSearchPage(),
+                                  maxRadius: context.height,
+                                  centerOffset:  Offset(context.width * 0.8, context.height * 0.1),
+                                ),
+                              ),
                               icon: const Icon(TablerIcons.file_search),
                               color: context.colorScheme.onPrimary,
                             ),
@@ -261,21 +265,20 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
                   sliver: SliverMasonryGrid(
                     gridDelegate:
-                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
+                        const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
                     delegate: SliverChildBuilderDelegate(
-                          (context, index) =>
-                          AnimationConfiguration.staggeredGrid(
-                            position: index,
-                            columnCount: index.isEven ? 1 : 2,
-                            duration: kListAnimationDuration,
-                            child: SlideAnimation(
-                              verticalOffset: kListSlideOffset,
-                              child: FadeInAnimation(
-                                child: NoteTile(note: _notes[index]),
-                              ),
-                            ),
+                      (context, index) => AnimationConfiguration.staggeredGrid(
+                        position: index,
+                        columnCount: index.isEven ? 1 : 2,
+                        duration: kListAnimationDuration,
+                        child: SlideAnimation(
+                          verticalOffset: kListSlideOffset,
+                          child: FadeInAnimation(
+                            child: NoteTile(note: _notes[index]),
                           ),
+                        ),
+                      ),
                       childCount: _notes.length,
                     ),
                     crossAxisSpacing: 10,

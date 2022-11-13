@@ -11,6 +11,7 @@ import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/core/theme.dart';
+import 'package:libello/features/dashboard/presentation/pages/notes/search.dart';
 import 'package:libello/features/dashboard/presentation/widgets/quick.tip.card.dart';
 import 'package:libello/features/shared/domain/entities/folder.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
@@ -22,6 +23,7 @@ import 'package:libello/features/shared/presentation/widgets/filled.button.dart'
 import 'package:libello/features/shared/presentation/widgets/folder.tile.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 import 'package:libello/features/shared/presentation/widgets/note.tile.dart';
+import 'package:libello/features/shared/presentation/widgets/reveal.route.dart';
 import 'package:lottie/lottie.dart';
 
 part 'tabs/folder.dart';
