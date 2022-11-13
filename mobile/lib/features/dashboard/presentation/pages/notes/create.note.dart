@@ -244,7 +244,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       child: Text('Create note'),
                     ),
-                    icon: const Icon(TablerIcons.note),
+                    icon: const Icon(TablerIcons.notes),
                     enableFeedback: true,
                     isExtended: !_loading,
                     backgroundColor: context.colorScheme.secondary,
@@ -385,17 +385,18 @@ class _CreateNotePageState extends State<CreateNotePage> {
     showModalBottomSheet(
       context: context,
       clipBehavior: Clip.hardEdge,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(kRadiusLarge),
           topLeft: Radius.circular(kRadiusLarge),
         ),
       ),
-      builder: (context) {
-        return SafeArea(
+      builder: (context) => SafeArea(
           top: false,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+            padding: EdgeInsets.fromLTRB(
+                24, 16, 24, context.mediaQuery.viewInsets.bottom),
             child: AnimatedColumn(
               animateType: AnimateType.slideUp,
               mainAxisSize: MainAxisSize.min,
@@ -415,20 +416,22 @@ class _CreateNotePageState extends State<CreateNotePage> {
                     color: context.colorScheme.secondary,
                   ),
                 ),
-                AppRoundedButton(
-                  text: 'Add',
-                  onTap: () {
-                    if (label != null && label!.isNotEmpty) {
-                      setState(() => _labels.add(label ??= 'Custom Tag'));
-                    }
-                    context.router.pop();
-                  },
+                SafeArea(
+                  top: false,
+                  child: AppRoundedButton(
+                    text: 'Add',
+                    onTap: () {
+                      if (label != null && label!.isNotEmpty) {
+                        setState(() => _labels.add(label ??= 'Custom Tag'));
+                      }
+                      context.router.pop();
+                    },
+                  ),
                 )
               ],
             ),
           ),
-        );
-      },
+        ),
     );
   }
 
@@ -438,17 +441,18 @@ class _CreateNotePageState extends State<CreateNotePage> {
     showModalBottomSheet(
       context: context,
       clipBehavior: Clip.hardEdge,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(kRadiusLarge),
           topLeft: Radius.circular(kRadiusLarge),
         ),
       ),
-      builder: (context) {
-        return SafeArea(
+      builder: (context) => SafeArea(
           top: false,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+            padding: EdgeInsets.fromLTRB(
+                24, 16, 24, context.mediaQuery.viewInsets.bottom),
             child: AnimatedColumn(
               animateType: AnimateType.slideUp,
               mainAxisSize: MainAxisSize.min,
@@ -465,26 +469,28 @@ class _CreateNotePageState extends State<CreateNotePage> {
                   capitalization: TextCapitalization.sentences,
                   suffixIcon: const Icon(TablerIcons.checkup_list),
                 ),
-                AppRoundedButton(
-                  text: 'Add',
-                  onTap: () {
-                    if (label != null && label!.isNotEmpty) {
-                      setState(() => _todos.add(
-                            NoteTodo(
-                              text: label ??= 'Custom Tag',
-                              completed: false,
-                              updatedAt: DateTime.now(),
-                            ),
-                          ));
-                    }
-                    context.router.pop();
-                  },
+                SafeArea(
+                  top: false,
+                  child: AppRoundedButton(
+                    text: 'Add',
+                    onTap: () {
+                      if (label != null && label!.isNotEmpty) {
+                        setState(() => _todos.add(
+                              NoteTodo(
+                                text: label ??= 'Custom Tag',
+                                completed: false,
+                                updatedAt: DateTime.now(),
+                              ),
+                            ));
+                      }
+                      context.router.pop();
+                    },
+                  ),
                 )
               ],
             ),
           ),
-        );
-      },
+        ),
     );
   }
 }

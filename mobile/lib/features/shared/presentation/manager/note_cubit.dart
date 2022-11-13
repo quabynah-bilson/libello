@@ -69,4 +69,13 @@ class NoteCubit extends Cubit<NoteState> {
       (r) => emit(NoteError(r)),
     );
   }
+
+  Future<void> createFolder(NoteFolder folder) async {
+    emit(NoteLoading());
+    var either = await _repo.createFolder(folder);
+    either.fold(
+      (l) => emit(NoteSuccess(l)),
+      (r) => emit(NoteError(r)),
+    );
+  }
 }

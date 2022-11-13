@@ -6,6 +6,7 @@ import 'package:libello/features/shared/domain/entities/folder.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/domain/repositories/notes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class NoteRepository implements BaseNoteRepository {
   // final _prefs = ;
@@ -16,8 +17,18 @@ class NoteRepository implements BaseNoteRepository {
 
   @override
   Future<Either<NoteFolder, String>> createFolder(NoteFolder folder) async {
-    // TODO: implement createFolder
-    throw UnimplementedError();
+    try {
+      /// update owner details
+      folder = folder.copyWith(
+          id: const Uuid().v4(),
+          owner: (await getIt.getAsync<SharedPreferences>())
+              .getString(kUserIdKey));
+      await _kNoteFolderRef.doc(folder.id).set(folder.toJson());
+      return Left(folder);
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while creating the note');
   }
 
   @override
@@ -66,6 +77,7 @@ class NoteRepository implements BaseNoteRepository {
     try {
       var stream = _kNoteFolderRef
           .orderBy('updatedAt', descending: true)
+          .where('owner', isEqualTo: owner)
           .snapshots()
           .map((event) =>
               event.docs.map((e) => NoteFolder.fromJson(e.data())).toList());

@@ -7,10 +7,12 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/core/router/route.gr.dart';
+import 'package:libello/features/shared/domain/entities/folder.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/animated.column.dart';
 import 'package:libello/features/shared/presentation/widgets/animated.list.dart';
+import 'package:libello/features/shared/presentation/widgets/folder.tile.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
 
@@ -41,11 +43,18 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
             IconButton(
               onPressed: () async => shareNote(context, _currentNote),
               icon: const Icon(TablerIcons.message_share),
+              tooltip: 'Share note',
+            ),
+            IconButton(
+              onPressed: _noteCubit.getNoteFolders,
+              icon: const Icon(TablerIcons.folder_plus),
+              tooltip: 'Add to folder',
             ),
             IconButton(
               onPressed: () => _noteCubit.deleteNote(_currentNote.id),
               icon: const Icon(TablerIcons.trash),
               color: context.colorScheme.error,
+              tooltip: 'Delete Note',
             ),
           ],
         ),
@@ -70,6 +79,10 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                   ..showSnackBar(state.data)
                   ..router.pushAndPopUntil(const DashboardRoute(),
                       predicate: (_) => false);
+              }
+
+              if (state is NoteSuccess<List<NoteFolder>>) {
+                _showFoldersSheet(state.data);
               }
             },
             child: AnimationLimiter(
@@ -160,6 +173,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                                         completed: !todo.completed,
                                         updatedAt: DateTime.now());
                                     _currentNote.todos[index] = todo;
+                                    _currentNote = _currentNote.copyWith(
+                                        updatedAt: DateTime.now());
                                     _noteCubit.updateNote(_currentNote);
                                   },
                                   child: Row(
@@ -175,6 +190,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                                               completed: checked,
                                               updatedAt: DateTime.now());
                                           _currentNote.todos[index] = todo;
+                                          _currentNote = _currentNote.copyWith(
+                                              updatedAt: DateTime.now());
                                           _noteCubit.updateNote(_currentNote);
                                         },
                                       ),
@@ -224,4 +241,101 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
           backgroundColor: context.colorScheme.secondary,
         ),
       );
+
+  /// show a list of folders for current user
+  void _showFoldersSheet(List<NoteFolder> folders) async =>
+      showModalBottomSheet(
+        context: context,
+        clipBehavior: Clip.hardEdge,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(kRadiusLarge),
+            topLeft: Radius.circular(kRadiusLarge),
+          ),
+        ),
+        builder: (context) => Padding(
+          padding: EdgeInsets.fromLTRB(
+              24, 20, 24, context.mediaQuery.viewInsets.bottom),
+          child: SafeArea(
+            top: false,
+            child: AnimatedColumn(
+              animateType: AnimateType.slideUp,
+              children: [
+                if (folders.isEmpty) ...{
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        TablerIcons.folder_minus,
+                        size: context.width * 0.2,
+                        color: context.colorScheme.secondary,
+                      ),
+                      const SizedBox(height: 24),
+                      Text('Oops!', style: context.theme.textTheme.headline6),
+                      const SizedBox(height: 8),
+                      Text(
+                        'You have no new folders available',
+                        style: context.theme.textTheme.subtitle1?.copyWith(
+                          color: context.colorScheme.onBackground
+                              .withOpacity(kEmphasisMedium),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      FloatingActionButton.extended(
+                        heroTag: kHomeFabTag,
+                        onPressed: () {
+                          context.router.pop();
+                          doAfterDelay(_createFolder);
+                        },
+                        icon: const Icon(TablerIcons.folder_plus),
+                        label: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          child: Text('Create one'),
+                        ),
+                        backgroundColor: context.colorScheme.secondary,
+                        foregroundColor: context.colorScheme.onSecondary,
+                      ),
+                    ],
+                  ),
+                } else ...{
+                  Center(
+                    child: Text(
+                      'Your Folders',
+                      style: context.theme.textTheme.subtitle1
+                          ?.copyWith(color: context.colorScheme.secondary),
+                    ),
+                  ),
+                  ...folders
+                      .map((folder) => FolderTile(folder: folder))
+                      .toList(),
+                  const SizedBox(height: 40),
+                  FloatingActionButton.extended(
+                    heroTag: kHomeFabTag,
+                    onPressed: () {
+                      context.router.pop();
+                      doAfterDelay(_createFolder);
+                    },
+                    icon: const Icon(TablerIcons.folder_plus),
+                    label: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text('Create one'),
+                    ),
+                    backgroundColor: context.colorScheme.secondary,
+                    foregroundColor: context.colorScheme.onSecondary,
+                  ),
+                },
+              ],
+            ),
+          ),
+        ),
+      );
+
+  /// create folder
+  void _createFolder() async {
+    var noteFolder = await createFolder(context);
+    if (noteFolder != null) {
+      _noteCubit.createFolder(noteFolder);
+    }
+  }
 }

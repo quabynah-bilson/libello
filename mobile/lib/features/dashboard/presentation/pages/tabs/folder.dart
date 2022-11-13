@@ -46,8 +46,11 @@ class _DashboardFolderTabState extends State<_DashboardFolderTab> {
               SliverToBoxAdapter(
                 child: FilledButtonWithIcon(
                   label: 'Create new folder',
-                  // todo => create new folder
-                  onTap: () => context.showSnackBar(kFeatureUnderDev),
+                  onTap: () async {
+                    var noteFolder = await createFolder(context);
+                    if (noteFolder == null) return;
+                    _noteCubit.createFolder(noteFolder);
+                  },
                 ),
               ),
 
@@ -98,8 +101,11 @@ class _DashboardFolderTabState extends State<_DashboardFolderTab> {
                         child: SizedBox(
                           height: context.height * 0.4,
                           child: GestureDetector(
-                            // todo => add a new folder
-                            onTap: () => context.showSnackBar(kFeatureUnderDev),
+                            onTap: () async {
+                              var noteFolder = await createFolder(context);
+                              if (noteFolder == null) return;
+                              _noteCubit.createFolder(noteFolder);
+                            },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,

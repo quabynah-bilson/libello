@@ -68,7 +68,7 @@ class _DashboardPageState extends State<DashboardPage> {
             onPressed: () => context.router.push(const CreateNoteRoute()),
             backgroundColor: context.colorScheme.secondary,
             foregroundColor: context.colorScheme.onSecondary,
-            child: const Icon(TablerIcons.plus),
+            child: const Icon(TablerIcons.notes),
           );
         },
       ),
