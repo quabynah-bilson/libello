@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^4.0.4
   firebase_auth: ^4.1.1
   share_plus:
+  package_info_plus:
 
 dev_dependencies:
   flutter_test:

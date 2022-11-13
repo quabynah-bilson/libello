@@ -126,14 +126,12 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
 
                             /// search
                             IconButton(
-                              onPressed: () => Navigator.of(context).push(
-                                RevealRoute(
+                              onPressed: () => Navigator.of(context).push(RevealRoute(
                                   page: const NoteSearchPage(),
                                   maxRadius: context.height,
                                   centerOffset: Offset(context.width * 0.8,
                                       context.height * 0.1),
-                                ),
-                              ),
+                                )),
                               icon: const Icon(TablerIcons.file_search),
                               color: context.colorScheme.onPrimary,
                             ),
@@ -214,7 +212,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                 padding: const EdgeInsets.only(top: 28, left: 20, bottom: 20),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    'Quick Tips ${!kIsReleased ? '(Coming soon)' : ''}',
+                    'Quick Tips ${kIsReleased ? '(Coming soon)' : ''}',
                     style: context.theme.textTheme.subtitle1
                         ?.copyWith(color: context.colorScheme.onBackground),
                   ),

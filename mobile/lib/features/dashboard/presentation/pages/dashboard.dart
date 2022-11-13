@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
+import 'package:libello/core/modals.dart';
 import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/core/theme.dart';
 import 'package:libello/features/dashboard/presentation/pages/notes/search.dart';
@@ -26,6 +28,7 @@ import 'package:libello/features/shared/presentation/widgets/loading.overlay.dar
 import 'package:libello/features/shared/presentation/widgets/note.tile.dart';
 import 'package:libello/features/shared/presentation/widgets/reveal.route.dart';
 import 'package:lottie/lottie.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 part 'tabs/folder.dart';
 
@@ -75,24 +78,38 @@ class _DashboardPageState extends State<DashboardPage> {
           );
         },
       ),
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: [
-          _selectedIndex == 0 ? TablerIcons.home_eco : TablerIcons.home_x,
-          _selectedIndex == 1
-              ? Icons.interests_sharp
-              : Icons.interests_outlined,
-          _selectedIndex == 2 ? Icons.folder : Icons.folder_outlined,
-          _selectedIndex == 3 ? Icons.settings : Icons.settings_outlined,
-        ],
-        activeIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.smoothEdge,
-        leftCornerRadius: 32,
-        rightCornerRadius: 32,
-        backgroundColor: context.colorScheme.surface,
-        activeColor: context.colorScheme.secondary,
-      ),
+      bottomNavigationBar: StreamBuilder<bool>(
+          stream: context.read<AuthCubit>().loginStatus,
+          initialData: false,
+          builder: (context, snapshot) {
+            return AnimatedBottomNavigationBar(
+              icons: [
+                _selectedIndex == 0 ? TablerIcons.home_eco : TablerIcons.home_x,
+                _selectedIndex == 1
+                    ? Icons.interests_sharp
+                    : Icons.interests_outlined,
+                _selectedIndex == 2 ? Icons.folder : Icons.folder_outlined,
+                _selectedIndex == 3 ? Icons.settings : Icons.settings_outlined,
+              ],
+              activeIndex: _selectedIndex,
+              onTap: (index) async {
+                if (index == 3 && snapshot.hasData && !snapshot.data!) {
+                  var user = await showLoginSheet(context);
+                  if (user is User && mounted) {
+                    setState(() => _selectedIndex = index);
+                  }
+                } else {
+                  setState(() => _selectedIndex = index);
+                }
+              },
+              gapLocation: GapLocation.center,
+              notchSmoothness: NotchSmoothness.smoothEdge,
+              leftCornerRadius: 32,
+              rightCornerRadius: 32,
+              backgroundColor: context.colorScheme.surface,
+              activeColor: context.colorScheme.secondary,
+            );
+          }),
     );
   }
 }

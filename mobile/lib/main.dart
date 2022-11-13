@@ -14,5 +14,7 @@ void main() async {
   /// setup dependencies
   await setupInjector();
 
+  // await AuthCubit().logout();
+
   runApp(const LibelloApp());
 }

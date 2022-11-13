@@ -6,11 +6,11 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
+import 'package:libello/core/modals.dart';
 import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/auth_cubit.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
-import 'package:libello/features/shared/presentation/pages/login.dart';
 import 'package:libello/features/shared/presentation/widgets/animated.column.dart';
 import 'package:libello/features/shared/presentation/widgets/app.text.field.dart';
 import 'package:libello/features/shared/presentation/widgets/filled.button.dart';
@@ -268,14 +268,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
       if (loggedIn) {
         _updateNote();
       } else {
-        // ignore: use_build_context_synchronously
-        var user = await Navigator.of(context).push(
-          LoginDialog(
-            _authCubit,
-            backgroundColor:
-                context.colorScheme.background.withOpacity(kEmphasisMedium),
-          ),
-        );
+        var user = await showLoginSheet(context);
         if (user is User) {
           // ignore: use_build_context_synchronously
           context.showSnackBar(
@@ -447,48 +440,48 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
         ),
       ),
       builder: (context) => SafeArea(
-          top: false,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                24, 16, 24, context.mediaQuery.viewInsets.bottom),
-            child: AnimatedColumn(
-              animateType: AnimateType.slideUp,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Add a todo item',
-                  style: context.theme.textTheme.subtitle1
-                      ?.copyWith(color: context.colorScheme.secondary),
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+              24, 16, 24, context.mediaQuery.viewInsets.bottom),
+          child: AnimatedColumn(
+            animateType: AnimateType.slideUp,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Add a todo item',
+                style: context.theme.textTheme.subtitle1
+                    ?.copyWith(color: context.colorScheme.secondary),
+              ),
+              const SizedBox(height: 24),
+              AppTextField(
+                'Item',
+                onChange: (input) => label = input?.trim(),
+                capitalization: TextCapitalization.sentences,
+                suffixIcon: const Icon(TablerIcons.checkup_list),
+              ),
+              SafeArea(
+                top: false,
+                child: AppRoundedButton(
+                  text: 'Add',
+                  onTap: () {
+                    if (label != null && label!.isNotEmpty) {
+                      setState(() => _todos.add(
+                            NoteTodo(
+                              text: label ??= 'Custom Tag',
+                              completed: false,
+                              updatedAt: DateTime.now(),
+                            ),
+                          ));
+                    }
+                    context.router.pop();
+                  },
                 ),
-                const SizedBox(height: 24),
-                AppTextField(
-                  'Item',
-                  onChange: (input) => label = input?.trim(),
-                  capitalization: TextCapitalization.sentences,
-                  suffixIcon: const Icon(TablerIcons.checkup_list),
-                ),
-                SafeArea(
-                  top: false,
-                  child: AppRoundedButton(
-                    text: 'Add',
-                    onTap: () {
-                      if (label != null && label!.isNotEmpty) {
-                        setState(() => _todos.add(
-                              NoteTodo(
-                                text: label ??= 'Custom Tag',
-                                completed: false,
-                                updatedAt: DateTime.now(),
-                              ),
-                            ));
-                      }
-                      context.router.pop();
-                    },
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
+      ),
     );
   }
 }

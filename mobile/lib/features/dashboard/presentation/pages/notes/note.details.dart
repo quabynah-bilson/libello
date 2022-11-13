@@ -6,6 +6,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
+import 'package:libello/core/modals.dart';
 import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/features/shared/domain/entities/folder.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
@@ -28,9 +29,7 @@ class NoteDetailsPage extends StatefulWidget {
 }
 
 class _NoteDetailsPageState extends State<NoteDetailsPage> {
-  late var _currentNote = widget.note,
-      _loading = true,
-      _folders = List<NoteFolder>.empty(growable: true);
+  late var _currentNote = widget.note, _loading = true;
   final _noteCubit = NoteCubit(), _updateNoteCubit = NoteCubit();
   NoteFolder? _currentFolder;
 
@@ -98,7 +97,6 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                   }
 
                   if (state is NoteSuccess<List<NoteFolder>>) {
-                    setState(() => _folders = state.data);
                     _showFoldersSheet(state.data);
                   }
                 },
