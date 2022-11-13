@@ -24,6 +24,7 @@ const kAppDesc = 'A note taking mobile application for pros';
 final kAppDevTeam =
     'Created and maintained by Quabynah Codelabs LLC © ${DateTime.now().year}';
 const kAppLogo = 'assets/logo.png';
+// reference: https://lottiefiles.com/110457-notes-document
 const kAppLoadingAnimation = 'assets/notes_doc.json';
 const kFeatureUnderDev =
     'This feature will be available in the next major release';
@@ -162,53 +163,60 @@ Future<void> showAppDetailsSheet(BuildContext context) async {
     builder: (context) => StatefulBuilder(
       builder: (context, setState) => SafeArea(
         top: false,
-        child: AnimatedColumn(
-          animateType: AnimateType.slideUp,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Hero(
-              tag: kAppLoadingAnimation,
-              child: LottieBuilder.asset(
-                kAppLoadingAnimation,
-                height: context.height * 0.2,
-                repeat: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: AnimatedColumn(
+            animateType: AnimateType.slideUp,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Hero(
+                tag: kAppLoadingAnimation,
+                child: LottieBuilder.asset(
+                  kAppLoadingAnimation,
+                  height: context.height * 0.2,
+                  repeat: false,
+                ),
               ),
-            ),
-            Text(
-              kAppName,
-              style: context.theme.textTheme.headline4,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              kAppDesc,
-              style: context.theme.textTheme.subtitle2?.copyWith(
-                color:
-                    context.colorScheme.onSurface.withOpacity(kEmphasisMedium),
+              Text(
+                kAppName,
+                style: context.theme.textTheme.headline4?.copyWith(
+                  color: context.colorScheme.secondary
+                      .withOpacity(kEmphasisMedium),
+                ),
               ),
-            ),
-            const SizedBox(height: 40),
-            FloatingActionButton.extended(
-              heroTag: kHomeFabTag,
-              onPressed: context.router.pop,
-              label: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Text('Dismiss'),
-              ),
-              backgroundColor: context.colorScheme.secondary,
-              foregroundColor: context.colorScheme.onSecondary,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
-              child: Text(
-                kAppDevTeam,
-                style: context.theme.textTheme.caption?.copyWith(
-                  color:
-                      context.colorScheme.onSurface.withOpacity(kEmphasisLow),
+              const SizedBox(height: 12),
+              Text(
+                kAppDesc,
+                style: context.theme.textTheme.subtitle2?.copyWith(
+                  color: context.colorScheme.onSurface
+                      .withOpacity(kEmphasisMedium),
                 ),
                 textAlign: TextAlign.center,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 16, bottom: 8),
+                child: Text(
+                  kAppDevTeam,
+                  style: context.theme.textTheme.caption?.copyWith(
+                    color:
+                        context.colorScheme.onSurface.withOpacity(kEmphasisLow),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 40),
+              FloatingActionButton.extended(
+                heroTag: kHomeFabTag,
+                onPressed: context.router.pop,
+                label: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Text('Dismiss'),
+                ),
+                backgroundColor: context.colorScheme.secondary,
+                foregroundColor: context.colorScheme.onSecondary,
+              ),
+            ],
+          ),
         ),
       ),
     ),

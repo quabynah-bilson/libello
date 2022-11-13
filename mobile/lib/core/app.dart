@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:libello/core/constants.dart';
@@ -22,6 +23,7 @@ class _LibelloAppState extends State<LibelloApp> {
         child: BlocProvider(
           create: (context) => NoteCubit(),
           child: MaterialApp.router(
+            scrollBehavior: const CupertinoScrollBehavior(),
             debugShowCheckedModeBanner: false,
             title: kAppName,
             theme: ThemeConfig.kLightThemeData(context),

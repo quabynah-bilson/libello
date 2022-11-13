@@ -11,6 +11,8 @@ import 'package:libello/features/shared/presentation/widgets/loading.overlay.dar
 import 'package:libello/features/shared/presentation/widgets/note.tile.dart';
 import 'package:lottie/lottie.dart';
 
+/// search page
+/// reference: https://itnext.io/full-text-search-in-flutter-with-algolia-firestore-cloud-functions-with-optimization-54004d727ad1
 class NoteSearchPage extends StatefulWidget {
   const NoteSearchPage({Key? key}) : super(key: key);
 
