@@ -123,7 +123,7 @@ class _NoteTileState extends State<NoteTile> {
                             return AnimationConfiguration.synchronized(
                               duration: kListAnimationDuration,
                               child: SlideAnimation(
-                                horizontalOffset: kListSlideOffset,
+                                verticalOffset: kListSlideOffset,
                                 child: FadeInAnimation(
                                   child: ListTile(
                                     leading: Icon(

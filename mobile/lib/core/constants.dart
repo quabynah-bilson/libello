@@ -62,6 +62,7 @@ Future<void> shareNote(BuildContext context, Note note) async {
 }
 
 /// create folder sheet
+/// reference: https://stackoverflow.com/questions/52414629/how-to-update-state-of-a-modalbottomsheet-in-flutter
 Future<NoteFolder?> createFolder(BuildContext context) async {
   final controller = TextEditingController();
   NoteFolder? folder;
@@ -77,8 +78,8 @@ Future<NoteFolder?> createFolder(BuildContext context) async {
         topLeft: Radius.circular(kRadiusLarge),
       ),
     ),
-    builder: (context) => Builder(
-      builder: (context) => SafeArea(
+    builder: (context) => StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) => SafeArea(
         top: false,
         child: Padding(
           padding: EdgeInsets.fromLTRB(
@@ -108,10 +109,11 @@ Future<NoteFolder?> createFolder(BuildContext context) async {
               AppDropdownField(
                 label: 'Type',
                 values: FolderType.values.map((e) => e.name).toList(),
-                onSelected: (type) {
+                onSelected: (type) => setState(() {
                   selectedFolderType = FolderType.values
                       .firstWhere((element) => element.name == type);
-                },
+                  folder = folder?.copyWith(type: selectedFolderType);
+                }),
                 current: selectedFolderType.name,
               ),
               const SizedBox(height: 40),

@@ -78,4 +78,15 @@ class NoteCubit extends Cubit<NoteState> {
       (r) => emit(NoteError(r)),
     );
   }
+
+  Future<void> getFolder(String folder) async {
+    emit(NoteLoading());
+    var either = await _repo.getFolder(folder);
+    either.fold(
+          (l) => l.listen((event) => event == null
+          ? emit(const NoteError('Folder deleted from your library'))
+          : emit(NoteSuccess<NoteFolder>(event))),
+          (r) => emit(NoteError(r)),
+    );
+  }
 }

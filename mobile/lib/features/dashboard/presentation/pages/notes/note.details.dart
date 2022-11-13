@@ -12,6 +12,7 @@ import 'package:libello/features/shared/domain/entities/note.dart';
 import 'package:libello/features/shared/presentation/manager/note_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/animated.column.dart';
 import 'package:libello/features/shared/presentation/widgets/animated.list.dart';
+import 'package:libello/features/shared/presentation/widgets/custom.chip.dart';
 import 'package:libello/features/shared/presentation/widgets/folder.tile.dart';
 import 'package:libello/features/shared/presentation/widgets/loading.overlay.dart';
 import 'package:libello/features/shared/presentation/widgets/tag.item.dart';
@@ -27,8 +28,11 @@ class NoteDetailsPage extends StatefulWidget {
 }
 
 class _NoteDetailsPageState extends State<NoteDetailsPage> {
-  late var _currentNote = widget.note, _loading = true;
-  final _noteCubit = NoteCubit();
+  late var _currentNote = widget.note,
+      _loading = true,
+      _folders = List<NoteFolder>.empty(growable: true);
+  final _noteCubit = NoteCubit(), _updateNoteCubit = NoteCubit();
+  NoteFolder? _currentFolder;
 
   @override
   void initState() {
@@ -41,14 +45,14 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
         appBar: AppBar(
           actions: [
             IconButton(
-              onPressed: () async => shareNote(context, _currentNote),
-              icon: const Icon(TablerIcons.message_share),
-              tooltip: 'Share note',
-            ),
-            IconButton(
               onPressed: _noteCubit.getNoteFolders,
               icon: const Icon(TablerIcons.folder_plus),
               tooltip: 'Add to folder',
+            ),
+            IconButton(
+              onPressed: () async => shareNote(context, _currentNote),
+              icon: const Icon(TablerIcons.message_share),
+              tooltip: 'Share note',
             ),
             IconButton(
               onPressed: () => _noteCubit.deleteNote(_currentNote.id),
@@ -60,31 +64,62 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
         ),
         body: LoadingOverlay(
           isLoading: _loading,
-          child: BlocListener(
-            bloc: _noteCubit,
-            listener: (context, state) {
-              if (!mounted) return;
+          child: MultiBlocListener(
+            listeners: [
+              BlocListener(
+                bloc: _noteCubit,
+                listener: (context, state) {
+                  if (!mounted) return;
 
-              setState(() => _loading = state is NoteLoading);
+                  setState(() => _loading = state is NoteLoading);
 
-              if (state is NoteError) {
-                context.showSnackBar(state.message);
-              }
-              if (state is NoteSuccess<Note>) {
-                setState(() => _currentNote = state.data);
-              }
+                  if (state is NoteError) {
+                    context.showSnackBar(state.message,
+                        context.colorScheme.error, context.colorScheme.onError);
+                  }
 
-              if (state is NoteSuccess<String>) {
-                context
-                  ..showSnackBar(state.data)
-                  ..router.pushAndPopUntil(const DashboardRoute(),
-                      predicate: (_) => false);
-              }
+                  if (state is NoteSuccess<Note>) {
+                    setState(() => _currentNote = state.data);
+                    if (state.data.folder != null &&
+                        state.data.folder!.isNotEmpty) {
+                      _noteCubit.getFolder(state.data.folder!);
+                    }
+                  }
 
-              if (state is NoteSuccess<List<NoteFolder>>) {
-                _showFoldersSheet(state.data);
-              }
-            },
+                  if (state is NoteSuccess<NoteFolder>) {
+                    setState(() => _currentFolder = state.data);
+                  }
+
+                  if (state is NoteSuccess<String>) {
+                    context
+                      ..showSnackBar(state.data)
+                      ..router.pushAndPopUntil(const DashboardRoute(),
+                          predicate: (_) => false);
+                  }
+
+                  if (state is NoteSuccess<List<NoteFolder>>) {
+                    setState(() => _folders = state.data);
+                    _showFoldersSheet(state.data);
+                  }
+                },
+              ),
+              BlocListener(
+                bloc: _updateNoteCubit,
+                listener: (context, state) {
+                  if (!mounted) return;
+
+                  setState(() => _loading = state is NoteLoading);
+
+                  if (state is NoteError) {
+                    context.showSnackBar(state.message);
+                  }
+
+                  if (state is NoteSuccess<Note>) {
+                    setState(() => _currentNote = state.data);
+                  }
+                },
+              ),
+            ],
             child: AnimationLimiter(
               child: AnimatedListView(
                 animateType: AnimateType.slideLeft,
@@ -96,11 +131,28 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                         ?.copyWith(color: context.colorScheme.onBackground),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    _currentNote.updatedAt.format('d M, y (g:i a)'),
-                    style: context.theme.textTheme.overline?.copyWith(
-                      color: context.colorScheme.onSurface
-                          .withOpacity(kEmphasisMedium),
+
+                  /// folder
+                  if (_currentFolder != null) ...{
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: CustomChip(
+                        onTap: () => context.router
+                            .push(FolderNotesRoute(folder: _currentFolder!)),
+                        leadingIcon: TablerIcons.folder,
+                        label: _currentFolder!.label,
+                      ),
+                    ),
+                  },
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      _currentNote.updatedAt.format('d M, y (g:i a)'),
+                      style: context.theme.textTheme.caption?.copyWith(
+                        color: context.colorScheme.onSurface
+                            .withOpacity(kEmphasisMedium),
+                      ),
                     ),
                   ),
 
@@ -307,7 +359,19 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                     ),
                   ),
                   ...folders
-                      .map((folder) => FolderTile(folder: folder))
+                      .map(
+                        (folder) => FolderTile(
+                          folder: folder,
+                          onTap: () {
+                            context.router.pop();
+                            doAfterDelay(() {
+                              _currentNote =
+                                  _currentNote.copyWith(folder: folder.id);
+                              _updateNoteCubit.updateNote(_currentNote);
+                            });
+                          },
+                        ),
+                      )
                       .toList(),
                   const SizedBox(height: 40),
                   FloatingActionButton.extended(

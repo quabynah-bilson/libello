@@ -38,8 +38,7 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(title: const Text('My notes')),
       body: BlocListener(
         bloc: _noteCubit,
@@ -74,20 +73,23 @@ class _NotesPageState extends State<NotesPage> {
               shrinkWrap: true,
               slivers: [
                 if (_notes.isEmpty) ...{
-                  SliverToBoxAdapter(
-                    child: AnimatedColumn(
-                      children: [
-                        LottieBuilder.asset(
-                          kAppLoadingAnimation,
-                          repeat: false,
-                          height: context.width * 0.4,
-                          width: context.width * 0.4,
-                        ),
-                        Text(
-                          'You have no recent notes',
-                          style: context.theme.textTheme.subtitle2,
-                        ),
-                      ],
+                  SliverFillRemaining(
+                    child: Center(
+                      child: AnimatedColumn(
+                        animateType: AnimateType.slideUp,
+                        children: [
+                          LottieBuilder.asset(
+                            kAppLoadingAnimation,
+                            repeat: false,
+                            height: context.width * 0.4,
+                            width: context.width * 0.4,
+                          ),
+                          Text(
+                            'You have no recent notes',
+                            style: context.theme.textTheme.subtitle2,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 } else ...{
@@ -123,12 +125,12 @@ class _NotesPageState extends State<NotesPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: kHomeFabTag,
         onPressed: () => context.router.push(const CreateNoteRoute()),
         backgroundColor: context.colorScheme.secondary,
         foregroundColor: context.colorScheme.onSecondary,
-        icon: const Icon(TablerIcons.plus),
+        icon: const Icon(TablerIcons.notes),
         label: const Text('New note'),
       ),
     );
-  }
 }

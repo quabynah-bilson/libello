@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:libello/core/extensions.dart';
 
 class ThemeConfig {
   static const kOrange = Colors.orange,

@@ -26,7 +26,7 @@ abstract class BaseNoteRepository {
 
   Future<Either<Stream<List<NoteFolder>>, String>> getFolders();
 
-  Future<Either<NoteFolder, String>> getFolder(String id);
+  Future<Either<Stream<NoteFolder?>, String>> getFolder(String id);
 
   /// endregion folders
 }

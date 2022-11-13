@@ -103,9 +103,9 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                             /// notifications
                             IconButton(
                               onPressed: () =>
-                                  // todo => show notifications
+                                  // todo => show search
                                   context.showSnackBar(kFeatureUnderDev),
-                              icon: const Icon(TablerIcons.bell),
+                              icon: const Icon(TablerIcons.file_search),
                               color: context.colorScheme.onPrimary,
                             ),
                           ],

@@ -64,9 +64,15 @@ class NoteRepository implements BaseNoteRepository {
   }
 
   @override
-  Future<Either<NoteFolder, String>> getFolder(String id) {
-    // TODO: implement getFolder
-    throw UnimplementedError();
+  Future<Either<Stream<NoteFolder?>, String>> getFolder(String id) async {
+    try {
+      var stream = _kNoteFolderRef.doc(id).snapshots().map(
+          (event) => event.exists ? NoteFolder.fromJson(event.data()) : null);
+      return Left(stream);
+    } catch (e) {
+      logger.e(e);
+    }
+    return const Right('An error occurred while getting this note');
   }
 
   @override

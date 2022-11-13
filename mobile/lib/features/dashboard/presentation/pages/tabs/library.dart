@@ -40,17 +40,15 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
             shrinkWrap: true,
             slivers: [
               /// top app bar
-              SliverToBoxAdapter(
-                child: AppBar(
-                  title: const Text('Library'),
-                  actions: [
-                    IconButton(
-                      onPressed: () => context.showSnackBar(kFeatureUnderDev),
-                      icon: const Icon(TablerIcons.search),
-                    ),
-                    const SizedBox(width: 12),
-                  ],
-                ),
+              SliverAppBar(
+                title: const Text('Library'),
+                actions: [
+                  IconButton(
+                    onPressed: () => context.showSnackBar(kFeatureUnderDev),
+                    icon: const Icon(TablerIcons.search),
+                  ),
+                  const SizedBox(width: 12),
+                ],
               ),
 
               /// fixed
@@ -114,28 +112,10 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
                 ),
               ),
 
-              /// secret notes
-              SliverToBoxAdapter(
-                child: ListTile(
-                  onTap: () => context.router
-                      .push(NotesRoute(status: NoteStatus.deleted)),
-                  leading: const Icon(TablerIcons.lock_access,
-                      color: ThemeConfig.kBlue),
-                  title: const Text('Secret'),
-                  trailing: Text(
-                    '${_notes.where((element) => element.status == NoteStatus.secret).length}',
-                    style: context.theme.textTheme.subtitle2?.copyWith(
-                      color: context.colorScheme.onBackground
-                          .withOpacity(kEmphasisLow),
-                    ),
-                  ),
-                ),
-              ),
-
               /// labels
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 40),
+                  padding: const EdgeInsets.only(top: 16),
                   child: FilledButtonWithIcon(
                     label: 'Labels',
                     // todo => add action
@@ -143,7 +123,7 @@ class _DashboardLibraryTabState extends State<_DashboardLibraryTab> {
                   ),
                 ),
               ),
-              //
+              // important
               SliverToBoxAdapter(
                 child: ListTile(
                   onTap: () =>

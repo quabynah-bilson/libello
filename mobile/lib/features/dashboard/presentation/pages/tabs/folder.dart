@@ -65,29 +65,37 @@ class _DashboardFolderTabState extends State<_DashboardFolderTab> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     children: [
-                      CustomChip(
-                        onTap: () =>
-                            context.router.push(NotesRoute(showAll: true)),
-                        leadingIcon: TablerIcons.filter,
-                        label: 'filter',
+                      Center(
+                        child: CustomChip(
+                          onTap: () =>
+                              context.router.push(NotesRoute(showAll: true)),
+                          leadingIcon: TablerIcons.filter,
+                          label: 'filter',
+                        ),
                       ),
-                      CustomChip(
-                        onTap: () => context.router
-                            .push(NotesRoute(type: NoteType.important)),
-                        leadingIcon: TablerIcons.star,
-                        label: 'important',
+                      Center(
+                        child: CustomChip(
+                          onTap: () => context.router
+                              .push(NotesRoute(type: NoteType.important)),
+                          leadingIcon: TablerIcons.star,
+                          label: 'important',
+                        ),
                       ),
-                      CustomChip(
-                        onTap: () => context.router
-                            .push(NotesRoute(type: NoteType.todoList)),
-                        leadingIcon: TablerIcons.list_check,
-                        label: 'to-do list',
+                      Center(
+                        child: CustomChip(
+                          onTap: () => context.router
+                              .push(NotesRoute(type: NoteType.todoList)),
+                          leadingIcon: TablerIcons.list_check,
+                          label: 'to-do list',
+                        ),
                       ),
-                      CustomChip(
-                        onTap: () => context.router
-                            .push(NotesRoute(type: NoteType.business)),
-                        leadingIcon: TablerIcons.briefcase,
-                        label: 'business',
+                      Center(
+                        child: CustomChip(
+                          onTap: () => context.router
+                              .push(NotesRoute(type: NoteType.business)),
+                          leadingIcon: TablerIcons.briefcase,
+                          label: 'business',
+                        ),
                       ),
                     ],
                   ),
