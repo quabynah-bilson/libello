@@ -18,7 +18,8 @@ void main() async {
   await setupInjector();
 
   /// setup app versioning
-  kAppVersionUpgrader = NewVersion(iOSAppStoreCountry: 'GH');
+  kAppVersionUpgrader = NewVersion(
+      androidId: 'io.qcodelabs.libello', iOSId: 'io.qcodelabs.libello');
 
   /// get cameras
   kCameras = await availableCameras();

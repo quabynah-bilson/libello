@@ -112,13 +112,13 @@ class _NotesPageState extends State<NotesPage> {
                       padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
                       sliver: SliverMasonryGrid(
                         gridDelegate:
-                            const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2),
+                            SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: _notes.length == 1 ? 1 : 2),
                         delegate: SliverChildBuilderDelegate(
                           (context, index) =>
                               AnimationConfiguration.staggeredGrid(
                             position: index,
-                            columnCount:  _notes.length == 1 ? 1 : 2,
+                            columnCount: _notes.length == 1 ? 1 : 2,
                             duration: kListAnimationDuration,
                             child: SlideAnimation(
                               verticalOffset: kListSlideOffset,

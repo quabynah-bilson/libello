@@ -16,7 +16,6 @@ import 'package:libello/core/extensions.dart';
 import 'package:libello/core/modals.dart';
 import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/core/theme.dart';
-import 'package:libello/features/dashboard/presentation/pages/notes/scan.note.dart';
 import 'package:libello/features/dashboard/presentation/pages/notes/search.dart';
 import 'package:libello/features/dashboard/presentation/widgets/quick.tip.card.dart';
 import 'package:libello/features/shared/domain/entities/folder.dart';
@@ -61,72 +60,82 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    doAfterDelay(_checkAppVersion);
+    doAfterDelay(_getAppVersion);
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      body: _pages[_selectedIndex],
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: BlocBuilder(
-        bloc: context.read<NoteCubit>(),
-        builder: (context, state) {
-          if (state is NoteLoading) return const SizedBox.shrink();
-          return FloatingActionButton(
-            heroTag: kHomeFabTag,
-            onPressed: () async {
-              await context.router.push(const CreateNoteRoute());
-              context.read<NoteCubit>().getNotes();
-            },
-            backgroundColor: context.colorScheme.secondary,
-            foregroundColor: context.colorScheme.onSecondary,
-            child: const Icon(TablerIcons.notes),
-          );
-        },
-      ),
-      bottomNavigationBar: StreamBuilder<bool>(
-          stream: context.read<AuthCubit>().loginStatus,
-          initialData: false,
-          builder: (context, snapshot) {
-            return AnimatedBottomNavigationBar(
-              icons: [
-                _selectedIndex == 0 ? TablerIcons.home_eco : TablerIcons.home_x,
-                _selectedIndex == 1
-                    ? Icons.interests_sharp
-                    : Icons.interests_outlined,
-                _selectedIndex == 2 ? Icons.folder : Icons.folder_outlined,
-                _selectedIndex == 3 ? Icons.settings : Icons.settings_outlined,
-              ],
-              activeIndex: _selectedIndex,
-              onTap: (index) async {
-                if (index == 3 && snapshot.hasData && !snapshot.data!) {
-                  var user = await showLoginSheet(context);
-                  if (user is User && mounted) {
+        body: _pages[_selectedIndex],
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: BlocBuilder(
+          bloc: context.read<NoteCubit>(),
+          builder: (context, state) {
+            if (state is NoteLoading) return const SizedBox.shrink();
+            return FloatingActionButton(
+              heroTag: kHomeFabTag,
+              onPressed: () async {
+                await context.router.push(const CreateNoteRoute());
+                context.read<NoteCubit>().getNotes();
+              },
+              backgroundColor: context.colorScheme.secondary,
+              foregroundColor: context.colorScheme.onSecondary,
+              child: const Icon(TablerIcons.notes),
+            );
+          },
+        ),
+        bottomNavigationBar: StreamBuilder<bool>(
+            stream: context.read<AuthCubit>().loginStatus,
+            initialData: false,
+            builder: (context, snapshot) {
+              return AnimatedBottomNavigationBar(
+                icons: [
+                  _selectedIndex == 0
+                      ? TablerIcons.home_eco
+                      : TablerIcons.home_x,
+                  _selectedIndex == 1
+                      ? Icons.interests_sharp
+                      : Icons.interests_outlined,
+                  _selectedIndex == 2 ? Icons.folder : Icons.folder_outlined,
+                  _selectedIndex == 3
+                      ? Icons.settings
+                      : Icons.settings_outlined,
+                ],
+                activeIndex: _selectedIndex,
+                onTap: (index) async {
+                  if (index == 3 && snapshot.hasData && !snapshot.data!) {
+                    var user = await showLoginSheet(context);
+                    if (user is User && mounted) {
+                      setState(() => _selectedIndex = index);
+                    }
+                  } else {
                     setState(() => _selectedIndex = index);
                   }
-                } else {
-                  setState(() => _selectedIndex = index);
-                }
-              },
-              gapLocation: GapLocation.center,
-              notchSmoothness: NotchSmoothness.smoothEdge,
-              leftCornerRadius: 32,
-              rightCornerRadius: 32,
-              backgroundColor: context.colorScheme.surface,
-              activeColor: context.colorScheme.primary,
-              inactiveColor: context.theme.disabledColor,
-            );
-          }),
-    );
+                },
+                gapLocation: GapLocation.center,
+                notchSmoothness: NotchSmoothness.smoothEdge,
+                leftCornerRadius: 32,
+                rightCornerRadius: 32,
+                backgroundColor: context.colorScheme.surface,
+                activeColor: context.colorScheme.primary,
+                inactiveColor: context.theme.disabledColor,
+              );
+            }),
+      );
 
   /// check for new app updates
-  void _checkAppVersion() async {
-    await kAppVersionUpgrader?.showAlertIfNecessary(context: context);
-    // var versionStatus = await kAppVersionUpgrader?.getVersionStatus();
-    // if (versionStatus != null) {
-    //   kAppVersionUpgrader?.showUpdateDialog(context: context, versionStatus: versionStatus);
-    // }
+  void _getAppVersion() async {
+    if (kIsReleased) {
+      await kAppVersionUpgrader?.showAlertIfNecessary(context: context);
+    } else {
+      var versionStatus = await kAppVersionUpgrader?.getVersionStatus();
+      if (versionStatus != null) {
+        kAppVersionUpgrader?.showUpdateDialog(
+            context: context,
+            versionStatus: versionStatus,
+            allowDismissal: false);
+      }
+    }
   }
 }
