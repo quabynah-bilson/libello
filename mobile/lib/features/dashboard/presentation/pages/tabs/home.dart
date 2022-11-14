@@ -237,8 +237,7 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                         topRightIcon: Icons.check_circle,
                         title: kScanNoteTitle,
                         subtitle: kScanNoteDescription,
-                        // todo => scan note
-                        onTap: () => context.showSnackBar(kFeatureUnderDev),
+                        onTap: () => context.router.push(const ScanNoteRoute()),
                       ),
 
                       /// scan note
@@ -302,7 +301,9 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                         child: SlideAnimation(
                           verticalOffset: kListSlideOffset,
                           child: FadeInAnimation(
-                            child: NoteTile(note: _notes[index]),
+                            child: NoteTile(
+                                key: ValueKey(_notes[index].id),
+                                note: _notes[index]),
                           ),
                         ),
                       ),
@@ -312,25 +313,25 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                     mainAxisSpacing: 12,
                   ),
                 ),
-              },
-              SliverToBoxAdapter(
-                child: Center(
-                  child: FloatingActionButton.extended(
-                    label: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
-                      child: Text('See more notes'),
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: FloatingActionButton.extended(
+                      label: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24),
+                        child: Text('See more notes'),
+                      ),
+                      icon: const Icon(TablerIcons.arrow_autofit_right),
+                      enableFeedback: true,
+                      elevation: 0,
+                      onPressed: () =>
+                          context.router.push(NotesRoute(showAll: true)),
+                      backgroundColor: context.colorScheme.primary
+                          .withOpacity(kEmphasisLowest),
+                      foregroundColor: context.colorScheme.primary,
                     ),
-                    icon: const Icon(TablerIcons.arrow_autofit_right),
-                    enableFeedback: true,
-                    elevation: 0,
-                    onPressed: () =>
-                        context.router.push(NotesRoute(showAll: true)),
-                    backgroundColor: context.colorScheme.primary
-                        .withOpacity(kEmphasisLowest),
-                    foregroundColor: context.colorScheme.primary,
                   ),
                 ),
-              ),
+              },
               SliverToBoxAdapter(
                 child: SizedBox(height: context.height * 0.17),
               ),

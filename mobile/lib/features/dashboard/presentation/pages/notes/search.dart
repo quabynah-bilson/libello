@@ -123,7 +123,9 @@ class _NoteSearchPageState extends State<NoteSearchPage> {
                                   child: SlideAnimation(
                                       verticalOffset: kListSlideOffset,
                                       child: FadeInAnimation(
-                                          child: NoteTile(note: note))),
+                                          child: NoteTile(
+                                              key: ValueKey(note.id),
+                                              note: note))),
                                 ),
                               )
                               .toList(),

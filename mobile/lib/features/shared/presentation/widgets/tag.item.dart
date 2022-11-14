@@ -6,45 +6,63 @@ import 'package:libello/core/theme.dart';
 
 class TagItem extends StatelessWidget {
   final String label;
+  final Color? color;
   final void Function()? onClosed;
 
-  const TagItem({Key? key, required this.label, this.onClosed})
-      : super(key: key);
+  const TagItem({
+    Key? key,
+    required this.label,
+    this.onClosed,
+    this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: context.theme.disabledColor.withOpacity(kEmphasisLow),
+            color: color == null ? context.theme.disabledColor.withOpacity(kEmphasisLow) : Colors.black,
           ),
-          color: context.theme.disabledColor.withOpacity(kEmphasisLowest),
+          color: (color == null ? context.colorScheme.onSurface : Colors.black)
+              .withOpacity(kEmphasisLowest),
           borderRadius: BorderRadius.circular(kRadiusSmall),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.label_important,
-              size: 18,
-              color: ThemeConfig.kAmber,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: context.theme.textTheme.caption?.copyWith(
-                color:
-                    context.colorScheme.onSurface.withOpacity(kEmphasisMedium),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    TablerIcons.tags,
+                    size: 18,
+                    color: color == null ? ThemeConfig.kAmber : Colors.black,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    label,
+                    style: context.theme.textTheme.caption?.copyWith(
+                        color: color == null ? context.colorScheme.onSurface : Colors.black),
+                  ),
+                ],
               ),
             ),
             if (onClosed != null) ...{
-              const SizedBox(width: 10),
-              GestureDetector(
-                onTap: onClosed,
-                child: Icon(
-                  TablerIcons.trash,
-                  size: 18,
-                  color: context.colorScheme.error.withOpacity(kEmphasisMedium),
+              Container(
+                decoration: BoxDecoration(
+                  color: context.colorScheme.error.withOpacity(kEmphasisLowest),
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(kRadiusSmall),
+                    bottomRight: Radius.circular(kRadiusSmall),
+                  ),
+                ),
+                margin: const EdgeInsets.only(left: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: GestureDetector(
+                  onTap: onClosed,
+                  child: Icon(TablerIcons.trash,
+                      size: 18, color: context.colorScheme.error),
                 ),
               ),
             },

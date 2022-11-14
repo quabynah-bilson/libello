@@ -172,7 +172,7 @@ class NoteRepository implements BaseNoteRepository {
 
   @override
   Future<Either<Stream<List<Note>>, String>> getRecentNotes(
-      [int pageSize = 5]) async {
+      [int? pageSize]) async {
     var owner =
         (await getIt.getAsync<SharedPreferences>()).getString(kUserIdKey);
     if (owner == null) return const Right(kAuthRequired);
@@ -180,7 +180,7 @@ class NoteRepository implements BaseNoteRepository {
       var stream = _kNoteRef
           .orderBy('updatedAt', descending: true)
           .where('owner', isEqualTo: owner)
-          .limit(pageSize)
+          .limit(pageSize ?? 50)
           .snapshots()
           .map((event) =>
               event.docs.map((e) => Note.fromJson(e.data())).toList());

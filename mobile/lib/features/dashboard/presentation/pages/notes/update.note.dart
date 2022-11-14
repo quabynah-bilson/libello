@@ -113,7 +113,6 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                                   input == null || input.isEmpty
                                       ? 'Required'
                                       : null,
-                              autofocus: true,
                               capitalization: TextCapitalization.sentences,
                               action: TextInputAction.next,
                               inputType: TextInputType.text,
@@ -161,6 +160,13 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                                   children: _labels
                                       .map((e) => TagItem(
                                             label: e,
+                                            color: widget.note.color == null
+                                                ? context.colorScheme.surface
+                                                : Color.fromRGBO(
+                                                    widget.note.color!.red,
+                                                    widget.note.color!.green,
+                                                    widget.note.color!.blue,
+                                                    widget.note.color!.opacity),
                                             onClosed: () => setState(() =>
                                                 _labels.removeWhere(
                                                     (element) => e == element)),
@@ -191,7 +197,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                             children: [
                               Icon(TablerIcons.checklist,
                                   size: 48,
-                                  color: context.colorScheme.secondary),
+                                  color: context.colorScheme.secondaryContainer),
                               const SizedBox(height: 16),
                               Text(
                                 'You have no todos for this note',
@@ -446,18 +452,19 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                 Text(
                   'Add a new label',
                   style: context.theme.textTheme.subtitle1
-                      ?.copyWith(color: context.colorScheme.secondary),
+                      ?.copyWith(color: context.colorScheme.secondaryContainer),
                 ),
                 const SizedBox(height: 24),
                 AppTextField(
                   'Label',
                   onChange: (input) => label = input?.trim(),
                   capitalization: TextCapitalization.words,
-                  maxLength: 15,
+                  maxLength: 12,
                   suffixIcon: Icon(
                     Icons.label,
-                    color: context.colorScheme.secondary,
+                    color: context.colorScheme.secondaryContainer,
                   ),
+                  autofocus: true,
                 ),
                 SafeArea(
                   top: false,
@@ -504,7 +511,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
               Text(
                 'Add a todo item',
                 style: context.theme.textTheme.subtitle1
-                    ?.copyWith(color: context.colorScheme.secondary),
+                    ?.copyWith(color: context.colorScheme.secondaryContainer),
               ),
               const SizedBox(height: 24),
               AppTextField(
@@ -512,6 +519,7 @@ class _UpdateNotePageState extends State<UpdateNotePage> {
                 onChange: (input) => label = input?.trim(),
                 capitalization: TextCapitalization.sentences,
                 suffixIcon: const Icon(TablerIcons.checkup_list),
+                autofocus: true,
               ),
               SafeArea(
                 top: false,

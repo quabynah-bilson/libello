@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:libello/features/shared/domain/entities/note.dart';
@@ -13,6 +14,9 @@ bool kIsReleased = kReleaseMode;
 
 /// app versioning
 NewVersion? kAppVersionUpgrader;
+
+/// camera
+List<CameraDescription> kCameras = List.empty(growable: true);
 
 /// app constants
 const kAppName = 'Libello.';

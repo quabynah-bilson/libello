@@ -16,6 +16,7 @@ import 'package:libello/core/extensions.dart';
 import 'package:libello/core/modals.dart';
 import 'package:libello/core/router/route.gr.dart';
 import 'package:libello/core/theme.dart';
+import 'package:libello/features/dashboard/presentation/pages/notes/scan.note.dart';
 import 'package:libello/features/dashboard/presentation/pages/notes/search.dart';
 import 'package:libello/features/dashboard/presentation/widgets/quick.tip.card.dart';
 import 'package:libello/features/shared/domain/entities/folder.dart';

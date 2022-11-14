@@ -138,9 +138,12 @@ class _FolderNotesPageState extends State<FolderNotesPage> {
                               columnCount: 2,
                               duration: kListAnimationDuration,
                               child: SlideAnimation(
-                                  verticalOffset: kListSlideOffset,
-                                  child: FadeInAnimation(
-                                      child: NoteTile(note: note))),
+                                verticalOffset: kListSlideOffset,
+                                child: FadeInAnimation(
+                                  child: NoteTile(
+                                      key: ValueKey(note.id), note: note),
+                                ),
+                              ),
                             ),
                           )
                           .toList(),

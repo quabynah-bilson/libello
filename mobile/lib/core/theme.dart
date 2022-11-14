@@ -59,6 +59,7 @@ class ThemeConfig {
           onSurface: Colors.black,
           onPrimary: Colors.white,
           onSecondary: Colors.black,
+          onSecondaryContainer: Colors.white,
           // onSecondary: Colors.white,
           onTertiary: Colors.black,
           onError: Colors.white,

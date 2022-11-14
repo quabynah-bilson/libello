@@ -42,8 +42,8 @@ class _NoteTileState extends State<NoteTile> {
 
           if (state is NoteSuccess<Note>) {
             _todos = state.data.todos;
-            if (state.data.todos.length >= 3) {
-              _todos = state.data.todos.getRange(0, 3).toList();
+            if (state.data.todos.length >= 2) {
+              _todos = state.data.todos.getRange(0, 2).toList();
             }
             setState(() => _currentNote = state.data);
           }
@@ -57,6 +57,7 @@ class _NoteTileState extends State<NoteTile> {
           onTap: () =>
               context.router.push(NoteDetailsRoute(note: _currentNote)),
           child: ClipRect(
+            clipBehavior: Clip.antiAlias,
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
               child: Container(
@@ -89,8 +90,9 @@ class _NoteTileState extends State<NoteTile> {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
+
+                    /// description / body
                     if (_currentNote.body.isNotEmpty) ...{
-                      const SizedBox(height: 8),
                       Text(
                         '~${wordCount(_currentNote.body)} words',
                         style: context.theme.textTheme.caption?.copyWith(
@@ -98,15 +100,7 @@ class _NoteTileState extends State<NoteTile> {
                               .withOpacity(kEmphasisMedium),
                         ),
                       ),
-                    },
-
-                    /// description / body
-                    Divider(
-                      height: 24,
-                      color: context.theme.disabledColor
-                          .withOpacity(kEmphasisLowest),
-                    ),
-                    if (_currentNote.body.isNotEmpty) ...{
+                      const SizedBox(height: 8),
                       Text(
                         _currentNote.body,
                         style: context.theme.textTheme.subtitle2?.copyWith(
@@ -138,7 +132,10 @@ class _NoteTileState extends State<NoteTile> {
                                     leading: Icon(
                                       TablerIcons.checklist,
                                       color: todo.completed
-                                          ? context.theme.disabledColor
+                                          ? (_currentNote.color == null
+                                              ? context.theme.disabledColor
+                                              : _generateForegroundColor()
+                                                  .withOpacity(kEmphasisLow))
                                           : _generateForegroundColor(),
                                     ),
                                     minLeadingWidth: 24,
@@ -150,7 +147,11 @@ class _NoteTileState extends State<NoteTile> {
                                       style: context.theme.textTheme.subtitle2
                                           ?.copyWith(
                                         color: todo.completed
-                                            ? context.theme.disabledColor
+                                            ? (_currentNote.color == null
+                                                ? context.theme.disabledColor
+                                                : _generateForegroundColor()
+                                                    .withOpacity(
+                                                        kEmphasisLow))
                                             : _generateForegroundColor(),
                                         decoration: todo.completed
                                             ? TextDecoration.lineThrough
@@ -180,7 +181,10 @@ class _NoteTileState extends State<NoteTile> {
                         spacing: 8,
                         children: List.generate(
                           _currentNote.tags.length,
-                          (index) => TagItem(label: _currentNote.tags[index]),
+                          (index) => TagItem(
+                            label: _currentNote.tags[index],
+                            color: _generateForegroundColor(),
+                          ),
                         ),
                       ),
                     },

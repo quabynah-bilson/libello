@@ -180,7 +180,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                           child: AnimatedColumn(
                             children: [
                               Icon(TablerIcons.checklist,
-                                  size: 48, color: context.colorScheme.primary),
+                                  size: 48, color: context.colorScheme.secondaryContainer),
                               const SizedBox(height: 16),
                               Text(
                                 'You have no todos for this note',
@@ -439,7 +439,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                 'Label',
                 onChange: (input) => label = input?.trim(),
                 capitalization: TextCapitalization.words,
-                maxLength: 15,
+                maxLength: 12,
                 suffixIcon: Icon(
                   Icons.label,
                   color: context.colorScheme.primary,
@@ -585,6 +585,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
     _generatedColors = palette.colors
         .map((e) => RgbColor(e.red, e.green, e.blue, e.alpha))
         .toList();
+    _selectedNoteColor = _generatedColors.last;
     if (mounted) setState(() {});
   }
 }

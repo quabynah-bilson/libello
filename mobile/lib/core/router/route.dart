@@ -4,6 +4,7 @@ import 'package:libello/features/dashboard/presentation/pages/folder/folder.note
 import 'package:libello/features/dashboard/presentation/pages/notes/create.note.dart';
 import 'package:libello/features/dashboard/presentation/pages/notes/note.details.dart';
 import 'package:libello/features/dashboard/presentation/pages/notes/notes.dart';
+import 'package:libello/features/dashboard/presentation/pages/notes/scan.note.dart';
 import 'package:libello/features/dashboard/presentation/pages/notes/update.note.dart';
 
 @CustomAutoRouter(
@@ -18,6 +19,7 @@ import 'package:libello/features/dashboard/presentation/pages/notes/update.note.
     AutoRoute(page: UpdateNotePage),
     AutoRoute(page: NotesPage),
     AutoRoute(page: NoteDetailsPage),
+    AutoRoute(page: ScanNotePage),
   ],
 )
 class $LibelloAppRouter {}

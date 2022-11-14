@@ -99,14 +99,14 @@ class _DashboardSettingsTabState extends State<_DashboardSettingsTab> {
                             ? '@${snapshot.data?.toLowerCase().replaceAll(' ', '_')}'
                             : '...',
                         style: context.theme.textTheme.headline4
-                            ?.copyWith(color: context.colorScheme.onPrimary),
+                            ?.copyWith(color: context.colorScheme.onSecondaryContainer),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '$kAppName, ${kAppDesc.toLowerCase()}',
                       style: context.theme.textTheme.subtitle2?.copyWith(
-                          color: context.colorScheme.onPrimary
+                          color: context.colorScheme.onSecondaryContainer
                               .withOpacity(kEmphasisMedium)),
                       textAlign: TextAlign.center,
                     ),
@@ -114,8 +114,8 @@ class _DashboardSettingsTabState extends State<_DashboardSettingsTab> {
                     FloatingActionButton.extended(
                       onPressed: _authCubit.logout,
                       elevation: 0,
-                      backgroundColor: context.colorScheme.onPrimary,
-                      foregroundColor: context.colorScheme.primary,
+                      backgroundColor: context.colorScheme.onSecondaryContainer,
+                      foregroundColor: context.colorScheme.secondaryContainer,
                       label: const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 24),
                         child: Text('Sign out'),

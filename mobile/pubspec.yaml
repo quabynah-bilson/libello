@@ -43,7 +43,9 @@ dependencies:
   share_plus:
   package_info_plus:
   new_version:
-  random_color: ^1.0.6-nullsafety
+  google_ml_kit:
+  camera:
+  image_picker:
 
 dev_dependencies:
   flutter_test:

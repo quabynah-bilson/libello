@@ -31,7 +31,7 @@ class NoteCubit extends Cubit<NoteState> {
 
   Future<void> getRecentNotes([int? pageSize]) async {
     emit(NoteLoading());
-    var either = await _repo.getRecentNotes(pageSize ?? 5);
+    var either = await _repo.getRecentNotes(pageSize ?? 4);
     either.fold(
       (l) => l.listen((event) => emit(NoteSuccess<List<Note>>(event))),
       (r) => emit(NoteError(r)),

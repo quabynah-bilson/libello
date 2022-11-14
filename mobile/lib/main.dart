@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:libello/core/app.dart';
@@ -18,6 +19,9 @@ void main() async {
 
   /// setup app versioning
   kAppVersionUpgrader = NewVersion(iOSAppStoreCountry: 'GH');
+
+  /// get cameras
+  kCameras = await availableCameras();
 
   /// run application
   runApp(const LibelloApp());

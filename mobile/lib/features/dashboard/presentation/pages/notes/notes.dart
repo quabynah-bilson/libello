@@ -123,7 +123,9 @@ class _NotesPageState extends State<NotesPage> {
                             child: SlideAnimation(
                               verticalOffset: kListSlideOffset,
                               child: FadeInAnimation(
-                                child: NoteTile(note: _notes[index]),
+                                child: NoteTile(
+                                    key: ValueKey(_notes[index].id),
+                                    note: _notes[index]),
                               ),
                             ),
                           ),

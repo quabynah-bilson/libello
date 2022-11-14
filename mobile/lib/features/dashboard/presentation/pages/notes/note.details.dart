@@ -181,8 +181,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                       padding: const EdgeInsets.only(top: 24),
                       child: Text(
                         'Labels',
-                        style: context.theme.textTheme.subtitle1
-                            ?.copyWith(color: context.colorScheme.secondaryContainer),
+                        style: context.theme.textTheme.subtitle1?.copyWith(
+                            color: context.colorScheme.secondaryContainer),
                       ),
                     ),
                     Padding(
@@ -199,7 +199,18 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                             child: FadeInAnimation(child: child),
                           ),
                           children: _currentNote.tags
-                              .map((e) => TagItem(label: e))
+                              .map(
+                                (e) => TagItem(
+                                  label: e,
+                                  color: _currentNote.color == null
+                                      ? context.colorScheme.surface
+                                      : Color.fromRGBO(
+                                          _currentNote.color!.red,
+                                          _currentNote.color!.green,
+                                          _currentNote.color!.blue,
+                                          _currentNote.color!.opacity),
+                                ),
+                              )
                               .toList(),
                         ),
                       ),
@@ -222,8 +233,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                       padding: const EdgeInsets.only(top: 24),
                       child: Text(
                         'To-Do',
-                        style: context.theme.textTheme.subtitle1
-                            ?.copyWith(color: context.colorScheme.secondaryContainer),
+                        style: context.theme.textTheme.subtitle1?.copyWith(
+                            color: context.colorScheme.secondaryContainer),
                       ),
                     ),
                     AnimationLimiter(
@@ -373,8 +384,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                   Center(
                     child: Text(
                       'Your Folders',
-                      style: context.theme.textTheme.subtitle1
-                          ?.copyWith(color: context.colorScheme.secondaryContainer),
+                      style: context.theme.textTheme.subtitle1?.copyWith(
+                          color: context.colorScheme.secondaryContainer),
                     ),
                   ),
                   const SizedBox(height: 16),
