@@ -6,7 +6,7 @@ repository: 'https://github.com/quabynah-bilson/libello'
 homepage: 'https://github.com/quabynah-bilson/libello'
 issue_tracker: 'https://github.com/quabynah-bilson/libello/issues'
 
-version: 0.0.0-alpha+2
+version: 0.0.0-alpha+3
 
 environment:
   sdk: '>=2.18.4 <3.0.0'
@@ -43,7 +43,6 @@ dependencies:
   share_plus:
   package_info_plus:
   new_version:
-  google_ml_kit:
   camera:
   image_picker:
 

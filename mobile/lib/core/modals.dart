@@ -125,7 +125,7 @@ Future<void> showAppDetailsSheet(BuildContext context) async {
               Text(
                 kAppName,
                 style: context.theme.textTheme.headline4?.copyWith(
-                  color: context.colorScheme.secondary,
+                  color: context.colorScheme.secondaryContainer,
                 ),
               ),
               const SizedBox(height: 12),

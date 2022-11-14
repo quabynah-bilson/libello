@@ -124,5 +124,9 @@ class _DashboardPageState extends State<DashboardPage> {
   /// check for new app updates
   void _checkAppVersion() async {
     await kAppVersionUpgrader?.showAlertIfNecessary(context: context);
+    // var versionStatus = await kAppVersionUpgrader?.getVersionStatus();
+    // if (versionStatus != null) {
+    //   kAppVersionUpgrader?.showUpdateDialog(context: context, versionStatus: versionStatus);
+    // }
   }
 }

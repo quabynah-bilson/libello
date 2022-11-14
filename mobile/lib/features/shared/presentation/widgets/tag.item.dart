@@ -4,6 +4,7 @@ import 'package:libello/core/constants.dart';
 import 'package:libello/core/extensions.dart';
 import 'package:libello/core/theme.dart';
 
+// todo => fix black colors
 class TagItem extends StatelessWidget {
   final String label;
   final Color? color;

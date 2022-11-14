@@ -202,13 +202,14 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                               .map(
                                 (e) => TagItem(
                                   label: e,
-                                  color: _currentNote.color == null
-                                      ? context.colorScheme.surface
-                                      : Color.fromRGBO(
-                                          _currentNote.color!.red,
-                                          _currentNote.color!.green,
-                                          _currentNote.color!.blue,
-                                          _currentNote.color!.opacity),
+                                  // fixme: show color for tag
+                                  // color: _currentNote.color == null
+                                  //     ? context.colorScheme.surface
+                                  //     : Color.fromRGBO(
+                                  //         _currentNote.color!.red,
+                                  //         _currentNote.color!.green,
+                                  //         _currentNote.color!.blue,
+                                  //         _currentNote.color!.opacity),
                                 ),
                               )
                               .toList(),
