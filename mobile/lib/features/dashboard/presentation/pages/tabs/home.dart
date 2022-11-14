@@ -291,12 +291,12 @@ class _DashboardHomeTabState extends State<_DashboardHomeTab> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
                   sliver: SliverMasonryGrid(
                     gridDelegate:
-                        const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
+                    SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:  _notes.length == 1 ? 1 : 2),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => AnimationConfiguration.staggeredGrid(
                         position: index,
-                        columnCount: index.isEven ? 1 : 2,
+                        columnCount:  _notes.length == 1 ? 1 : 2,
                         duration: kListAnimationDuration,
                         child: SlideAnimation(
                           verticalOffset: kListSlideOffset,

@@ -118,7 +118,7 @@ class _NotesPageState extends State<NotesPage> {
                           (context, index) =>
                               AnimationConfiguration.staggeredGrid(
                             position: index,
-                            columnCount: index.isEven ? 1 : 2,
+                            columnCount:  _notes.length == 1 ? 1 : 2,
                             duration: kListAnimationDuration,
                             child: SlideAnimation(
                               verticalOffset: kListSlideOffset,

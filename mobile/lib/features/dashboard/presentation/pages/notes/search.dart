@@ -109,8 +109,8 @@ class _NoteSearchPageState extends State<NoteSearchPage> {
                           padding: EdgeInsets.fromLTRB(
                               24, 20, 24, context.height * 0.15),
                           gridDelegate:
-                              const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
+                          SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: _filteredNotes.length == 1 ? 1 : 2),
                           shrinkWrap: true,
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 12,
@@ -118,7 +118,7 @@ class _NoteSearchPageState extends State<NoteSearchPage> {
                               .map(
                                 (note) => AnimationConfiguration.staggeredGrid(
                                   position: _filteredNotes.indexOf(note),
-                                  columnCount: 2,
+                                  columnCount: _filteredNotes.length == 1 ? 1 : 2,
                                   duration: kListAnimationDuration,
                                   child: SlideAnimation(
                                       verticalOffset: kListSlideOffset,

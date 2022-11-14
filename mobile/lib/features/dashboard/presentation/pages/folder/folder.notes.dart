@@ -126,8 +126,8 @@ class _FolderNotesPageState extends State<FolderNotesPage> {
                       padding: EdgeInsets.fromLTRB(
                           24, 16, 24, context.height * 0.15),
                       gridDelegate:
-                          const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2),
+                          SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: _notes.length == 1 ? 1 : 2),
                       shrinkWrap: true,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 12,
@@ -135,7 +135,7 @@ class _FolderNotesPageState extends State<FolderNotesPage> {
                           .map(
                             (note) => AnimationConfiguration.staggeredGrid(
                               position: _notes.indexOf(note),
-                              columnCount: 2,
+                              columnCount: _notes.length == 1 ? 1 : 2,
                               duration: kListAnimationDuration,
                               child: SlideAnimation(
                                 verticalOffset: kListSlideOffset,
