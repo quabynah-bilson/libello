@@ -21,9 +21,9 @@ class TagItem extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: color == null ? context.theme.disabledColor.withOpacity(kEmphasisLow) : Colors.black,
+            color: color == null ? context.theme.disabledColor.withOpacity(kEmphasisLow) : color!,
           ),
-          color: (color == null ? context.colorScheme.onSurface : Colors.black)
+          color: (color == null ? context.colorScheme.onSurface : color!)
               .withOpacity(kEmphasisLowest),
           borderRadius: BorderRadius.circular(kRadiusSmall),
         ),
@@ -38,13 +38,13 @@ class TagItem extends StatelessWidget {
                   Icon(
                     TablerIcons.tags,
                     size: 18,
-                    color: color == null ? ThemeConfig.kAmber : Colors.black,
+                    color: color == null ? ThemeConfig.kAmber : color!,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     label,
                     style: context.theme.textTheme.caption?.copyWith(
-                        color: color == null ? context.colorScheme.onSurface : Colors.black),
+                        color: color == null ? context.colorScheme.onSurface : color!),
                   ),
                 ],
               ),

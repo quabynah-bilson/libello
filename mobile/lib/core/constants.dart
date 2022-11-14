@@ -63,8 +63,23 @@ const kUserIdKey = 'libello-id-key';
 /// share
 Future<void> shareNote(BuildContext context, Note note) async {
   final box = context.findRenderObject() as RenderBox?;
-  await Share.share(note.title,
-      subject: note.title,
+
+  var shareableContent = note.title;
+  if (note.body.isNotEmpty) {
+    shareableContent += "\n\n\"${note.body.trim()}\"\n\n";
+  }
+
+  if (note.todos.isNotEmpty) {
+    shareableContent += "Tasks to-do:\n";
+    for (var item in note.todos) {
+      shareableContent += "\n${item.text}";
+    }
+  }
+
+  logger.i('shareable content: $shareableContent');
+
+  await Share.share(shareableContent.trim(),
+      subject:  note.title,
       sharePositionOrigin: Platform.isIOS && context.size!.width >= 650
           ? box!.localToGlobal(Offset.zero) & box.size
           : null);

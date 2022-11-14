@@ -439,6 +439,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                 'Label',
                 onChange: (input) => label = input?.trim(),
                 capitalization: TextCapitalization.words,
+                autofocus: true,
                 maxLength: 12,
                 suffixIcon: Icon(
                   Icons.label,
@@ -494,6 +495,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
               const SizedBox(height: 24),
               AppTextField(
                 'Item',
+                autofocus: true,
                 onChange: (input) => label = input?.trim(),
                 capitalization: TextCapitalization.sentences,
                 suffixIcon: const Icon(TablerIcons.checkup_list),

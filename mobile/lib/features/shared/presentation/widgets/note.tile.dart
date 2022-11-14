@@ -73,7 +73,12 @@ class _NoteTileState extends State<NoteTile> {
                           widget.note.color!.green,
                           widget.note.color!.blue,
                           widget.note.color!.opacity),
-                  borderRadius: BorderRadius.circular(kRadiusMedium),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(kRadiusMedium),
+                    bottomRight: Radius.circular(kRadiusMedium),
+                    bottomLeft: Radius.circular(kRadiusMedium),
+                    topRight: Radius.circular(kRadiusLarge),
+                  ),
                   border: Border.all(
                       color: context.theme.disabledColor
                           .withOpacity(kEmphasisLowest)),
@@ -150,8 +155,7 @@ class _NoteTileState extends State<NoteTile> {
                                             ? (_currentNote.color == null
                                                 ? context.theme.disabledColor
                                                 : _generateForegroundColor()
-                                                    .withOpacity(
-                                                        kEmphasisLow))
+                                                    .withOpacity(kEmphasisLow))
                                             : _generateForegroundColor(),
                                         decoration: todo.completed
                                             ? TextDecoration.lineThrough
