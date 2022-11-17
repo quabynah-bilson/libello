@@ -6,7 +6,7 @@ repository: 'https://github.com/quabynah-bilson/libello'
 homepage: 'https://github.com/quabynah-bilson/libello'
 issue_tracker: 'https://github.com/quabynah-bilson/libello/issues'
 
-version: 0.0.0-alpha+4
+version: 0.0.0-alpha+6
 
 environment:
   sdk: '>=2.18.4 <3.0.0'

@@ -8,6 +8,7 @@ import 'package:libello/features/shared/domain/entities/folder.dart';
 import 'package:libello/features/shared/presentation/manager/auth_cubit.dart';
 import 'package:libello/features/shared/presentation/widgets/app.text.field.dart';
 import 'package:lottie/lottie.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../features/shared/presentation/widgets/animated.column.dart';
 import 'constants.dart';
@@ -122,11 +123,20 @@ Future<void> showAppDetailsSheet(BuildContext context) async {
                   repeat: false,
                 ),
               ),
-              Text(
-                kAppName,
-                style: context.theme.textTheme.headline4?.copyWith(
-                  color: context.colorScheme.secondaryContainer,
-                ),
+              FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) {
+                    var version = '';
+                    if(snapshot.hasData && snapshot.data != null) {
+                      version = '(v${snapshot.data?.version})';
+                    }
+                    return Text(
+                      '$kAppName$version',
+                      style: context.theme.textTheme.headline4?.copyWith(
+                        color: context.colorScheme.secondaryContainer,
+                      ),
+                    );
+                  }
               ),
               const SizedBox(height: 12),
               Text(
